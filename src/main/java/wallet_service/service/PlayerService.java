@@ -99,5 +99,6 @@ public class PlayerService {
 
     public void logout(String username) {
         addAction(username, "Выход из системы", "");
+        playerRepository.removePlayer(username);
     }
 }

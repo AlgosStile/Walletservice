@@ -45,4 +45,7 @@ public class PlayerRepository {
     public Collection<Player> getAllPlayers() {
         return players.values();
     }
+    public void removePlayer(String username) {
+        players.remove(username);
+    }
 }

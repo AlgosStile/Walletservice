@@ -5,11 +5,20 @@ import wallet_service.model.Transaction;
 import wallet_service.repository.PlayerRepository;
 import wallet_service.repository.TransactionRepository;
 import wallet_service.service.PlayerService;
+
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Класс WalletServiceApplication представляет приложение для управления кошельками игроков.
+ */
 public class WalletServiceApplication {
 
+    /**
+     * Точка входа в приложение.
+     *
+     * @param args аргументы командной строки
+     */
     public static void main(String[] args) {
         PlayerRepository playerRepository = new PlayerRepository();
         TransactionRepository transactionRepository = new TransactionRepository();
@@ -25,7 +34,6 @@ public class WalletServiceApplication {
             System.out.println("6. История транзакций");
             System.out.println("7. Завершить");
             System.out.println("8. История действий");
-
 
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -96,9 +104,16 @@ public class WalletServiceApplication {
                     }
                     break;
                 case 7:
+                    System.out.print("Введите имя пользователя: ");
                     String logoutUsername = scanner.nextLine();
                     playerService.logout(logoutUsername);
-                    System.exit(0);
+                    System.out.println("Игрок" + " " + logoutUsername + " успешно вышел из системы");
+                    // проверяем, остался ли хотя бы один игрок
+                    if (playerRepository.getAllPlayers().isEmpty()) {
+                        System.out.println("Все игроки вышли из системы. Завершение работы...");
+                        System.exit(0);
+                    }
+
                 case 8:
                     System.out.print("Введите имя пользователя: ");
                     String actionUsername = scanner.nextLine();
