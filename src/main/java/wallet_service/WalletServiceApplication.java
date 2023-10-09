@@ -18,9 +18,16 @@ public class WalletServiceApplication {
 
     /**
      * Точка входа в приложение.
-     *
-     * @param args аргументы командной строки
      */
+    private static final String MENU_ITEM_1 = "1. Регистрировать игрока";
+    private static final String MENU_ITEM_2 = "2. Аутентифицировать игрока";
+    private static final String MENU_ITEM_3 = "3. Получить баланс";
+    private static final String MENU_ITEM_4 = "4. Дебет";
+    private static final String MENU_ITEM_5 = "5. Кредит";
+    private static final String MENU_ITEM_6 = "6. История транзакций";
+    private static final String MENU_ITEM_7 = "7. Завершить";
+    private static final String MENU_ITEM_8 = "8. История действий";
+
     public static void main(String[] args) {
         PlayerRepository playerRepository = new PlayerRepository();
         TransactionRepository transactionRepository = new TransactionRepository();
@@ -28,14 +35,8 @@ public class WalletServiceApplication {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            System.out.println("1. Регистрировать игрока");
-            System.out.println("2. Аутентифицировать игрока");
-            System.out.println("3. Получить баланс");
-            System.out.println("4. Дебет");
-            System.out.println("5. Кредит");
-            System.out.println("6. История транзакций");
-            System.out.println("7. Завершить");
-            System.out.println("8. История действий");
+            String menu = MENU_ITEM_1 + "\n" + MENU_ITEM_2 + "\n" + MENU_ITEM_3 + "\n" + MENU_ITEM_4 + "\n" + MENU_ITEM_5 + "\n" + MENU_ITEM_6 + "\n" + MENU_ITEM_7 + "\n" + MENU_ITEM_8;
+            System.out.println(menu);
 
             int choice = scanner.nextInt();
             scanner.nextLine();
