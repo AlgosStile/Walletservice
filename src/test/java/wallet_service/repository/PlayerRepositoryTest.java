@@ -1,21 +1,27 @@
 package wallet_service.repository;
 
+import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import wallet_service.model.Player;
+import wallet_service.repository.PlayerRepository;
+import static org.junit.Assert.*;
 
 import java.util.Collection;
 
-import static org.junit.Assert.*;
 
 public class PlayerRepositoryTest {
-
+    private PlayerRepository playerRepository;
     @Before
     public void setUp() throws Exception {
+        playerRepository = new PlayerRepository();
     }
 
-    //testAddPlayer() и testGetPlayer() Проверяют, что игрок корректно добавляется в репозиторий и возвращается
-    // обратно при вызове getPlayer().
+    /**
+     * testAddPlayer() и testGetPlayer() Проверяют, что игрок корректно добавляется в репозиторий и возвращается
+     * при вызове getPlayer().
+     */
     @Test
     public void testAddPlayer() {
         PlayerRepository playerRepository = new PlayerRepository();
@@ -39,7 +45,9 @@ public class PlayerRepositoryTest {
     }
 
 
-    //testGetAllPlayers() Проверяет, что метод getAllPlayers() возвращает всех добавленных в репозиторий игроков.
+    /**
+     * testGetAllPlayers() Проверяет, что метод getAllPlayers() возвращает всех добавленных в репозиторий игроков.
+     */
     @Test
     public void testGetAllPlayers() {
         PlayerRepository playerRepository = new PlayerRepository();
@@ -53,5 +61,48 @@ public class PlayerRepositoryTest {
         assertEquals(2, allPlayers.size());
         assertTrue(allPlayers.contains(player1));
         assertTrue(allPlayers.contains(player2));
+    }
+    /**
+     * Тест успешного удаления игрока.
+     */
+    @Test
+    public void testRemovePlayer() {
+        String username = "test";
+        Player player = new Player(username, "1234");
+        playerRepository.addPlayer(player);
+
+        playerRepository.removePlayer(username);
+
+        Player retrievedPlayer = playerRepository.getPlayer(username);
+        Assert.assertNull(retrievedPlayer);
+    }
+
+    /**
+     * Проверка удаления игрока, которого нет в репозитории.
+     */
+    @Test
+    public void testRemoveNonExistingPlayer() {
+        String nonExistingPlayerName = "notExist";
+        playerRepository.removePlayer(nonExistingPlayerName);
+
+        Player retrievedPlayer = playerRepository.getPlayer(nonExistingPlayerName);
+        Assert.assertNull(retrievedPlayer);
+    }
+
+    /**
+     * Проверка удаления игрока при передаче пустого имени.
+     */
+    @Test
+    public void testRemovePlayerWithEmptyName() {
+        playerRepository.removePlayer("");
+
+        Player retrievedPlayer = playerRepository.getPlayer("");
+        Assert.assertNull(retrievedPlayer);
+    }
+
+
+    @After
+    public void tearDown() {
+        playerRepository = null;
     }
 }
