@@ -1,4 +1,6 @@
 package wallet_service.controller;
 
-public class TransactionType {
+
+public enum TransactionType {
+    DEBIT, CREDIT
 }
