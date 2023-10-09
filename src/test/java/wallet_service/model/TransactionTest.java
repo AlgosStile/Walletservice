@@ -12,7 +12,9 @@ public class TransactionTest {
     public void setUp() throws Exception {
     }
 
-    //testGetId() Проверяет, что метод getId() класса Transaction возвращает правильный id транзакции.
+    /**
+     * testGetId() Проверяет, что метод getId() класса Transaction возвращает правильный id транзакции.
+     */
     @Test
     public void testGetId() {
         Transaction transaction = new Transaction("id", 100.0, TransactionType.DEBIT);
@@ -22,7 +24,9 @@ public class TransactionTest {
         assertEquals("id", id);
     }
 
-    //testGetAmount() Проверяет, что метод getAmount() класса Transaction возвращает правильную сумму транзакции.
+    /**
+     * testGetAmount() Проверяет, что метод getAmount() класса Transaction возвращает правильную сумму транзакции.
+     */
     @Test
     public void testGetAmount() {
         Transaction transaction = new Transaction("id", 100.0, TransactionType.DEBIT);
@@ -32,7 +36,9 @@ public class TransactionTest {
         assertEquals(100.0, amount, 0.0);
     }
 
-    //getType() Проверяет, что метод getType() класса Transaction возвращает правильный тип транзакции.
+    /**
+     * getType() Проверяет, что метод getType() класса Transaction возвращает правильный тип транзакции.
+     */
     @Test
     public void getType() {
         Transaction transaction = new Transaction("id", 100.0, TransactionType.DEBIT);

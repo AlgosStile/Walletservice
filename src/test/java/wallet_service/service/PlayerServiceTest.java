@@ -26,9 +26,10 @@ public class PlayerServiceTest {
         playerService = new PlayerService(playerRepository, transactionRepository);
     }
 
-
-    //addAction() и testGetPlayerActions() Проверяют, что действие корректно добавляется для игрока
-    //и возвращается при вызове getPlayerActions().
+    /**
+     * addAction() и testGetPlayerActions() Проверяют, что действие корректно добавляется для игрока
+     * и возвращается при вызове getPlayerActions().
+     */
     @Test
     public void addAction() {
         playerService.addAction("username", "action", "detail");
@@ -55,9 +56,10 @@ public class PlayerServiceTest {
         assertEquals("detail2", actions.get(1).getDetail());
     }
 
-
-    //checkingUsernameThereAreNoActionsInTheSystem() Проверяет, что для нового пользователя вернется пустой список
-    // действий.
+    /**
+     * checkingUsernameThereAreNoActionsInTheSystem() Проверяет, что для нового пользователя вернется пустой список
+     * действий.
+     */
     @Test
     public void checkingUsernameThereAreNoActionsInTheSystem() {
         List<Action> actions = playerService.getPlayerActions("username");
@@ -66,7 +68,10 @@ public class PlayerServiceTest {
         assertEquals(0, actions.size());
     }
 
-    //testRegisterPlayer() и testAuthenticatePlayer() Проверяют процедуру регистрации и аутентификации пользователя.
+    /**
+     * testRegisterPlayer() и testAuthenticatePlayer() Проверяют процедуру регистрации и аутентификации пользователя.
+     *
+     */
     @Test
     public void testRegisterPlayer() {
         PlayerRepository playerRepository = new PlayerRepository();
@@ -89,9 +94,10 @@ public class PlayerServiceTest {
 
         assertTrue(authenticated);
     }
-
-    //testAuthenticatePlayer_invalidUsername() и testAuthenticatePlayer_invalidPassword() Проверяют,
-    //что процедура аутентификации возвращает false при неправильном имени пользователя или пароле.
+    /**
+     * TestAuthenticatePlayer_invalidUsername() и testAuthenticatePlayer_invalidPassword() Проверяют,
+     * что процедура аутентификации возвращает false при неправильном имени пользователя или пароле.
+     */
     @Test
     public void testAuthenticatePlayer_invalidUsername() {
         boolean authenticated = playerService.authenticatePlayer("username", "password");
@@ -108,7 +114,9 @@ public class PlayerServiceTest {
         assertFalse(authenticated);
     }
 
-    //testGetBalance() Проверяет, что баланс игрока корректно обновляется после проведения транзакций.
+    /**
+     * testGetBalance() Проверяет, что баланс игрока корректно обновляется после проведения транзакций.
+     */
     @Test
     public void testGetBalance() throws Exception {
         PlayerRepository playerRepository = new PlayerRepository();
@@ -122,9 +130,10 @@ public class PlayerServiceTest {
         assertEquals(100.0, balance, 0.0);
     }
 
-
-    //debit() и credit() Эти тесты проверяют, что транзакции дебета и кредита корректно обновляют баланс игрока
-    // и добавляют транзакции в список транзакций.
+    /**
+     * debit() и credit() Эти тесты проверяют, что транзакции дебета и кредита корректно обновляют баланс игрока
+     * и добавляют транзакции в список транзакций.
+     */
     @Test
     public void debit() throws Exception {
         playerRepository.addPlayer(new Player("username", "password"));
@@ -138,9 +147,11 @@ public class PlayerServiceTest {
         assertEquals(TransactionType.DEBIT, player.getTransactions().get(1).getType());
     }
 
-    //debit_insufficientBalance() и debit_nonexistentUser_shouldThrowException()
-    //credit_nonexistentUser_shouldThrowException() и testCredit_invalidUsername()
-    //Эти тесты проверяют различные случаи, когда должно вызываться исключение.
+    /**
+     * debit_insufficientBalance() и debit_nonexistentUser_shouldThrowException()
+     * credit_nonexistentUser_shouldThrowException() и testCredit_invalidUsername()
+     * Эти тесты проверяют различные случаи, когда должно вызываться исключение.
+     */
     @Test
     public void debit_insufficientBalance() {
         playerRepository.addPlayer(new Player("username", "password"));
@@ -200,8 +211,9 @@ public class PlayerServiceTest {
         }
     }
 
-
-    //getTransactionHistory() Проверяет, что история транзакций игрока возвращается корректно.
+    /**
+     * getTransactionHistory() Проверяет, что история транзакций игрока возвращается корректно.
+     */
     @Test
     public void getTransactionHistory() throws Exception {
         playerRepository.addPlayer(new Player("username", "password"));
@@ -215,8 +227,9 @@ public class PlayerServiceTest {
         assertEquals(TransactionType.DEBIT, transactions.get(1).getType());
     }
 
-
-    //logout() Проверяет, что при выходе игрока создается соответствующее действие.
+    /**
+     * logout() Проверяет, что при выходе игрока создается соответствующее действие.
+     */
     @Test
     public void logout() {
         playerService.logout("username");

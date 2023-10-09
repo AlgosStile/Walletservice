@@ -20,8 +20,10 @@ public class PlayerTest {
     }
 
 
-    //testDebit_negativeAmount_shouldThrowException() и testCredit_negativeAmount_shouldThrowException()
-    //Эти тесты проверяют, что при попытке снять или положить на счет отрицательную сумму вызывается исключение.
+    /**
+     * testDebit_negativeAmount_shouldThrowException() и testCredit_negativeAmount_shouldThrowException()
+     * Эти тесты проверяют, что при попытке снять или положить насчет отрицательную сумму вызывается исключение.
+     */
     @Test
     public void testDebit_negativeAmount_shouldThrowException() {
         assertThrows(Exception.class, () -> player.debit("transactionId", -50.0));
@@ -33,9 +35,10 @@ public class PlayerTest {
         assertThrows(Exception.class, () -> player.credit("transactionId", -50.0));
     }
 
-
-    //testGetUsername() и getPassword() Проверяют, что методы getUsername() и getPassword() класса Player
-    // возвращают правильное имя пользователя и пароль.
+    /**
+     * testGetUsername() и getPassword() Проверяют, что методы getUsername() и getPassword() класса Player
+     * возвращают правильное имя пользователя и пароль.
+     */
     @Test
     public void testGetUsername() {
         Player player = new Player("username", "password");
@@ -54,8 +57,10 @@ public class PlayerTest {
         assertEquals("password", password);
     }
 
-    //testGetBalance() и testDebit_insufficientBalance_shouldNotChangeBalance() Эти тесты проверяют,
-    // что баланс игрока корректно обновляется при выполнении операций дебетован и кредитован.
+    /**
+     * testGetBalance() и testDebit_insufficientBalance_shouldNotChangeBalance() Эти тесты проверяют,
+     * что баланс игрока корректно обновляется при выполнении операций дебетован и кредитован.
+     */
     @Test
     public void testGetBalance() throws Exception {
         Player player = new Player("username", "password");
@@ -81,9 +86,11 @@ public class PlayerTest {
     }
 
 
-    //testGetTransactions(), testAddTransaction(), testDebit() и credit() Эти тесты проверяют,
-    //что транзакции добавляются в список транзакций игрока и что баланс игрока корректно обновляется
-    //при выполнении этих транзакций.
+    /**
+     * testGetTransactions(), testAddTransaction(), testDebit() и credit() Эти тесты проверяют,
+     * что транзакции добавляются в список транзакций игрока и что баланс игрока корректно обновляется
+     * при выполнении этих транзакций.
+     */
     @Test
     public void testGetTransactions() {
         Player player = new Player("username", "password");

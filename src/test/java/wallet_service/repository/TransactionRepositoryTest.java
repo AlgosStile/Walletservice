@@ -16,10 +16,11 @@ public class TransactionRepositoryTest {
     public void setUp() throws Exception {
     }
 
-
-    //testAddTransaction() и testGetTransaction() Проверяют, что транзакция корректно добавляется в репозиторий
-    // и возвращается при вызове getTransaction().
-    @Test
+    /**
+     * testAddTransaction() и testGetTransaction() Проверяют, что транзакция корректно добавляется в репозиторий
+     * и возвращается при вызове getTransaction().
+     */
+        @Test
     public void testAddTransaction() {
         TransactionRepository transactionRepository = new TransactionRepository();
         Transaction transaction = new Transaction("id", 100.0, TransactionType.DEBIT);
@@ -40,10 +41,11 @@ public class TransactionRepositoryTest {
         assertEquals(transaction, retrievedTransaction);
     }
 
-
-    //testGetAllTransactions() Проверяет, что метод getAllTransactions() возвращает все добавленные в репозиторий
-    // транзакции.
-    @Test
+    /**
+     * testGetAllTransactions() Проверяет, что метод getAllTransactions() возвращает все добавленные в репозиторий
+     * транзакции.
+     */
+        @Test
     public void testGetAllTransactions() {
         TransactionRepository transactionRepository = new TransactionRepository();
         Transaction transaction1 = new Transaction("id1", 100.0, TransactionType.DEBIT);
