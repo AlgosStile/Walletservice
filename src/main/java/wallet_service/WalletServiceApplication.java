@@ -103,14 +103,20 @@ public class WalletServiceApplication {
                         System.out.println(transaction.getType() + " " + transaction.getAmount() + " " + transaction.getId());
                     }
                     break;
+                /**
+                 * Выход пользователя из системы и завершение работы программы, если все игроки вышли из системы.
+                 *
+                 * @param scanner объект Scanner для чтения ввода пользователя
+                 * @param playerService объект PlayerService для управления игроками
+                 * @param playerRepository объект PlayerRepository для доступа к данным игроков
+                 */
                 case 7:
                     System.out.print("Введите имя пользователя: ");
                     String logoutUsername = scanner.nextLine();
                     playerService.logout(logoutUsername);
                     System.out.println("Игрок" + " " + logoutUsername + " успешно вышел из системы");
-                    // проверяем, остался ли хотя бы один игрок
                     if (playerRepository.getAllPlayers().isEmpty()) {
-                        System.out.println("Все игроки вышли из системы. Завершение работы...");
+                        System.out.println("В системе больше нет игроков. Завершение работы...");
                         System.exit(0);
                     }
 
