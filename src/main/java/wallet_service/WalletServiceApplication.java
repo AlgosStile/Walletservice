@@ -11,6 +11,8 @@ import java.util.Scanner;
 
 /**
  * Класс WalletServiceApplication представляет приложение для управления кошельками игроков.
+ *
+ * @author Олег Тодор
  */
 public class WalletServiceApplication {
 

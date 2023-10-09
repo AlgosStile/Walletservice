@@ -4,6 +4,8 @@ import wallet_service.controller.TransactionType;
 
 /**
  * Класс, представляющий транзакцию.
+ *
+ * @author Олег Тодор
  */
 public class Transaction {
     private String id; // Идентификатор транзакции

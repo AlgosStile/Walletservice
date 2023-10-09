@@ -10,7 +10,7 @@ public class ActionTest {
     @Before
     public void setUp() throws Exception {
     }
-
+    /* */
 
     //testGetUsername() Проверяет,
     // что метод getUsername() класса Action возвращает правильное имя пользователя.

@@ -7,6 +7,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Класс, представляющий репозиторий игроков.
+ *
+ * @author Олег Тодор
  */
 public class PlayerRepository {
     private Map<String, Player> players; // Коллекция игроков

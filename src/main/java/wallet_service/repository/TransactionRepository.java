@@ -7,6 +7,8 @@ import java.util.Map;
 
 /**
  * Класс, представляющий репозиторий транзакций.
+ *
+ * @author Олег Тодор
  */
 public class TransactionRepository {
     private Map<String, Transaction> transactions; // Коллекция транзакций

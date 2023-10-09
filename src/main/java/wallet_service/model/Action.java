@@ -2,6 +2,8 @@ package wallet_service.model;
 
 /**
  * Класс, представляющий действие пользователя.
+ *
+ * @author Олег Тодор
  */
 public class Action {
     private String username; // Имя пользователя

@@ -6,6 +6,8 @@ import java.util.List;
 
 /**
  * Класс, представляющий игрока.
+ *
+ * @author Олег Тодор
  */
 public class Player {
     private String username; // Имя пользователя

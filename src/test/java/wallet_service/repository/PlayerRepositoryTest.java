@@ -5,14 +5,16 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import wallet_service.model.Player;
-import wallet_service.repository.PlayerRepository;
-import static org.junit.Assert.*;
 
 import java.util.Collection;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 public class PlayerRepositoryTest {
     private PlayerRepository playerRepository;
+
     @Before
     public void setUp() throws Exception {
         playerRepository = new PlayerRepository();
@@ -62,6 +64,7 @@ public class PlayerRepositoryTest {
         assertTrue(allPlayers.contains(player1));
         assertTrue(allPlayers.contains(player2));
     }
+
     /**
      * Тест успешного удаления игрока.
      */
@@ -106,3 +109,4 @@ public class PlayerRepositoryTest {
         playerRepository = null;
     }
 }
+/* */
