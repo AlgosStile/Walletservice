@@ -29,16 +29,7 @@ import java.util.Scanner;
  * @author Олег Тодор
  */
 public class WalletServiceApplication {
-    private static final String
-            MENU_ITEM_1 = "1. Регистрировать игрока",
-            MENU_ITEM_2 = "2. Аутентифицировать игрока",
-            MENU_ITEM_3 = "3. Баланс",
-            MENU_ITEM_4 = "4. Дебет",
-            MENU_ITEM_5 = "5. Кредит",
-            MENU_ITEM_6 = "6. История транзакций",
-            MENU_ITEM_7 = "7. Завершение работы игрока",
-            MENU_ITEM_8 = "8. История действий",
-            MENU_ITEM_9 = "9. Выход";
+    private static final String MENU_ITEM_1 = "1. Регистрировать игрока", MENU_ITEM_2 = "2. Аутентифицировать игрока", MENU_ITEM_3 = "3. Баланс", MENU_ITEM_4 = "4. Дебет", MENU_ITEM_5 = "5. Кредит", MENU_ITEM_6 = "6. История транзакций", MENU_ITEM_7 = "7. Завершение работы игрока", MENU_ITEM_8 = "8. История действий", MENU_ITEM_9 = "9. Выход";
 
     private static PlayerService playerService;
     private static Scanner scanner;
@@ -52,8 +43,7 @@ public class WalletServiceApplication {
         scanner = new Scanner(System.in);
         boolean running = true;
         while (running) {
-            String menu = String.join("\n", MENU_ITEM_1, MENU_ITEM_2, MENU_ITEM_3,
-                    MENU_ITEM_4, MENU_ITEM_5, MENU_ITEM_6, MENU_ITEM_7, MENU_ITEM_8, MENU_ITEM_9);
+            String menu = String.join("\n", MENU_ITEM_1, MENU_ITEM_2, MENU_ITEM_3, MENU_ITEM_4, MENU_ITEM_5, MENU_ITEM_6, MENU_ITEM_7, MENU_ITEM_8, MENU_ITEM_9);
 
             System.out.println(menu);
             int choice = scanner.nextInt();
@@ -147,8 +137,7 @@ public class WalletServiceApplication {
         String username = readLineFromUser("Введите имя пользователя: ");
 
         for (Transaction transaction : playerService.getTransactionHistory(username)) {
-            System.out.println(transaction.getType() + " "
-                    + transaction.getAmount() + " " + transaction.getId());
+            System.out.println(transaction.getType() + " " + transaction.getAmount() + " " + transaction.getId());
         }
     }
 

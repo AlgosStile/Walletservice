@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import wallet_service.in.controller.TransactionType;
 import wallet_service.in.model.Transaction;
-import wallet_service.out.repository.TransactionRepository;
 
 import java.util.Collection;
 
@@ -21,7 +20,7 @@ public class TransactionRepositoryTest {
      * testAddTransaction() и testGetTransaction() Проверяют, что транзакция корректно добавляется в репозиторий
      * и возвращается при вызове getTransaction().
      */
-        @Test
+    @Test
     public void testAddTransaction() {
         TransactionRepository transactionRepository = new TransactionRepository();
         Transaction transaction = new Transaction("id", 100.0, TransactionType.DEBIT);
@@ -46,7 +45,7 @@ public class TransactionRepositoryTest {
      * testGetAllTransactions() Проверяет, что метод getAllTransactions() возвращает все добавленные в репозиторий
      * транзакции.
      */
-        @Test
+    @Test
     public void testGetAllTransactions() {
         TransactionRepository transactionRepository = new TransactionRepository();
         Transaction transaction1 = new Transaction("id1", 100.0, TransactionType.DEBIT);

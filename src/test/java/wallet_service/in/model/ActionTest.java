@@ -2,7 +2,6 @@ package wallet_service.in.model;
 
 import org.junit.Before;
 import org.junit.Test;
-import wallet_service.in.model.Action;
 
 import static org.junit.Assert.assertEquals;
 

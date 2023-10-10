@@ -10,6 +10,7 @@ import wallet_service.out.repository.TransactionRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+
 /**
  * Сервис, обеспечивающий взаимодействие между игроками и кошельками в игровом приложении.
  */
@@ -22,7 +23,7 @@ public class PlayerService {
     /**
      * Конструктор класса.
      *
-     * @param playerRepository Репозиторий игроков.
+     * @param playerRepository      Репозиторий игроков.
      * @param transactionRepository Репозиторий транзакций.
      */
     public PlayerService(PlayerRepository playerRepository, TransactionRepository transactionRepository) {
@@ -35,8 +36,8 @@ public class PlayerService {
      * Добавить действие для заданного пользователя.
      *
      * @param username Имя пользователя.
-     * @param action Действие.
-     * @param detail Детали действия.
+     * @param action   Действие.
+     * @param detail   Детали действия.
      */
     public synchronized void addAction(String username, String action, String detail) {
         actions.add(new Action(username, action, detail));
@@ -104,9 +105,9 @@ public class PlayerService {
     /**
      * Выполнить дебетовую операцию для пользователя.
      *
-     * @param username Имя пользователя.
+     * @param username      Имя пользователя.
      * @param transactionId Идентификатор транзакции.
-     * @param amount Сумма транзакции.
+     * @param amount        Сумма транзакции.
      * @throws Exception если пользователь не найден или транзакция с данной id уже существует.
      */
     public void debit(String username, String transactionId, double amount) throws Exception {
@@ -128,9 +129,9 @@ public class PlayerService {
     /**
      * Выполнить кредитовую операцию для пользователя.
      *
-     * @param username Имя пользователя.
+     * @param username      Имя пользователя.
      * @param transactionId Идентификатор транзакции.
-     * @param amount Сумма транзакции.
+     * @param amount        Сумма транзакции.
      * @throws Exception если пользователь не найден или транзакция с данной id уже существует.
      */
     public void credit(String username, String transactionId, double amount) throws Exception {
@@ -148,6 +149,7 @@ public class PlayerService {
         boolean result = transactionRepository.getTransaction(transactionId) != null;
         addAction(username, "Кредит", result ? "Успешно" : "Неудачно");
     }
+
     /**
      * Получить историю транзакций пользователя.
      *

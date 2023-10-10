@@ -6,7 +6,6 @@ import wallet_service.in.controller.TransactionType;
 import wallet_service.in.model.Action;
 import wallet_service.in.model.Player;
 import wallet_service.in.model.Transaction;
-import wallet_service.in.service.PlayerService;
 import wallet_service.out.repository.PlayerRepository;
 import wallet_service.out.repository.TransactionRepository;
 
@@ -71,7 +70,6 @@ public class PlayerServiceTest {
 
     /**
      * testRegisterPlayer() и testAuthenticatePlayer() Проверяют процедуру регистрации и аутентификации пользователя.
-     *
      */
     @Test
     public void testRegisterPlayer() {
@@ -95,6 +93,7 @@ public class PlayerServiceTest {
 
         assertTrue(authenticated);
     }
+
     /**
      * TestAuthenticatePlayer_invalidUsername() и testAuthenticatePlayer_invalidPassword() Проверяют,
      * что процедура аутентификации возвращает false при неправильном имени пользователя или пароле.
