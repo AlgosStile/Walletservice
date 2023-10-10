@@ -1,9 +1,11 @@
-package wallet_service.model;
+package wallet_service.in.model;
 
 import org.junit.Before;
 import org.junit.Test;
-import wallet_service.controller.TransactionType;
-import wallet_service.repository.PlayerRepository;
+import wallet_service.in.controller.TransactionType;
+import wallet_service.in.model.Player;
+import wallet_service.in.model.Transaction;
+import wallet_service.out.repository.PlayerRepository;
 
 import static org.junit.Assert.*;
 

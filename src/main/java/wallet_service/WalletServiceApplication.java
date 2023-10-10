@@ -1,10 +1,10 @@
 package wallet_service;
 
-import wallet_service.model.Action;
-import wallet_service.model.Transaction;
-import wallet_service.repository.PlayerRepository;
-import wallet_service.repository.TransactionRepository;
-import wallet_service.service.PlayerService;
+import wallet_service.in.model.Action;
+import wallet_service.in.model.Transaction;
+import wallet_service.in.service.PlayerService;
+import wallet_service.out.repository.PlayerRepository;
+import wallet_service.out.repository.TransactionRepository;
 
 import java.util.Scanner;
 

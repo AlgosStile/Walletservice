@@ -1,6 +1,6 @@
-package wallet_service.model;
+package wallet_service.in.model;
 
-import wallet_service.controller.TransactionType;
+import wallet_service.in.controller.TransactionType;
 
 /**
  * Класс, представляющий транзакцию.

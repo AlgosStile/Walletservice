@@ -1,8 +1,9 @@
-package wallet_service.model;
+package wallet_service.in.model;
 
 import org.junit.Before;
 import org.junit.Test;
-import wallet_service.controller.TransactionType;
+import wallet_service.in.controller.TransactionType;
+import wallet_service.in.model.Transaction;
 
 import static org.junit.Assert.assertEquals;
 

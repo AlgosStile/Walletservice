@@ -1,6 +1,6 @@
-package wallet_service.repository;
+package wallet_service.out.repository;
 
-import wallet_service.model.Player;
+import wallet_service.in.model.Player;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

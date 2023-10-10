@@ -1,9 +1,10 @@
-package wallet_service.repository;
+package wallet_service.out.repository;
 
 import org.junit.Before;
 import org.junit.Test;
-import wallet_service.controller.TransactionType;
-import wallet_service.model.Transaction;
+import wallet_service.in.controller.TransactionType;
+import wallet_service.in.model.Transaction;
+import wallet_service.out.repository.TransactionRepository;
 
 import java.util.Collection;
 

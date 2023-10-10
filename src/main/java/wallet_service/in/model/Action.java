@@ -1,4 +1,4 @@
-package wallet_service.model;
+package wallet_service.in.model;
 
 /**
  * Класс, представляющий действие пользователя.
