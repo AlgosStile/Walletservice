@@ -30,7 +30,7 @@ import java.util.Scanner;
  * @author Олег Тодор
  */
 public class WalletServiceApplication {
-    private static final String MENU_ITEM_1 = "1. Регистрировать игрока", MENU_ITEM_2 = "2. Аутентифицировать игрока", MENU_ITEM_3 = "3. Баланс", MENU_ITEM_4 = "4. Дебет", MENU_ITEM_5 = "5. Кредит", MENU_ITEM_6 = "6. История транзакций", MENU_ITEM_7 = "7. Завершение работы игрока", MENU_ITEM_8 = "8. История действий", MENU_ITEM_9 = "9. Выход";
+    private static final String MENU_ITEM_1 = "1. Регистрировать игрока", MENU_ITEM_2 = "2. Аутентифицировать игрока", MENU_ITEM_3 = "3. Баланс", MENU_ITEM_4 = "4. Дебетовая операция по счету", MENU_ITEM_5 = "5. Кредитная операция по счету", MENU_ITEM_6 = "6. История транзакций", MENU_ITEM_7 = "7. Завершение работы игрока", MENU_ITEM_8 = "8. История действий", MENU_ITEM_9 = "9. Выход";
 
     private static PlayerService playerService;
     private static Scanner scanner;

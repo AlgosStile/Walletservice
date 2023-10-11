@@ -4,7 +4,7 @@
 Данное приложение является эмулятором банковской системы, позволяющим пользователю осуществлять операции с балансами игроков.
 
 ## Код:
-Код состоит из объектов `TransactionType`, `Action`, `Player`, `Transaction`, `PlayerRepository`, `TransactionRepository`, `PlayerService`, и `WalletServiceApplication` вместе с которыми взаимодействует главный исполняемый класс `WalletServiceApplication`.
+Код состоит из объектов `TransactionType`, `Action`, `Player`, `Transaction`, `PlayerRepository`, `TransactionRepository`, `PlayerService`, `PlayerServiceImpl` и `WalletServiceApplication` вместе с которыми взаимодействует главный исполняемый класс `WalletServiceApplication`.
 
 ## Как собрать:
 
@@ -45,9 +45,10 @@
 
 1. Регистрация нового игрока.
 2. Аутентификация игрока.
-3. Просмотр баланса.
+3. Баланс.
 4. Дебетовая операция по счету.
 5. Кредитная операция по счету.
-6. Просмотр истории транзакций.
-7. История действий.
-8. Завершить работу с приложением.
+6. История транзакций.
+7. Завершение работы игрока.
+8. История действий.
+9. Выход.
