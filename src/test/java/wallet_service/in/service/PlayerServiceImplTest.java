@@ -216,6 +216,29 @@ public class PlayerServiceImplTest {
         }
     }
 
+    @Test
+    public void testIsUserAuthenticated_returnsTrue_whenUsernameMatchesAuthenticatedUser() {
+        Player player = new Player("JohnDoe", "password");
+        playerRepository.addPlayer(player);
+
+        playerService.authenticatePlayer("JohnDoe", "password");
+        boolean result = playerService.isUserAuthenticated("JohnDoe");
+
+        assertTrue(result);
+    }
+
+    @Test
+    public void testIsUserAuthenticated_returnsFalse_whenUsernameDoesNotMatchAuthenticatedUser() {
+        Player player = new Player("JohnDoe", "password");
+        playerRepository.addPlayer(player);
+
+        playerService.authenticatePlayer("JohnDoe", "password");
+        boolean result = playerService.isUserAuthenticated("JaneSmith");
+
+        assertFalse(result);
+    }
+
+
     /**
      * getTransactionHistory() 🧪
      * Проверяет, что история транзакций игрока возвращается корректно.
