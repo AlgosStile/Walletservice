@@ -16,6 +16,7 @@ public class PlayerServiceImpl implements PlayerService {
     private TransactionRepository transactionRepository;
 
     private List<Action> actions;
+    private String authenticatedUser;
 
     /**
      * Конструктор класса.
@@ -81,11 +82,36 @@ public class PlayerServiceImpl implements PlayerService {
      * @param password Пароль пользователя.
      * @return true если аутентификация прошла успешно, false в противном случае.
      */
+    @Override
     public boolean authenticatePlayer(String username, String password) {
         Player player = playerRepository.getPlayer(username);
         boolean result = player != null && player.getPassword().equals(password);
+        if (result) {
+            authenticatedUser = username;
+        }
         addAction(username, "Аутентификация игрока", result ? "Успешно" : "Неудачно");
         return result;
+    }
+
+    /**
+     * Проверяет, зарегистрирован ли пользователь.
+     *
+     * @param username Имя пользователя.
+     * @return true если пользователь зарегистрирован, false в противном случае.
+     */
+    public boolean isUserRegistered(String username) {
+        Player player = playerRepository.getPlayer(username);
+        return player != null;
+    }
+
+    /**
+     * Проверяет, аутентифицирован ли пользователь.
+     *
+     * @param username Имя пользователя.
+     * @return true если пользователь аутентифицирован, false в противном случае.
+     */
+    public boolean isUserAuthenticated(String username) {
+        return username.equals(authenticatedUser);
     }
 
     /**
@@ -166,7 +192,9 @@ public class PlayerServiceImpl implements PlayerService {
     public void logout(String username) {
         addAction(username, "Выход из системы", "");
         playerRepository.removePlayer(username);
+        authenticatedUser = null;
     }
+
 }
 
 

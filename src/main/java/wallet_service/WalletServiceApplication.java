@@ -105,9 +105,14 @@ public class WalletServiceApplication {
 
     private static void getBalance() {
         String username = readLineFromUser("Введите имя пользователя: ");
-        double balance = playerService.getBalance(username);
-        System.out.println("Баланс: " + balance);
+        if (playerService.isUserRegistered(username) && playerService.isUserAuthenticated(username)) {
+            double balance = playerService.getBalance(username);
+            System.out.println("Баланс: " + balance);
+        } else {
+            System.out.println("Пользователь не аутентифицирован в системе! Введите регистрационные данные.");
+        }
     }
+
 
     private static void debitTransaction() {
         String username = readLineFromUser("Введите имя пользователя: ");
@@ -165,6 +170,7 @@ public class WalletServiceApplication {
         System.out.print(prompt);
         return scanner.nextLine();
     }
+
 
     private static double readDoubleFromUser(String prompt) {
         System.out.print(prompt);
