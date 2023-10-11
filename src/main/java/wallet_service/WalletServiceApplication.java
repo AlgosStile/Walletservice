@@ -3,6 +3,7 @@ package wallet_service;
 import wallet_service.in.model.Action;
 import wallet_service.in.model.Transaction;
 import wallet_service.in.service.PlayerService;
+import wallet_service.in.service.PlayerServiceImpl;
 import wallet_service.out.repository.PlayerRepository;
 import wallet_service.out.repository.TransactionRepository;
 
@@ -39,7 +40,8 @@ public class WalletServiceApplication {
     public static void main(String[] args) {
         playerRepository = new PlayerRepository();
         TransactionRepository transactionRepository = new TransactionRepository();
-        playerService = new PlayerService(playerRepository, transactionRepository);
+        playerService = new PlayerServiceImpl(playerRepository, transactionRepository);
+
         scanner = new Scanner(System.in);
         boolean running = true;
         while (running) {

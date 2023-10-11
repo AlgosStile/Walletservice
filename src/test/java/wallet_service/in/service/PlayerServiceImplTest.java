@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class PlayerServiceTest {
+public class PlayerServiceImplTest {
 
     private PlayerService playerService;
     private PlayerRepository playerRepository;
@@ -23,7 +23,7 @@ public class PlayerServiceTest {
     public void setUp() {
         playerRepository = new PlayerRepository();
         transactionRepository = new TransactionRepository();
-        playerService = new PlayerService(playerRepository, transactionRepository);
+        playerService = new PlayerServiceImpl(playerRepository, transactionRepository);
     }
 
     /**
@@ -75,7 +75,7 @@ public class PlayerServiceTest {
     public void testRegisterPlayer() {
         PlayerRepository playerRepository = new PlayerRepository();
         TransactionRepository transactionRepository = new TransactionRepository();
-        PlayerService playerService = new PlayerService(playerRepository, transactionRepository);
+        PlayerService playerService = new PlayerServiceImpl(playerRepository, transactionRepository);
 
         playerService.registerPlayer("username", "password");
 
@@ -86,7 +86,7 @@ public class PlayerServiceTest {
     public void testAuthenticatePlayer() {
         PlayerRepository playerRepository = new PlayerRepository();
         TransactionRepository transactionRepository = new TransactionRepository();
-        PlayerService playerService = new PlayerService(playerRepository, transactionRepository);
+        PlayerService playerService = new PlayerServiceImpl(playerRepository, transactionRepository);
         playerService.registerPlayer("username", "password");
 
         boolean authenticated = playerService.authenticatePlayer("username", "password");
@@ -121,7 +121,7 @@ public class PlayerServiceTest {
     public void testGetBalance() throws Exception {
         PlayerRepository playerRepository = new PlayerRepository();
         TransactionRepository transactionRepository = new TransactionRepository();
-        PlayerService playerService = new PlayerService(playerRepository, transactionRepository);
+        PlayerService playerService = new PlayerServiceImpl(playerRepository, transactionRepository);
         playerService.registerPlayer("username", "password");
         playerService.credit("username", "transactionId", 100.0);
 
