@@ -216,25 +216,33 @@ public class PlayerServiceImplTest {
         }
     }
 
+    /**
+     * testIsUserAuthenticated_returnsTrue_whenUsernameMatchesAuthenticatedUser() 🧪
+     * Тестовый метод для проверки, возвращает ли метод isUserAuthenticated() true,
+     * когда имя пользователя совпадает с аутентифицированным пользователем.
+     */
     @Test
     public void testIsUserAuthenticated_returnsTrue_whenUsernameMatchesAuthenticatedUser() {
         Player player = new Player("JohnDoe", "password");
         playerRepository.addPlayer(player);
-
         playerService.authenticatePlayer("JohnDoe", "password");
-        boolean result = playerService.isUserAuthenticated("JohnDoe");
 
+        boolean result = playerService.isUserAuthenticated("JohnDoe");
         assertTrue(result);
     }
 
+    /**
+     * testIsUserAuthenticated_returnsFalse_whenUsernameDoesNotMatchAuthenticatedUser() 🧪
+     * Тестовый метод для проверки, возвращает ли метод isUserAuthenticated() false,
+     * когда имя пользователя не совпадает с аутентифицированным пользователем.
+     */
     @Test
     public void testIsUserAuthenticated_returnsFalse_whenUsernameDoesNotMatchAuthenticatedUser() {
         Player player = new Player("JohnDoe", "password");
         playerRepository.addPlayer(player);
-
         playerService.authenticatePlayer("JohnDoe", "password");
-        boolean result = playerService.isUserAuthenticated("JaneSmith");
 
+        boolean result = playerService.isUserAuthenticated("JaneSmith");
         assertFalse(result);
     }
 
