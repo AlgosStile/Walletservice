@@ -3,17 +3,17 @@ package wallet_service.in.controller;
 import org.junit.Before;
 import org.junit.Test;
 
-
 import static org.junit.Assert.assertEquals;
 
 public class TransactionTypeTest {
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
     }
 
     /**
-     * values() Этот тест проверяет правильность созданных констант перечисления TransactionType.
+     * values() 🧪
+     * Этот тест проверяет правильность созданных констант перечисления TransactionType.
      * Две константы: DEBIT и CREDIT, и они должны быть на местах 0 и 1 соответственно.
      */
     @Test
@@ -26,7 +26,8 @@ public class TransactionTypeTest {
     }
 
     /**
-     * valueOf() На вход подается строка "DEBIT" и тест проверяет,
+     * valueOf() 🧪
+     * На вход подается строка "DEBIT" и тест проверяет,
      * что метод корректно возвращает соответствующее значение перечисления TransactionType.DEBIT.
      */
     @Test

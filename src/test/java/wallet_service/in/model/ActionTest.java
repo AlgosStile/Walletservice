@@ -11,10 +11,9 @@ public class ActionTest {
     public void setUp() throws Exception {
     }
 
-
     /**
-     * testGetUsername() Проверяет,
-     * что метод getUsername() класса Action возвращает правильное имя пользователя.
+     * testGetUsername() 🧪
+     * Проверяет, что метод getUsername() класса Action возвращает правильное имя пользователя.
      */
     @Test
     public void testGetUsername() {
@@ -26,8 +25,8 @@ public class ActionTest {
     }
 
     /**
-     * testGetAction() Проверяет, что метод getAction() класса Action возвращает
-     * правильное действие.
+     * testGetAction() 🧪
+     * Проверяет, что метод getAction() класса Action возвращает правильное действие.
      */
     @Test
     public void testGetAction() {
@@ -40,10 +39,10 @@ public class ActionTest {
     }
 
     /**
-     * testGetDetail() Проверяет, что метод getDetail() класса Action
+     * testGetDetail() 🧪
+     * Проверяет, что метод getDetail() класса Action
      * возвращает правильную детализацию действия.
      */
-
     @Test
     public void testGetDetail() {
         Action action = new Action("username", "action", "detail");

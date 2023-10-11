@@ -27,7 +27,8 @@ public class PlayerServiceImplTest {
     }
 
     /**
-     * addAction() и testGetPlayerActions() Проверяют, что действие корректно добавляется для игрока
+     * addAction() и testGetPlayerActions() 🧪
+     * Проверяют, что действие корректно добавляется для игрока
      * и возвращается при вызове getPlayerActions().
      */
     @Test
@@ -57,7 +58,8 @@ public class PlayerServiceImplTest {
     }
 
     /**
-     * checkingUsernameThereAreNoActionsInTheSystem() Проверяет, что для нового пользователя вернется пустой список
+     * checkingUsernameThereAreNoActionsInTheSystem() 🧪
+     * Проверяет, что для нового пользователя вернется пустой список
      * действий.
      */
     @Test
@@ -69,7 +71,8 @@ public class PlayerServiceImplTest {
     }
 
     /**
-     * testRegisterPlayer() и testAuthenticatePlayer() Проверяют процедуру регистрации и аутентификации пользователя.
+     * testRegisterPlayer() и testAuthenticatePlayer() 🧪
+     * Проверяют процедуру регистрации и аутентификации пользователя.
      */
     @Test
     public void testRegisterPlayer() {
@@ -95,8 +98,8 @@ public class PlayerServiceImplTest {
     }
 
     /**
-     * TestAuthenticatePlayer_invalidUsername() и testAuthenticatePlayer_invalidPassword() Проверяют,
-     * что процедура аутентификации возвращает false при неправильном имени пользователя или пароле.
+     * TestAuthenticatePlayer_invalidUsername() и testAuthenticatePlayer_invalidPassword() 🧪
+     * Проверяют, что процедура аутентификации возвращает false при неправильном имени пользователя или пароле.
      */
     @Test
     public void testAuthenticatePlayer_invalidUsername() {
@@ -115,7 +118,8 @@ public class PlayerServiceImplTest {
     }
 
     /**
-     * testGetBalance() Проверяет, что баланс игрока корректно обновляется после проведения транзакций.
+     * testGetBalance() 🧪
+     * Проверяет, что баланс игрока корректно обновляется после проведения транзакций.
      */
     @Test
     public void testGetBalance() throws Exception {
@@ -131,7 +135,8 @@ public class PlayerServiceImplTest {
     }
 
     /**
-     * debit() и credit() Эти тесты проверяют, что транзакции дебета и кредита корректно обновляют баланс игрока
+     * debit() и credit() 🧪
+     * Эти тесты проверяют, что транзакции дебета и кредита корректно обновляют баланс игрока
      * и добавляют транзакции в список транзакций.
      */
     @Test
@@ -149,7 +154,7 @@ public class PlayerServiceImplTest {
 
     /**
      * debit_insufficientBalance() и debit_nonexistentUser_shouldThrowException()
-     * credit_nonexistentUser_shouldThrowException() и testCredit_invalidUsername()
+     * credit_nonexistentUser_shouldThrowException() и testCredit_invalidUsername() 🧪
      * Эти тесты проверяют различные случаи, когда должно вызываться исключение.
      */
     @Test
@@ -212,7 +217,8 @@ public class PlayerServiceImplTest {
     }
 
     /**
-     * getTransactionHistory() Проверяет, что история транзакций игрока возвращается корректно.
+     * getTransactionHistory() 🧪
+     * Проверяет, что история транзакций игрока возвращается корректно.
      */
     @Test
     public void getTransactionHistory() throws Exception {
@@ -228,7 +234,8 @@ public class PlayerServiceImplTest {
     }
 
     /**
-     * logout() Проверяет, что при выходе игрока создается соответствующее действие.
+     * logout() 🧪
+     * Проверяет, что при выходе игрока создается соответствующее действие.
      */
     @Test
     public void logout() {

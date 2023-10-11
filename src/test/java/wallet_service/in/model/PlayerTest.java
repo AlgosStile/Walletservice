@@ -21,7 +21,7 @@ public class PlayerTest {
 
 
     /**
-     * testDebit_negativeAmount_shouldThrowException() и testCredit_negativeAmount_shouldThrowException()
+     * testDebit_negativeAmount_shouldThrowException() и testCredit_negativeAmount_shouldThrowException() 🧪
      * Эти тесты проверяют, что при попытке снять или положить насчет отрицательную сумму вызывается исключение.
      */
     @Test
@@ -36,7 +36,8 @@ public class PlayerTest {
     }
 
     /**
-     * testGetUsername() и getPassword() Проверяют, что методы getUsername() и getPassword() класса Player
+     * testGetUsername() и getPassword() 🧪
+     * Проверяют, что методы getUsername() и getPassword() класса Player
      * возвращают правильное имя пользователя и пароль.
      */
     @Test
@@ -58,8 +59,8 @@ public class PlayerTest {
     }
 
     /**
-     * testGetBalance() и testDebit_insufficientBalance_shouldNotChangeBalance() Эти тесты проверяют,
-     * что баланс игрока корректно обновляется при выполнении операций дебетован и кредитован.
+     * testGetBalance() и testDebit_insufficientBalance_shouldNotChangeBalance() 🧪
+     * Эти тесты проверяют, что баланс игрока корректно обновляется при выполнении операций дебетован и кредитован.
      */
     @Test
     public void testGetBalance() throws Exception {
@@ -87,7 +88,8 @@ public class PlayerTest {
 
 
     /**
-     * testGetTransactions(), testAddTransaction(), testDebit() и credit() Эти тесты проверяют,
+     * testGetTransactions(), testAddTransaction(), testDebit() и credit() 🧪
+     * Эти тесты проверяют,
      * что транзакции добавляются в список транзакций игрока и что баланс игрока корректно обновляется
      * при выполнении этих транзакций.
      */
@@ -133,6 +135,12 @@ public class PlayerTest {
         assertEquals(TransactionType.CREDIT, player.getTransactions().get(0).getType());
     }
 
+    /**
+     * credit_negativeAmount() 🧪
+     * Тест проверяет поведение метода credit класса Player при попытке начислить отрицательную сумму.
+     * Предполагается, что метод должен выбрасывать исключение с сообщением "Некорректная сумма".
+     * Соответственно, баланс игрока после попытки должен остаться равным 0.0.
+     */
     @Test
     public void credit_negativeAmount() {
         Player player = new Player("username", "password");
@@ -147,6 +155,12 @@ public class PlayerTest {
         assertEquals(0.0, player.getBalance(), 0.0);
     }
 
+    /**
+     * credit_zeroAmount() 🧪
+     * Тест проверяет поведение метода credit класса Player при попытке начислить нулевую сумму.
+     * Ожидается, что начисление будет успешным, баланс игрока не изменится и останется равным 0.0.
+     * Также проверяется, что добавляется транзакция с типом CREDIT и общее количество транзакций увеличивается на 1.
+     */
     @Test
     public void credit_zeroAmount() throws Exception {
         Player player = new Player("username", "password");
@@ -158,6 +172,12 @@ public class PlayerTest {
         assertEquals(TransactionType.CREDIT, player.getTransactions().get(0).getType());
     }
 
+    /**
+     * testDebit_insufficientBalance() 🧪
+     * Тест проверяет поведение метода debit класса Player при попытке снять сумму больше текущего баланса игрока.
+     * Ожидается, что метод должен выбрасывать исключение с сообщением "Недостаточно средств".
+     * Соответственно, баланс игрока после попытки должен остаться равным 0.0.
+     */
     @Test
     public void testDebit_insufficientBalance() {
         Player player = new Player("username", "password");

@@ -1,6 +1,6 @@
 package wallet_service.out.repository;
 
-import org.junit.After;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +21,8 @@ public class PlayerRepositoryTest {
     }
 
     /**
-     * testAddPlayer() и testGetPlayer() Проверяют, что игрок корректно добавляется в репозиторий и возвращается
+     * testAddPlayer() и testGetPlayer() 🧪
+     * Проверяют, что игрок корректно добавляется в репозиторий и возвращается
      * при вызове getPlayer().
      */
     @Test
@@ -48,7 +49,8 @@ public class PlayerRepositoryTest {
 
 
     /**
-     * testGetAllPlayers() Проверяет, что метод getAllPlayers() возвращает всех добавленных в репозиторий игроков.
+     * testGetAllPlayers() 🧪
+     * Проверяет, что метод getAllPlayers() возвращает всех добавленных в репозиторий игроков.
      */
     @Test
     public void testGetAllPlayers() {
@@ -66,6 +68,7 @@ public class PlayerRepositoryTest {
     }
 
     /**
+     * testRemovePlayer() 🧪
      * Тест успешного удаления игрока.
      */
     @Test
@@ -81,6 +84,7 @@ public class PlayerRepositoryTest {
     }
 
     /**
+     * testRemoveNonExistingPlayer() 🧪
      * Проверка удаления игрока, которого нет в репозитории.
      */
     @Test
@@ -93,6 +97,7 @@ public class PlayerRepositoryTest {
     }
 
     /**
+     * testRemovePlayerWithEmptyName() 🧪
      * Проверка удаления игрока при передаче пустого имени.
      */
     @Test
@@ -103,9 +108,4 @@ public class PlayerRepositoryTest {
         Assert.assertNull(retrievedPlayer);
     }
 
-
-    @After
-    public void tearDown() {
-        playerRepository = null;
-    }
 }
