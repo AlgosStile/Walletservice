@@ -6,8 +6,8 @@ import wallet_service.in.model.Action;
 import wallet_service.in.model.Transaction;
 import wallet_service.in.service.PlayerService;
 import wallet_service.in.service.PlayerServiceImpl;
-import wallet_service.out.repository.PlayerRepository;
-import wallet_service.out.repository.TransactionRepository;
+import wallet_service.in.repository.PlayerRepository;
+import wallet_service.in.repository.TransactionRepository;
 
 import java.util.List;
 import java.util.Scanner;

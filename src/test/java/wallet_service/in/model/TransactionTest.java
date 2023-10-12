@@ -1,23 +1,21 @@
 package wallet_service.in.model;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import wallet_service.in.controller.TransactionType;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TransactionTest {
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
     }
 
-    /**
-     * testGetId() 🧪
-     * Проверяет, что метод getId() класса Transaction возвращает правильный id транзакции.
-     */
     @Test
-    public void testGetId() {
+    @DisplayName("Get Id Test")
+    public void GetIdTest() {
         Transaction transaction = new Transaction("id", 100.0, TransactionType.DEBIT);
 
         String id = transaction.getId();
@@ -25,12 +23,9 @@ public class TransactionTest {
         assertEquals("id", id);
     }
 
-    /**
-     * testGetAmount() 🧪
-     * Проверяет, что метод getAmount() класса Transaction возвращает правильную сумму транзакции.
-     */
     @Test
-    public void testGetAmount() {
+    @DisplayName("Get Amount Test")
+    public void GetAmountTest() {
         Transaction transaction = new Transaction("id", 100.0, TransactionType.DEBIT);
 
         double amount = transaction.getAmount();
@@ -38,12 +33,9 @@ public class TransactionTest {
         assertEquals(100.0, amount, 0.0);
     }
 
-    /**
-     * getType() 🧪
-     * Проверяет, что метод getType() класса Transaction возвращает правильный тип транзакции.
-     */
     @Test
-    public void getType() {
+    @DisplayName("Get Type Test")
+    public void getTypeTest() {
         Transaction transaction = new Transaction("id", 100.0, TransactionType.DEBIT);
 
         TransactionType type = transaction.getType();

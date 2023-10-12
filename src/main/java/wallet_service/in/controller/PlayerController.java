@@ -18,7 +18,7 @@ public class PlayerController {
         System.out.println("Игрок успешно зарегистрировался");
     }
 
-    public boolean authenticatePlayer(String username, String password) {
+    public void authenticatePlayer(String username, String password) {
         boolean isAuthenticated = playerService.authenticatePlayer(username, password);
 
         if (isAuthenticated) {
@@ -27,10 +27,9 @@ public class PlayerController {
             System.out.println("Неправильное имя пользователя или пароль");
         }
 
-        return isAuthenticated;
     }
 
-    public double getBalance(String username) {
+    public void getBalance(String username) {
         double balance = 0;
         if (playerService.isUserRegistered(username) && playerService.isUserAuthenticated(username)) {
             balance = playerService.getBalance(username);
@@ -39,7 +38,6 @@ public class PlayerController {
             System.out.println("Пользователь не аутентифицирован в системе! Введите регистрационные данные.");
         }
 
-        return balance;
     }
 
 

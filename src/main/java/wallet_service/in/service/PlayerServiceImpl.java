@@ -4,61 +4,30 @@ import wallet_service.in.controller.TransactionType;
 import wallet_service.in.model.Action;
 import wallet_service.in.model.Player;
 import wallet_service.in.model.Transaction;
-import wallet_service.out.repository.PlayerRepository;
-import wallet_service.out.repository.TransactionRepository;
+import wallet_service.in.repository.PlayerRepository;
+import wallet_service.in.repository.TransactionRepository;
+
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class PlayerServiceImpl implements PlayerService {
-    private Player player;
     private PlayerRepository playerRepository;
     private TransactionRepository transactionRepository;
-
     private List<Action> actions;
     private String authenticatedUser;
 
-    /**
-     * Конструктор класса.
-     *
-     * @param playerRepository      Репозиторий игроков.
-     * @param transactionRepository Репозиторий транзакций.
-     */
     public PlayerServiceImpl(PlayerRepository playerRepository, TransactionRepository transactionRepository) {
         this.playerRepository = playerRepository;
         this.transactionRepository = transactionRepository;
         this.actions = new CopyOnWriteArrayList<>();
     }
 
-    public PlayerServiceImpl(Player player) {
-        this.player = player;
-    }
-
-    //    @Override
-//    public ConcurrentLinkedQueue<Transaction> getTransactions() {
-//        return new ConcurrentLinkedQueue<>(player.getTransactions());
-//    }
-
-
-    /**
-     * Добавить действие для заданного пользователя.
-     *
-     * @param username Имя пользователя.
-     * @param action   Действие.
-     * @param detail   Детали действия.
-     */
     public synchronized void addAction(String username, String action, String detail) {
         actions.add(new Action(username, action, detail));
     }
 
-
-    /**
-     * Извлечь все действия заданного пользователя.
-     *
-     * @param username Имя пользователя.
-     * @return Список действий пользователя.
-     */
     public List<Action> getPlayerActions(String username) {
         List<Action> playerActions = new ArrayList<>();
         for (Action action : actions) {
@@ -69,13 +38,6 @@ public class PlayerServiceImpl implements PlayerService {
         return playerActions;
     }
 
-    /**
-     * Зарегистрировать нового пользователя.
-     *
-     * @param username Имя пользователя.
-     * @param password Пароль пользователя.
-     * @throws RuntimeException если имя пользователя уже занято.
-     */
     public void registerPlayer(String username, String password) {
         Player existingPlayer = playerRepository.getPlayer(username);
         if (existingPlayer != null) {
@@ -86,14 +48,6 @@ public class PlayerServiceImpl implements PlayerService {
         addAction(username, "Регистрация игрока", "");
     }
 
-    /**
-     * Аутентифицировать пользователя.
-     *
-     * @param username Имя пользователя.
-     * @param password Пароль пользователя.
-     * @return true если аутентификация прошла успешно, false в противном случае.
-     */
-    @Override
     public boolean authenticatePlayer(String username, String password) {
         Player player = playerRepository.getPlayer(username);
         boolean result = player != null && player.getPassword().equals(password);
@@ -104,50 +58,27 @@ public class PlayerServiceImpl implements PlayerService {
         return result;
     }
 
-    /**
-     * Проверяет, зарегистрирован ли пользователь.
-     *
-     * @param username Имя пользователя.
-     * @return true если пользователь зарегистрирован, false в противном случае.
-     */
     public boolean isUserRegistered(String username) {
         Player player = playerRepository.getPlayer(username);
         return player != null;
     }
 
-    /**
-     * Проверяет, аутентифицирован ли пользователь.
-     *
-     * @param username Имя пользователя.
-     * @return true если пользователь аутентифицирован, false в противном случае.
-     */
     public boolean isUserAuthenticated(String username) {
         return username.equals(authenticatedUser);
     }
 
-    /**
-     * Получить баланс пользователя.
-     *
-     * @param username Имя пользователя.
-     * @return Баланс пользователя если пользователь найден, 0 в противном случае.
-     */
     public double getBalance(String username) {
         Player player = playerRepository.getPlayer(username);
         return player != null ? player.getBalance() : 0;
     }
 
-    /**
-     * Выполнить дебетовую операцию для пользователя.
-     *
-     * @param username      Имя пользователя.
-     * @param transactionId Идентификатор транзакции.
-     * @param amount        Сумма транзакции.
-     * @throws Exception если пользователь не найден или транзакция с данной id уже существует.
-     */
     public void debit(String username, String transactionId, double amount) throws Exception {
         Player player = playerRepository.getPlayer(username);
         if (player == null) {
             throw new Exception("Игрок не найден");
+        }
+        if (player.getBalance() < amount) {
+            throw new Exception("Недостаточно средств на счете");
         }
         if (transactionRepository.getTransaction(transactionId) != null) {
             throw new Exception("Транзакция с этим идентификатором уже существует");
@@ -160,14 +91,6 @@ public class PlayerServiceImpl implements PlayerService {
         addAction(username, "Дебит", result ? "Успешно" : "Неудачно");
     }
 
-    /**
-     * Выполнить кредитовую операцию для пользователя.
-     *
-     * @param username      Имя пользователя.
-     * @param transactionId Идентификатор транзакции.
-     * @param amount        Сумма транзакции.
-     * @throws Exception если пользователь не найден или транзакция с данной id уже существует.
-     */
     public void credit(String username, String transactionId, double amount) throws Exception {
         Player player = playerRepository.getPlayer(username);
         if (player == null) {
@@ -184,33 +107,19 @@ public class PlayerServiceImpl implements PlayerService {
         addAction(username, "Кредит", result ? "Успешно" : "Неудачно");
     }
 
-    /**
-     * Получить историю транзакций пользователя.
-     *
-     * @param username Имя пользователя.
-     * @return Список транзакций пользователя, если пользователь найден, новый пустой список в противном случае.
-     */
-//    public List<Transaction> getTransactionHistory(String username) {
-//        Player player = playerRepository.getPlayer(username);
-//        return player != null ? player.getTransactions() : new ArrayList<>();
-//    }
+
+
     public List<Transaction> getTransactionHistory(String username) {
         Player player = playerRepository.getPlayer(username);
         return player != null ? new ArrayList<>(player.getTransactions()) : new ArrayList<>();
     }
 
-
-    /**
-     * Выход из системы для пользователя.
-     *
-     * @param username Имя пользователя.
-     */
     public void logout(String username) {
         addAction(username, "Выход из системы", "");
         playerRepository.removePlayer(username);
         authenticatedUser = null;
     }
-
 }
+
 
 

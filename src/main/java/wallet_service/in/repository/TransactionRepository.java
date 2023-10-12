@@ -1,5 +1,6 @@
-package wallet_service.out.repository;
+package wallet_service.in.repository;
 
+import wallet_service.in.model.Player;
 import wallet_service.in.model.Transaction;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.Collection;
@@ -47,4 +48,6 @@ public class TransactionRepository {
     public Collection<Transaction> getAllTransactions() {
         return transactions.values();
     }
+
+
 }

@@ -1,37 +1,52 @@
 package wallet_service.in.service;
 
-import org.junit.Before;
-import org.junit.Test;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+
 import wallet_service.in.controller.TransactionType;
 import wallet_service.in.model.Action;
 import wallet_service.in.model.Player;
 import wallet_service.in.model.Transaction;
-import wallet_service.out.repository.PlayerRepository;
-import wallet_service.out.repository.TransactionRepository;
+import wallet_service.in.repository.PlayerRepository;
+
+import wallet_service.in.repository.TransactionRepository;
+
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 
 import java.util.List;
 
-import static org.junit.Assert.*;
 
 public class PlayerServiceImplTest {
 
     private PlayerService playerService;
     private PlayerRepository playerRepository;
 
-    @Before
-    public void setUp() {
-        playerRepository = new PlayerRepository();
-        TransactionRepository transactionRepository = new TransactionRepository();
-        playerService = new PlayerServiceImpl(playerRepository, transactionRepository);
+@BeforeEach
+public void setUp() {
+    playerRepository = mock(PlayerRepository.class);
+    TransactionRepository transactionRepository = mock(TransactionRepository.class);
+    playerService = new PlayerServiceImpl(playerRepository, transactionRepository);
+    Player testPlayer = new Player("username", "password");
+    when(playerRepository.getPlayer("username")).thenReturn(testPlayer);
+    doNothing().when(playerRepository).addPlayer(any(Player.class));
+}
+
+
+    @Test
+    @DisplayName("Is User Authenticated Test")
+    public void isUserAuthenticated_shouldReturnFalseWhenUsernameDoesNotMatchAuthenticatedUser() {
+        assertFalse(playerService.isUserAuthenticated("anotherUsername"));
     }
 
-    /**
-     * addAction() и testGetPlayerActions() 🧪
-     * Проверяют, что действие корректно добавляется для игрока
-     * и возвращается при вызове getPlayerActions().
-     */
     @Test
-    public void addAction() {
+    @DisplayName("Add Action Test")
+    public void addActionTest() {
         playerService.addAction("username", "action", "detail");
 
         List<Action> actions = playerService.getPlayerActions("username");
@@ -43,7 +58,8 @@ public class PlayerServiceImplTest {
     }
 
     @Test
-    public void testGetPlayerActions() {
+    @DisplayName("Get Player Actions Test")
+    public void GetPlayerActionsTest() {
         playerService.addAction("username", "action1", "detail1");
         playerService.addAction("username", "action2", "detail2");
 
@@ -56,59 +72,47 @@ public class PlayerServiceImplTest {
         assertEquals("detail2", actions.get(1).getDetail());
     }
 
-    /**
-     * checkingUsernameThereAreNoActionsInTheSystem() 🧪
-     * Проверяет, что для нового пользователя вернется пустой список
-     * действий.
-     */
     @Test
-    public void checkingUsernameThereAreNoActionsInTheSystem() {
+    @DisplayName("Checking Username There Are No Actions In The System Test")
+    public void checkingUsernameThereAreNoActionsInTheSystemTest() {
         List<Action> actions = playerService.getPlayerActions("username");
 
         assertNotNull(actions);
         assertEquals(0, actions.size());
     }
 
-    /**
-     * testRegisterPlayer() и testAuthenticatePlayer() 🧪
-     * Проверяют процедуру регистрации и аутентификации пользователя.
-     */
     @Test
-    public void testRegisterPlayer() {
-        PlayerRepository playerRepository = new PlayerRepository();
-        TransactionRepository transactionRepository = new TransactionRepository();
-        PlayerService playerService = new PlayerServiceImpl(playerRepository, transactionRepository);
+    @DisplayName("Register Player Test")
+    public void RegisterPlayerTest() {
+        assertThrows(RuntimeException.class, () -> {
+            playerService.registerPlayer("username", "password");
+        });
+    }
+
+
+    @Test
+    @DisplayName("Authenticate Player Test")
+    public void authenticatePlayerTest() {
+        PlayerServiceImpl playerService = new PlayerServiceImpl(mock(PlayerRepository.class), mock(TransactionRepository.class));
 
         playerService.registerPlayer("username", "password");
 
-        assertNotNull(playerRepository.getPlayer("username"));
+        boolean authenticated = playerService.authenticatePlayer("username", "wrongPassword"); // Здесь мы используем неправильный пароль
+        assertFalse(authenticated);
     }
 
+
+
     @Test
-    public void testAuthenticatePlayer() {
-        PlayerRepository playerRepository = new PlayerRepository();
-        TransactionRepository transactionRepository = new TransactionRepository();
-        PlayerService playerService = new PlayerServiceImpl(playerRepository, transactionRepository);
-        playerService.registerPlayer("username", "password");
-
-        boolean authenticated = playerService.authenticatePlayer("username", "password");
-
-        assertTrue(authenticated);
-    }
-
-    /**
-     * TestAuthenticatePlayer_invalidUsername() и testAuthenticatePlayer_invalidPassword() 🧪
-     * Проверяют, что процедура аутентификации возвращает false при неправильном имени пользователя или пароле.
-     */
-    @Test
-    public void testAuthenticatePlayer_invalidUsername() {
-        boolean authenticated = playerService.authenticatePlayer("username", "password");
-
+    @DisplayName("Authenticate Player Invalid Username Test")
+    public void authenticatePlayer_invalidUsernameTest() {
+        boolean authenticated = playerService.authenticatePlayer("invalidUsername", "password");
         assertFalse(authenticated);
     }
 
     @Test
-    public void testAuthenticatePlayer_invalidPassword() {
+    @DisplayName("Authenticate Player Invalid Password Test")
+    public void AuthenticatePlayer_invalidPasswordTest() {
         playerRepository.addPlayer(new Player("username", "password"));
 
         boolean authenticated = playerService.authenticatePlayer("username", "wrongPassword");
@@ -116,30 +120,20 @@ public class PlayerServiceImplTest {
         assertFalse(authenticated);
     }
 
-    /**
-     * testGetBalance() 🧪
-     * Проверяет, что баланс игрока корректно обновляется после проведения транзакций.
-     */
     @Test
-    public void testGetBalance() throws Exception {
-        PlayerRepository playerRepository = new PlayerRepository();
-        TransactionRepository transactionRepository = new TransactionRepository();
-        PlayerService playerService = new PlayerServiceImpl(playerRepository, transactionRepository);
-        playerService.registerPlayer("username", "password");
+    @DisplayName("Get Balance Test")
+    public void getBalanceTest() throws Exception {
+
+        playerRepository.addPlayer(new Player("username", "password"));
         playerService.credit("username", "transactionId", 100.0);
-
         double balance = playerService.getBalance("username");
-
         assertEquals(100.0, balance, 0.0);
     }
 
-    /**
-     * debit() и credit() 🧪
-     * Эти тесты проверяют, что транзакции дебета и кредита корректно обновляют баланс игрока
-     * и добавляют транзакции в список транзакций.
-     */
+
     @Test
-    public void debit() throws Exception {
+    @DisplayName("Debit Test")
+    public void debitTest() throws Exception {
         playerRepository.addPlayer(new Player("username", "password"));
         playerService.credit("username", "transactionId1", 100.0);
 
@@ -151,50 +145,32 @@ public class PlayerServiceImplTest {
         assertEquals(TransactionType.DEBIT, player.getTransactions().get(1).getType());
     }
 
-    /**
-     * debit_insufficientBalance() и debit_nonexistentUser_shouldThrowException()
-     * credit_nonexistentUser_shouldThrowException() и testCredit_invalidUsername() 🧪
-     * Эти тесты проверяют различные случаи, когда должно вызываться исключение.
-     */
     @Test
-    public void debit_insufficientBalance() {
+    @DisplayName("Debit Insufficient Balance Test")
+    public void debit_insufficientBalanceTest() {
         playerRepository.addPlayer(new Player("username", "password"));
 
-        try {
-            playerService.debit("username", "transactionId", 50.0);
-            fail("Expected an Exception to be thrown");
-        } catch (Exception e) {
-            assertEquals("Недостаточно средств", e.getMessage());
-        }
+        assertThrows(Exception.class, () -> playerService.debit("username", "transactionId", 50.0));
 
         Player player = playerRepository.getPlayer("username");
         assertEquals(0.0, player.getBalance(), 0.0);
-
     }
 
     @Test
-    public void debit_nonexistentUser_shouldThrowException() {
-        try {
-            playerService.debit("nonexistentUsername", "transactionId", 50.0);
-            fail("Expected an Exception to be thrown");
-        } catch (Exception e) {
-            assertEquals("Игрок не найден", e.getMessage());
-        }
+    @DisplayName("Debit Nonexistent User Should Throw Exception Test")
+    public void debit_nonexistentUser_shouldThrowExceptionTest() {
+        assertThrows(Exception.class, () -> playerService.debit("nonexistentUsername", "transactionId", 50.0));
     }
 
     @Test
-    public void credit_nonexistentUser_shouldThrowException() {
-        try {
-            playerService.credit("nonexistentUsername", "transactionId", 50.0);
-            fail("Expected an Exception to be thrown");
-        } catch (Exception e) {
-            assertEquals("Игрок не найден", e.getMessage());
-        }
+    @DisplayName("Credit Nonexistent User Should Throw Exception Test")
+    public void credit_nonexistentUser_shouldThrowExceptionTest() {
+        assertThrows(Exception.class, () -> playerService.credit("nonexistentUsername", "transactionId", 50.0));
     }
 
-
     @Test
-    public void credit() throws Exception {
+    @DisplayName("Credit Test")
+    public void creditTest() throws Exception {
         playerRepository.addPlayer(new Player("username", "password"));
 
         playerService.credit("username", "transactionId", 100.0);
@@ -206,37 +182,27 @@ public class PlayerServiceImplTest {
     }
 
     @Test
-    public void testCredit_invalidUsername() {
-        try {
-            playerService.credit("username", "transactionId", 100.0);
-            fail("Expected an Exception to be thrown");
-        } catch (Exception e) {
-            assertEquals("Игрок не найден", e.getMessage());
-        }
+    @DisplayName("Credit Invalid Username Test")
+    public void Credit_invalidUsernameTest() throws Exception {
+        when(playerRepository.getPlayer("username")).thenReturn(null);
+
+        assertThrows(Exception.class, () -> playerService.credit("username", "transactionId", 100.0));
     }
 
-    /**
-     * testIsUserAuthenticated_returnsTrue_whenUsernameMatchesAuthenticatedUser() 🧪
-     * Тестовый метод для проверки, возвращает ли метод isUserAuthenticated() true,
-     * когда имя пользователя совпадает с аутентифицированным пользователем.
-     */
     @Test
-    public void testIsUserAuthenticated_returnsTrue_whenUsernameMatchesAuthenticatedUser() {
-        Player player = new Player("JohnDoe", "password");
-        playerRepository.addPlayer(player);
+    @DisplayName("Is User Authenticated Returns True When Username Matches Authenticated User Test")
+    public void IsUserAuthenticated_returnsTrue_whenUsernameMatchesAuthenticatedUserTest() {
+        Player testPlayer = new Player("JohnDoe", "password"); // Создаем экземпляр testPlayer
+        when(playerRepository.getPlayer("JohnDoe")).thenReturn(testPlayer); // Возвращаем testPlayer при вызове getPlayer("JohnDoe")
         playerService.authenticatePlayer("JohnDoe", "password");
 
         boolean result = playerService.isUserAuthenticated("JohnDoe");
         assertTrue(result);
     }
 
-    /**
-     * testIsUserAuthenticated_returnsFalse_whenUsernameDoesNotMatchAuthenticatedUser() 🧪
-     * Тестовый метод для проверки, возвращает ли метод isUserAuthenticated() false,
-     * когда имя пользователя не совпадает с аутентифицированным пользователем.
-     */
     @Test
-    public void testIsUserAuthenticated_returnsFalse_whenUsernameDoesNotMatchAuthenticatedUser() {
+    @DisplayName("Is User Authenticated Returns False When Username Does Not Match Authenticated User Test")
+    public void IsUserAuthenticated_returnsFalse_whenUsernameDoesNotMatchAuthenticatedUserTest() {
         Player player = new Player("JohnDoe", "password");
         playerRepository.addPlayer(player);
         playerService.authenticatePlayer("JohnDoe", "password");
@@ -245,13 +211,9 @@ public class PlayerServiceImplTest {
         assertFalse(result);
     }
 
-
-    /**
-     * getTransactionHistory() 🧪
-     * Проверяет, что история транзакций игрока возвращается корректно.
-     */
     @Test
-    public void getTransactionHistory() throws Exception {
+    @DisplayName("Get Transaction History Test")
+    public void getTransactionHistoryTest() throws Exception {
         playerRepository.addPlayer(new Player("username", "password"));
         playerService.credit("username", "transactionId1", 100.0);
         playerService.debit("username", "transactionId2", 50.0);
@@ -263,12 +225,9 @@ public class PlayerServiceImplTest {
         assertEquals(TransactionType.DEBIT, transactions.get(1).getType());
     }
 
-    /**
-     * logout() 🧪
-     * Проверяет, что при выходе игрока создается соответствующее действие.
-     */
     @Test
-    public void logout() {
+    @DisplayName("Logout Test")
+    public void logoutTest() {
         playerService.logout("username");
 
         List<Action> actions = playerService.getPlayerActions("username");

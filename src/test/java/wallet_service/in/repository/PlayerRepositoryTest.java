@@ -1,32 +1,26 @@
-package wallet_service.out.repository;
+package wallet_service.in.repository;
 
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import wallet_service.in.model.Player;
 
 import java.util.Collection;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerRepositoryTest {
     private PlayerRepository playerRepository;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         playerRepository = new PlayerRepository();
     }
 
-    /**
-     * testAddPlayer() и testGetPlayer() 🧪
-     * Проверяют, что игрок корректно добавляется в репозиторий и возвращается
-     * при вызове getPlayer().
-     */
     @Test
-    public void testAddPlayer() {
+    @DisplayName("Add Player Test")
+    public void AddPlayerTest() {
         PlayerRepository playerRepository = new PlayerRepository();
         Player player = new Player("username", "password");
 
@@ -35,9 +29,9 @@ public class PlayerRepositoryTest {
         assertEquals(player, playerRepository.getPlayer("username"));
     }
 
-
     @Test
-    public void testGetPlayer() {
+    @DisplayName("Get Player Test")
+    public void GetPlayerTest() {
         PlayerRepository playerRepository = new PlayerRepository();
         Player player = new Player("username", "password");
         playerRepository.addPlayer(player);
@@ -47,13 +41,9 @@ public class PlayerRepositoryTest {
         assertEquals(player, retrievedPlayer);
     }
 
-
-    /**
-     * testGetAllPlayers() 🧪
-     * Проверяет, что метод getAllPlayers() возвращает всех добавленных в репозиторий игроков.
-     */
     @Test
-    public void testGetAllPlayers() {
+    @DisplayName("Get All Players Test")
+    public void GetAllPlayersTest() {
         PlayerRepository playerRepository = new PlayerRepository();
         Player player1 = new Player("username1", "password1");
         Player player2 = new Player("username2", "password2");
@@ -67,12 +57,9 @@ public class PlayerRepositoryTest {
         assertTrue(allPlayers.contains(player2));
     }
 
-    /**
-     * testRemovePlayer() 🧪
-     * Тест успешного удаления игрока.
-     */
     @Test
-    public void testRemovePlayer() {
+    @DisplayName("Remove Player Test")
+    public void RemovePlayerTest() {
         String username = "test";
         Player player = new Player(username, "1234");
         playerRepository.addPlayer(player);
@@ -80,32 +67,25 @@ public class PlayerRepositoryTest {
         playerRepository.removePlayer(username);
 
         Player retrievedPlayer = playerRepository.getPlayer(username);
-        Assert.assertNull(retrievedPlayer);
+        assertNull(retrievedPlayer);
     }
 
-    /**
-     * testRemoveNonExistingPlayer() 🧪
-     * Проверка удаления игрока, которого нет в репозитории.
-     */
     @Test
-    public void testRemoveNonExistingPlayer() {
+    @DisplayName("Remove Non-Existing Player Test")
+    public void RemoveNonExistingPlayerTest() {
         String nonExistingPlayerName = "notExist";
         playerRepository.removePlayer(nonExistingPlayerName);
 
         Player retrievedPlayer = playerRepository.getPlayer(nonExistingPlayerName);
-        Assert.assertNull(retrievedPlayer);
+        assertNull(retrievedPlayer);
     }
 
-    /**
-     * testRemovePlayerWithEmptyName() 🧪
-     * Проверка удаления игрока при передаче пустого имени.
-     */
     @Test
-    public void testRemovePlayerWithEmptyName() {
+    @DisplayName("Remove Player With Empty Name Test")
+    public void RemovePlayerWithEmptyNameTest() {
         playerRepository.removePlayer("");
 
         Player retrievedPlayer = playerRepository.getPlayer("");
-        Assert.assertNull(retrievedPlayer);
+        assertNull(retrievedPlayer);
     }
-
 }

@@ -23,6 +23,7 @@ public class Action {
         this.detail = detail;
     }
 
+
     /**
      * Получить имя пользователя.
      *

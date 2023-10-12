@@ -1,28 +1,25 @@
-package wallet_service.out.repository;
+package wallet_service.in.repository;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import wallet_service.in.controller.TransactionType;
 import wallet_service.in.model.Transaction;
 
 import java.util.Collection;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TransactionRepositoryTest {
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
     }
 
-    /**
-     * testAddTransaction() и testGetTransaction() 🧪
-     * Проверяют, что транзакция корректно добавляется в репозиторий
-     * и возвращается при вызове getTransaction().
-     */
     @Test
-    public void testAddTransaction() {
+    @DisplayName("Add Transaction Test")
+    public void AddTransactionTest() {
         TransactionRepository transactionRepository = new TransactionRepository();
         Transaction transaction = new Transaction("id", 100.0, TransactionType.DEBIT);
 
@@ -32,7 +29,8 @@ public class TransactionRepositoryTest {
     }
 
     @Test
-    public void testGetTransaction() {
+    @DisplayName("Get Transaction Test")
+    public void GetTransactionTest() {
         TransactionRepository transactionRepository = new TransactionRepository();
         Transaction transaction = new Transaction("id", 100.0, TransactionType.DEBIT);
         transactionRepository.addTransaction(transaction);
@@ -42,13 +40,9 @@ public class TransactionRepositoryTest {
         assertEquals(transaction, retrievedTransaction);
     }
 
-    /**
-     * testGetAllTransactions() 🧪
-     * Проверяет, что метод getAllTransactions() возвращает все добавленные в репозиторий
-     * транзакции.
-     */
     @Test
-    public void testGetAllTransactions() {
+    @DisplayName("Get All Transactions Test")
+    public void GetAllTransactionsTest() {
         TransactionRepository transactionRepository = new TransactionRepository();
         Transaction transaction1 = new Transaction("id1", 100.0, TransactionType.DEBIT);
         Transaction transaction2 = new Transaction("id2", 200.0, TransactionType.CREDIT);

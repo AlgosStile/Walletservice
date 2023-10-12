@@ -23,7 +23,9 @@ public class Transaction {
         this.id = id;
         this.amount = amount;
         this.type = type;
+
     }
+
 
     /**
      * Получить идентификатор транзакции.

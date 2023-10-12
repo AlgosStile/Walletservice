@@ -1,23 +1,20 @@
 package wallet_service.in.controller;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TransactionTypeTest {
 
-    @Before
+    @BeforeEach
     public void setUp() {
     }
 
-    /**
-     * values() 🧪
-     * Этот тест проверяет правильность созданных констант перечисления TransactionType.
-     * Две константы: DEBIT и CREDIT, и они должны быть на местах 0 и 1 соответственно.
-     */
     @Test
-    public void values() {
+    @DisplayName("Values Test")
+    public void valuesTest() {
         TransactionType[] types = TransactionType.values();
 
         assertEquals(2, types.length);
@@ -25,13 +22,9 @@ public class TransactionTypeTest {
         assertEquals(TransactionType.CREDIT, types[1]);
     }
 
-    /**
-     * valueOf() 🧪
-     * На вход подается строка "DEBIT" и тест проверяет,
-     * что метод корректно возвращает соответствующее значение перечисления TransactionType.DEBIT.
-     */
     @Test
-    public void valueOf() {
+    @DisplayName("Value Of Test")
+    public void valueOfTest() {
         TransactionType type = TransactionType.valueOf("DEBIT");
 
         assertEquals(TransactionType.DEBIT, type);

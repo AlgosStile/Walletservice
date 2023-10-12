@@ -1,22 +1,20 @@
 package wallet_service.in.model;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ActionTest {
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
     }
 
-    /**
-     * testGetUsername() 🧪
-     * Проверяет, что метод getUsername() класса Action возвращает правильное имя пользователя.
-     */
     @Test
-    public void testGetUsername() {
+    @DisplayName("Get Username Test")
+    public void GetUsernameTest() {
         Action action = new Action("username", "action", "detail");
 
         String username = action.getUsername();
@@ -24,12 +22,9 @@ public class ActionTest {
         assertEquals("username", username);
     }
 
-    /**
-     * testGetAction() 🧪
-     * Проверяет, что метод getAction() класса Action возвращает правильное действие.
-     */
     @Test
-    public void testGetAction() {
+    @DisplayName("Get Action Test")
+    public void GetActionTest() {
 
         Action actionInstance = new Action("username", "action", "detail");
 
@@ -38,13 +33,9 @@ public class ActionTest {
         assertEquals("action", actionResult);
     }
 
-    /**
-     * testGetDetail() 🧪
-     * Проверяет, что метод getDetail() класса Action
-     * возвращает правильную детализацию действия.
-     */
     @Test
-    public void testGetDetail() {
+    @DisplayName("Get Detail Test")
+    public void GetDetailTest() {
         Action action = new Action("username", "action", "detail");
 
         String detail = action.getDetail();
