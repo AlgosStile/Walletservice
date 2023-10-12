@@ -19,6 +19,5 @@ public interface PlayerService {
     void credit(String username, String transactionId, double amount) throws Exception;
     List<Transaction> getTransactionHistory(String username);
 
-    ConcurrentLinkedQueue<Transaction> getTransactions();
     void logout(String username);
 }

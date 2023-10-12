@@ -112,7 +112,7 @@ public class WalletServiceApplication {
 
     private void displayTransactionHistory() {
         String username = readLineFromUser("Введите имя пользователя: ");
-        List<Transaction> transactions = transactionController.getTransactionHistory(username);
+        List<Transaction> transactions = (List<Transaction>) transactionController.getTransactionHistory(username);
         for (Transaction transaction : transactions) {
             System.out.println(transaction.getType() + " " + transaction.getAmount() + " " + transaction.getId());
         }

@@ -9,7 +9,6 @@ import wallet_service.out.repository.TransactionRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class PlayerServiceImpl implements PlayerService {
@@ -36,10 +35,10 @@ public class PlayerServiceImpl implements PlayerService {
         this.player = player;
     }
 
-    @Override
-    public ConcurrentLinkedQueue<Transaction> getTransactions() {
-        return new ConcurrentLinkedQueue<>(player.getTransactions());
-    }
+    //    @Override
+//    public ConcurrentLinkedQueue<Transaction> getTransactions() {
+//        return new ConcurrentLinkedQueue<>(player.getTransactions());
+//    }
 
 
     /**
