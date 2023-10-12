@@ -17,12 +17,11 @@ public class PlayerServiceImplTest {
 
     private PlayerService playerService;
     private PlayerRepository playerRepository;
-    private TransactionRepository transactionRepository;
 
     @Before
     public void setUp() {
         playerRepository = new PlayerRepository();
-        transactionRepository = new TransactionRepository();
+        TransactionRepository transactionRepository = new TransactionRepository();
         playerService = new PlayerServiceImpl(playerRepository, transactionRepository);
     }
 

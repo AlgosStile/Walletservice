@@ -2,8 +2,8 @@ package wallet_service.in.model;
 
 import wallet_service.in.controller.TransactionType;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Класс, представляющий игрока.
@@ -11,10 +11,11 @@ import java.util.List;
  * @author Олег Тодор
  */
 public class Player {
+    private ConcurrentLinkedQueue<Transaction> transactions;
     private String username; // Имя пользователя
     private String password; // Пароль
     private double balance; // Баланс
-    private List<Transaction> transactions; // Список транзакций
+
 
     /**
      * Конструктор класса Player.
@@ -26,7 +27,7 @@ public class Player {
         this.username = username;
         this.password = password;
         this.balance = 0;
-        this.transactions = new ArrayList<>();
+        this.transactions = new ConcurrentLinkedQueue<>();
     }
 
     /**
@@ -62,7 +63,7 @@ public class Player {
      * @return Список транзакций игрока
      */
     public List<Transaction> getTransactions() {
-        return transactions;
+        return (List<Transaction>) transactions;
     }
 
     /**
@@ -70,9 +71,10 @@ public class Player {
      *
      * @param transaction Транзакция для добавления
      */
-    public synchronized void addTransaction(Transaction transaction) {
+    public void addTransaction(Transaction transaction) {
         transactions.add(transaction);
     }
+
 
     /**
      * Выполнить дебетовую транзакцию.

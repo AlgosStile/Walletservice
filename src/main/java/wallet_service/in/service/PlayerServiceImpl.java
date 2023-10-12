@@ -9,9 +9,11 @@ import wallet_service.out.repository.TransactionRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class PlayerServiceImpl implements PlayerService {
+    private Player player;
     private PlayerRepository playerRepository;
     private TransactionRepository transactionRepository;
 
@@ -29,6 +31,16 @@ public class PlayerServiceImpl implements PlayerService {
         this.transactionRepository = transactionRepository;
         this.actions = new CopyOnWriteArrayList<>();
     }
+
+    public PlayerServiceImpl(Player player) {
+        this.player = player;
+    }
+
+    @Override
+    public ConcurrentLinkedQueue<Transaction> getTransactions() {
+        return new ConcurrentLinkedQueue<>(player.getTransactions());
+    }
+
 
     /**
      * Добавить действие для заданного пользователя.
@@ -179,10 +191,15 @@ public class PlayerServiceImpl implements PlayerService {
      * @param username Имя пользователя.
      * @return Список транзакций пользователя, если пользователь найден, новый пустой список в противном случае.
      */
+//    public List<Transaction> getTransactionHistory(String username) {
+//        Player player = playerRepository.getPlayer(username);
+//        return player != null ? player.getTransactions() : new ArrayList<>();
+//    }
     public List<Transaction> getTransactionHistory(String username) {
         Player player = playerRepository.getPlayer(username);
-        return player != null ? player.getTransactions() : new ArrayList<>();
+        return player != null ? new ArrayList<>(player.getTransactions()) : new ArrayList<>();
     }
+
 
     /**
      * Выход из системы для пользователя.

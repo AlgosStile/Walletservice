@@ -1,5 +1,7 @@
 package wallet_service;
 
+import wallet_service.in.controller.PlayerController;
+import wallet_service.in.controller.TransactionController;
 import wallet_service.in.model.Action;
 import wallet_service.in.model.Transaction;
 import wallet_service.in.service.PlayerService;
@@ -7,42 +9,50 @@ import wallet_service.in.service.PlayerServiceImpl;
 import wallet_service.out.repository.PlayerRepository;
 import wallet_service.out.repository.TransactionRepository;
 
+import java.util.List;
 import java.util.Scanner;
 
 /**
- * Класс WalletServiceApplication представляет собой интерфейс командной строки для приложения кошелька.
- * Он позволяет пользователям зарегистрироваться, аутентифицироваться и выполнять транзакции на своем аккаунте, а также просматривать историю своих транзакций и действий.
- * Класс использует объект PlayerService для обработки всей бизнес-логики и объект PlayerRepository для хранения данных игроков.
- * Класс содержит следующие методы:
- * main - главный метод, который запускает приложение и обрабатывает пользовательский ввод.
- * registerPlayer - метод для регистрации нового игрока.
- * authenticatePlayer - метод для аутентификации игрока.
- * getBalance - метод для получения баланса игрока.
- * debitTransaction - метод для выполнения дебетовой транзакции.
- * creditTransaction - метод для выполнения кредитной транзакции.
- * displayTransactionHistory - метод для отображения истории транзакций игрока.
- * logoutPlayer - метод для выхода игрока из системы.
- * displayActionHistory - метод для отображения истории действий игрока.
- * readLineFromUser - метод для чтения строки ввода от пользователя.
- * readDoubleFromUser - метод для чтения числа с плавающей точкой ввода от пользователя.
- * shutdown - метод для завершения работы приложения.
+ * Класс WalletServiceApplication представляет собой командно-строковый интерфейс банковского сервиса,
+ * осуществляющего управление счетами игроков. Пользователи могут регистрироваться, аутентифицироваться,
+ * проводить транзакции и просматривать историю транзакций и действий.
+ * Это главный класс приложения, он использует PlayerService для бизнес-логики и PlayerRepository для хранения данных.
  *
  * @author Олег Тодор
  */
 public class WalletServiceApplication {
-    private static final String MENU_ITEM_1 = "1. Регистрировать игрока", MENU_ITEM_2 = "2. Аутентифицировать игрока", MENU_ITEM_3 = "3. Баланс", MENU_ITEM_4 = "4. Дебетовая операция по счету", MENU_ITEM_5 = "5. Кредитная операция по счету", MENU_ITEM_6 = "6. История транзакций", MENU_ITEM_7 = "7. Завершение работы игрока", MENU_ITEM_8 = "8. История действий", MENU_ITEM_9 = "9. Выход";
+    private static final String MENU_ITEM_1 = "1. Регистрировать игрока";
+    private static final String MENU_ITEM_2 = "2. Аутентифицировать игрока";
+    private static final String MENU_ITEM_3 = "3. Баланс";
+    private static final String MENU_ITEM_4 = "4. Дебетовая операция по счету";
+    private static final String MENU_ITEM_5 = "5. Кредитная операция по счету";
+    private static final String MENU_ITEM_6 = "6. История транзакций";
+    private static final String MENU_ITEM_7 = "7. Завершение работы игрока";
+    private static final String MENU_ITEM_8 = "8. История действий";
+    private static final String MENU_ITEM_9 = "9. Выход";
 
-    private static PlayerService playerService;
     private static Scanner scanner;
-    private static PlayerRepository playerRepository;
+    private static TransactionController transactionController;
+    private static PlayerController playerController;
 
-
-    public static void main(String[] args) {
-        playerRepository = new PlayerRepository();
+    public static void main(String[] args) throws Exception {
+        PlayerRepository playerRepository = new PlayerRepository();
         TransactionRepository transactionRepository = new TransactionRepository();
-        playerService = new PlayerServiceImpl(playerRepository, transactionRepository);
+        PlayerService playerService = new PlayerServiceImpl(playerRepository, transactionRepository);
 
+        WalletServiceApplication application = new WalletServiceApplication(playerService);
+        application.run();
+    }
+
+    public WalletServiceApplication(PlayerService playerService) {
         scanner = new Scanner(System.in);
+
+        playerController = new PlayerController(playerService);
+        transactionController = new TransactionController(playerService);
+    }
+
+
+    public void run() throws Exception {
         boolean running = true;
         while (running) {
             String menu = String.join("\n", MENU_ITEM_1, MENU_ITEM_2, MENU_ITEM_3, MENU_ITEM_4, MENU_ITEM_5, MENU_ITEM_6, MENU_ITEM_7, MENU_ITEM_8, MENU_ITEM_9);
@@ -53,19 +63,32 @@ public class WalletServiceApplication {
 
             switch (choice) {
                 case 1:
-                    registerPlayer();
+                    System.out.print("Введите имя пользователя: ");
+                    String username1 = scanner.nextLine();
+                    System.out.print("Введите пароль: ");
+                    String password1 = scanner.nextLine();
+                    playerController.registerPlayer(username1, password1);
                     break;
                 case 2:
-                    authenticatePlayer();
+                    String username2 = readLineFromUser("Введите имя пользователя: ");
+                    String password2 = readLineFromUser("Введите пароль: ");
+                    playerController.authenticatePlayer(username2, password2);
                     break;
                 case 3:
-                    getBalance();
+                    String username3 = readLineFromUser("Введите имя пользователя: ");
+                    playerController.getBalance(username3);
                     break;
                 case 4:
-                    debitTransaction();
+                    String username4 = readLineFromUser("Введите имя пользователя: ");
+                    String transactionId4 = readLineFromUser("Введите ID транзакции: ");
+                    double amount4 = readDoubleFromUser("Введите сумму: ");
+                    transactionController.debitTransaction(username4, transactionId4, amount4);
                     break;
                 case 5:
-                    creditTransaction();
+                    String username5 = readLineFromUser("Введите имя пользователя: ");
+                    String transactionId5 = readLineFromUser("Введите ID транзакции: ");
+                    double amount5 = readDoubleFromUser("Введите сумму: ");
+                    transactionController.creditTransaction(username5, transactionId5, amount5);
                     break;
                 case 6:
                     displayTransactionHistory();
@@ -86,100 +109,45 @@ public class WalletServiceApplication {
         }
     }
 
-    private static void registerPlayer() {
+
+    private void displayTransactionHistory() {
         String username = readLineFromUser("Введите имя пользователя: ");
-        String password = readLineFromUser("Введите пароль: ");
-        playerService.registerPlayer(username, password);
-        System.out.println("Игрок успешно зарегистрировался");
-    }
-
-    private static void authenticatePlayer() {
-        String username = readLineFromUser("Введите имя пользователя: ");
-        String password = readLineFromUser("Введите пароль: ");
-        if (playerService.authenticatePlayer(username, password)) {
-            System.out.println("Игрок успешно авторизован!");
-        } else {
-            System.out.println("Неправильное имя пользователя или пароль");
-        }
-    }
-
-    private static void getBalance() {
-        String username = readLineFromUser("Введите имя пользователя: ");
-        if (playerService.isUserRegistered(username) && playerService.isUserAuthenticated(username)) {
-            double balance = playerService.getBalance(username);
-            System.out.println("Баланс: " + balance);
-        } else {
-            System.out.println("Пользователь не аутентифицирован в системе! Введите регистрационные данные.");
-        }
-    }
-
-
-    private static void debitTransaction() {
-        String username = readLineFromUser("Введите имя пользователя: ");
-        String transactionId = readLineFromUser("Введите ID транзакции: ");
-        double amount = readDoubleFromUser("Введите сумму: ");
-
-        try {
-            playerService.debit(username, transactionId, amount);
-            System.out.println("Дебетовая транзакция прошла успешно");
-        } catch (Exception e) {
-            System.out.println("Дебетовая транзакция не удалась: " + e.getMessage());
-        }
-    }
-
-    private static void creditTransaction() {
-        String username = readLineFromUser("Введите имя пользователя: ");
-        String transactionId = readLineFromUser("Введите ID транзакции: ");
-        double amount = readDoubleFromUser("Введите сумму: ");
-
-        try {
-            playerService.credit(username, transactionId, amount);
-            System.out.println("Кредитная транзакция прошла успешно --> $");
-        } catch (Exception e) {
-            System.out.println("Кредитная транзакция не удалась ¯\\_(ツ)_/¯ : " + e.getMessage());
-        }
-    }
-
-    private static void displayTransactionHistory() {
-        String username = readLineFromUser("Введите имя пользователя: ");
-
-        for (Transaction transaction : playerService.getTransactionHistory(username)) {
+        List<Transaction> transactions = transactionController.getTransactionHistory(username);
+        for (Transaction transaction : transactions) {
             System.out.println(transaction.getType() + " " + transaction.getAmount() + " " + transaction.getId());
         }
     }
 
-    private static void logoutPlayer() {
+    private void logoutPlayer() {
         String username = readLineFromUser("Введите имя пользователя: ");
-        playerService.logout(username);
+        playerController.logoutPlayer(username);
         System.out.println("Игрок" + " " + username + " успешно вышел из системы");
-
-        if (playerRepository.getAllPlayers().isEmpty()) {
-            System.out.println("В системе больше нет игроков. Завершение работы...");
-            System.exit(0);
-        }
     }
 
-    private static void displayActionHistory() {
+    private void displayActionHistory() {
         String username = readLineFromUser("Введите имя пользователя: ");
-        for (Action action : playerService.getPlayerActions(username)) {
+        List<Action> actions = playerController.getPlayerActions(username);
+        for (Action action : actions) {
             System.out.println(action.getAction() + " " + action.getDetail());
         }
     }
 
-    private static String readLineFromUser(String prompt) {
+    private String readLineFromUser(String prompt) {
         System.out.print(prompt);
         return scanner.nextLine();
     }
 
 
-    private static double readDoubleFromUser(String prompt) {
+    private double readDoubleFromUser(String prompt) {
         System.out.print(prompt);
         double value = scanner.nextDouble();
         scanner.nextLine();
         return value;
     }
 
-    private static void shutdown() {
+    private void shutdown() {
         System.out.println("Завершение работы...");
     }
+
 }
+
