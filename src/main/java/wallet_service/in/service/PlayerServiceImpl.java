@@ -7,7 +7,6 @@ import wallet_service.in.model.Transaction;
 import wallet_service.in.repository.PlayerRepository;
 import wallet_service.in.repository.TransactionRepository;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -67,7 +66,11 @@ public class PlayerServiceImpl implements PlayerService {
         return username.equals(authenticatedUser);
     }
 
+    @Override
     public double getBalance(String username) {
+        if (authenticatedUser == null || !authenticatedUser.equals(username)) {
+            throw new RuntimeException("Пользователь не аутентифицирован. Введите регистрационные данные.");
+        }
         Player player = playerRepository.getPlayer(username);
         return player != null ? player.getBalance() : 0;
     }
@@ -108,17 +111,22 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
 
-
+    @Override
     public List<Transaction> getTransactionHistory(String username) {
+        if (authenticatedUser == null || !authenticatedUser.equals(username)) {
+            throw new RuntimeException("Пользователь не аутентифицирован. Введите регистрационные данные.");
+        }
         Player player = playerRepository.getPlayer(username);
         return player != null ? new ArrayList<>(player.getTransactions()) : new ArrayList<>();
     }
+
 
     public void logout(String username) {
         addAction(username, "Выход из системы", "");
         playerRepository.removePlayer(username);
         authenticatedUser = null;
     }
+
 }
 
 

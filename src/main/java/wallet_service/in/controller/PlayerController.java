@@ -29,6 +29,7 @@ public class PlayerController {
 
     }
 
+
     public void getBalance(String username) {
         double balance = 0;
         if (playerService.isUserRegistered(username) && playerService.isUserAuthenticated(username)) {
