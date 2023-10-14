@@ -10,13 +10,7 @@ public class Action {
     private String action; // Действие
     private String detail; // Детали действия
 
-    /**
-     * Конструктор класса Action.
-     *
-     * @param username Имя пользователя
-     * @param action   Действие
-     * @param detail   Детали действия
-     */
+
     public Action(String username, String action, String detail) {
         this.username = username;
         this.action = action;

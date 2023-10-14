@@ -6,12 +6,11 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <include file="001-create-tables.xml"/>
-    <include file="002-insert-data.xml"/>
-
+    <changeSet id="insert-data" author="your_author_name">
+        <insert tableName="player">
+            <column name="username" value="testuser"/>
+            <column name="password" value="testpass"/>
+            <column name="balance" valueNumeric="1000.0"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>
-<!-- Вставить это выше перед миграшкой -/!>
-        <!-    <include file="migrations/001-create-tables.xml" relativeToChangelogFile="true" />-->
-<!--    <include file="migrations/002-insert-data.xml" relativeToChangelogFile="true" />-->
-
-
