@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="seed-data" author="you">
+        <insert tableName="player">
+            <column name="id" value="1"/>
+            <column name="username" value="john"/>
+            <column name="password" value="password123"/>
+        </insert>
+        <!-- не забыть вставить остальные данные -->
+    </changeSet>
+
+    <!-- не забыть добавить другие наборы изменений -->
+
+</databaseChangeLog>

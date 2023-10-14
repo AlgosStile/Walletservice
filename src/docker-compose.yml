@@ -1,18 +1,13 @@
 version: '3'
 services:
-  postgres_db:
+  db:
     image: postgres
-    ports:
-      - "5433:5433"
+    restart: always
     environment:
-      POSTGRES_USER: wallet_user
-      POSTGRES_PASSWORD: wallet_password
-      POSTGRES_DB: wallet_db
-      POSTGRES_INITDB_ARGS: --encoding=UTF8 --lc-collate=C --lc-ctype=C
-    volumes:
-      - db-data:/var/lib/postgresql/data
-      - ./liquibase:/liquibase
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: postgres
+    ports:
+      - "5433:5432"
 
-volumes:
-  db-data:
 
