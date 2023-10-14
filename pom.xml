@@ -21,6 +21,13 @@
             <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.6.0</version>
+        </dependency>
+
 
         <!-- Зависимость для Mockito -->
         <dependency>
@@ -29,9 +36,6 @@
             <version>3.10.0</version>
             <scope>test</scope>
         </dependency>
-
-
-
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -39,15 +43,22 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>9.22.2</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.testcontainers/junit-jupiter -->
+        <dependency>
+            <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>RELEASE</version>
+            <version>1.19.1</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
-            <groupId>com.microsoft.jfr</groupId>
-            <artifactId>jfr-streaming</artifactId>
-            <version>1.2.0</version>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>4.24.0</version>
         </dependency>
         <dependency>
             <groupId>com.microsoft.jfr</groupId>
@@ -55,5 +66,4 @@
             <version>1.2.0</version>
         </dependency>
     </dependencies>
-
 </project>
