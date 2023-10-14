@@ -6,14 +6,10 @@
     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
     <!-- Отдельный файл изменений для создания таблиц -->
-    <include file="create_tables.xml" relativeToChangelogFile="true">
-        <logicalFilePath>create_tables.xml</logicalFilePath>
-    </include>
+    <include file="create_tables.xml" relativeToChangelogFile="true"/>
 
     <!-- Отдельный файл изменений для предзаполнения данных -->
-    <include file="seed_data.xml" relativeToChangelogFile="true">
-        <logicalFilePath>seed_data.xml</logicalFilePath>
-    </include>
+    <include file="seed_data.xml" relativeToChangelogFile="true"/>
     <changeSet id="1" author="wallet">
         <createTable tableName="player" schemaName="service_schema">
             <column name="id" type="bigserial" autoIncrement="true">

@@ -3,7 +3,7 @@ services:
   postgres_db:
     image: postgres
     ports:
-      - 5432:5432
+      - "5433:5433"
     environment:
       POSTGRES_USER: wallet_user
       POSTGRES_PASSWORD: wallet_password

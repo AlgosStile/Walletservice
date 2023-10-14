@@ -6,19 +6,27 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class Config {
+    private static final Config instance = new Config();
     private final Properties configFile;
 
-    public Config(String configFilename) {
-        configFile = new java.util.Properties();
-        try {
-            InputStream is = Config.class.getResourceAsStream("/" + configFilename);
+    private Config() {
+        configFile = new Properties();
+        loadConfig();
+    }
+
+    public static Config getInstance() {
+        return instance;
+    }
+
+    private void loadConfig() {
+        try (InputStream is = Config.class.getResourceAsStream("/db.properties")) {
             configFile.load(is);
-        } catch (IOException eta) {
-            eta.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     public String getProperty(String key) {
-        return this.configFile.getProperty(key);
+        return configFile.getProperty(key);
     }
 }

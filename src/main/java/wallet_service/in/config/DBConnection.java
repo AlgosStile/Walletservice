@@ -6,31 +6,27 @@ import java.sql.SQLException;
 
 public class DBConnection {
     private static DBConnection instance;
-    private Connection connection;
-    private String url;
-    private String username;
-    private String password;
+    private final Connection connection;
+    private final String url;
+    private final String username;
+    private final String password;
 
-    private DBConnection(){
-        try {
-            Config myConfig = new Config("db.properties");
-            this.url = myConfig.getProperty("db.url");
-            this.username = myConfig.getProperty("db.user");
-            this.password = myConfig.getProperty("db.password");
-            connection = DriverManager.getConnection(url, username, password);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+    private DBConnection() throws SQLException {
+        Config config = Config.getInstance();
+        url = config.getProperty("db.url");
+        username = config.getProperty("db.user");
+        password = config.getProperty("db.password");
+        connection = DriverManager.getConnection(url, username, password);
     }
 
-    public synchronized static DBConnection getInstance(){
-        if(instance == null){
+    public static synchronized DBConnection getInstance() throws SQLException {
+        if (instance == null) {
             instance = new DBConnection();
         }
         return instance;
     }
 
-    public Connection getConnection(){
+    public Connection getConnection() {
         return connection;
     }
 }
