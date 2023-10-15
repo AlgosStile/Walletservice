@@ -6,7 +6,13 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <changeSet id="create-table-player" author="your_author_name">
+    <changeSet id="001-create-schema" author="Algosstile">
+        <sql>
+            CREATE SCHEMA IF NOT EXISTS migration;
+        </sql>
+    </changeSet>
+
+    <changeSet id="create-table-player" author="Algosstile">
         <createTable schemaName="migration" tableName="player">
             <column name="username" type="varchar(255)">
                 <constraints nullable="false" primaryKey="true"/>
@@ -20,7 +26,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="create-table-transaction" author="your_author_name">
+    <changeSet id="create-table-transaction" author="Algosstile">
         <createTable schemaName="migration" tableName="transaction">
             <column name="id" type="varchar(255)">
                 <constraints nullable="false" primaryKey="true"/>
@@ -38,6 +44,7 @@
 
         <addForeignKeyConstraint constraintName="fk_transaction_player"
                                  baseTableName="transaction" baseColumnNames="username"
-                                 referencedTableName="player" referencedColumnNames="username"/>
+                                 referencedTableName="player"
+                                 referencedColumnNames="username" />
     </changeSet>
 </databaseChangeLog>
