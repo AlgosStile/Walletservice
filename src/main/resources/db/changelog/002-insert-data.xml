@@ -7,7 +7,7 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
     <changeSet id="insert-data" author="your_author_name">
-        <insert tableName="player">
+        <insert schemaName="migration" tableName="player">
             <column name="username" value="testuser"/>
             <column name="password" value="testpass"/>
             <column name="balance" valueNumeric="1000.0"/>

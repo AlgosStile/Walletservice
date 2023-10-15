@@ -7,7 +7,7 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
     <changeSet id="create-table-player" author="your_author_name">
-        <createTable tableName="player">
+        <createTable schemaName="migration" tableName="player">
             <column name="username" type="varchar(255)">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
@@ -21,7 +21,7 @@
     </changeSet>
 
     <changeSet id="create-table-transaction" author="your_author_name">
-        <createTable tableName="transaction">
+        <createTable schemaName="migration" tableName="transaction">
             <column name="id" type="varchar(255)">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
@@ -35,7 +35,6 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-
 
         <addForeignKeyConstraint constraintName="fk_transaction_player"
                                  baseTableName="transaction" baseColumnNames="username"

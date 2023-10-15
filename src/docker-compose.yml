@@ -5,9 +5,10 @@ services:
     restart: always
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: wallet
+      POSTGRES_DB: wallet_db
+
     ports:
-      - "5433:5432"
+      - "5432:5432"
 
 

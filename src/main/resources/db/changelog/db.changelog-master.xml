@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -10,8 +9,5 @@
     <include file="002-insert-data.xml"/>
 
 </databaseChangeLog>
-<!-- Вставить это выше перед миграшкой -/!>
-        <!-    <include file="migrations/001-create-tables.xml" relativeToChangelogFile="true" />-->
-<!--    <include file="migrations/002-insert-data.xml" relativeToChangelogFile="true" />-->
 
 
