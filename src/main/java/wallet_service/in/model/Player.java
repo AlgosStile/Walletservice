@@ -8,6 +8,7 @@ import java.util.List;
 
 
 public class Player {
+    private int id;
     private String username; // Имя пользователя
     private String password; // Пароль
     private double balance; // Баланс
@@ -19,6 +20,9 @@ public class Player {
         this.password = password;
         this.balance = 0;
         this.transactions = new ArrayList<>();
+    }
+    public void setId(int id) {
+        this.id = id;
     }
 
 

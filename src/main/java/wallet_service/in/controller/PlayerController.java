@@ -4,6 +4,7 @@ import wallet_service.in.service.PlayerService;
 import wallet_service.in.model.Action;
 
 
+import java.sql.SQLException;
 import java.util.List;
 
 
@@ -17,12 +18,16 @@ public class PlayerController {
 
 
     public void registerPlayer(String username, String password) {
-        playerService.registerPlayer(username, password);
-        System.out.println("Игрок успешно зарегистрировался");
+        try {
+            playerService.registerPlayer(username, password);
+            System.out.println("Игрок успешно зарегистрирован");
+        } catch (Exception e) {
+            System.out.println("Ошибка при регистрации: " + e.getMessage());
+        }
     }
 
 
-    public void authenticatePlayer(String username, String password) {
+    public void authenticatePlayer(String username, String password) throws SQLException {
         boolean isAuthenticated = playerService.authenticatePlayer(username, password);
 
         if (isAuthenticated) {
@@ -33,7 +38,7 @@ public class PlayerController {
     }
 
 
-    public void getBalance(String username) {
+    public void getBalance(String username) throws SQLException {
         double balance = 0;
         if (playerService.isUserRegistered(username) && playerService.isUserAuthenticated(username)) {
             balance = playerService.getBalance(username);

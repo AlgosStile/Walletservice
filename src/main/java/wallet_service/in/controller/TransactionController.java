@@ -3,6 +3,7 @@ package wallet_service.in.controller;
 import wallet_service.in.model.Transaction;
 import wallet_service.in.service.PlayerService;
 
+import java.sql.SQLException;
 import java.util.List;
 
 
@@ -35,7 +36,7 @@ public class TransactionController {
     }
 
 
-    public List<Transaction> getTransactionHistory(String username) {
+    public List<Transaction> getTransactionHistory(String username) throws SQLException {
         return playerService.getTransactionHistory(username);
     }
 

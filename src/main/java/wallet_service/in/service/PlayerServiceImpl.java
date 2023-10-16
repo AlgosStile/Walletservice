@@ -9,7 +9,7 @@ import wallet_service.in.repository.TransactionRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.sql.SQLException;
 
 public class PlayerServiceImpl implements PlayerService {
     private PlayerRepository playerRepository;
@@ -20,7 +20,7 @@ public class PlayerServiceImpl implements PlayerService {
     public PlayerServiceImpl(PlayerRepository playerRepository, TransactionRepository transactionRepository) {
         this.playerRepository = playerRepository;
         this.transactionRepository = transactionRepository;
-        this.actions = new CopyOnWriteArrayList<>();
+
     }
 
     public synchronized void addAction(String username, String action, String detail) {
@@ -37,17 +37,18 @@ public class PlayerServiceImpl implements PlayerService {
         return playerActions;
     }
 
-    public void registerPlayer(String username, String password) {
+    public void registerPlayer(String username, String password) throws SQLException {
         Player existingPlayer = playerRepository.getPlayer(username);
         if (existingPlayer != null) {
             throw new RuntimeException("Имя пользователя уже занято!");
         }
+
         Player player = new Player(username, password);
-        playerRepository.addPlayer(player);
-        addAction(username, "Регистрация игрока", "");
+        int playerId = playerRepository.addPlayer(player);  // Тут мы присвоили id нашему игроку после сохранения в базе
+        player.setId(playerId);
     }
 
-    public boolean authenticatePlayer(String username, String password) {
+    public boolean authenticatePlayer(String username, String password) throws SQLException {
         Player player = playerRepository.getPlayer(username);
         boolean result = player != null && player.getPassword().equals(password);
         if (result) {
@@ -57,7 +58,7 @@ public class PlayerServiceImpl implements PlayerService {
         return result;
     }
 
-    public boolean isUserRegistered(String username) {
+    public boolean isUserRegistered(String username) throws SQLException {
         Player player = playerRepository.getPlayer(username);
         return player != null;
     }
@@ -66,14 +67,14 @@ public class PlayerServiceImpl implements PlayerService {
         return username.equals(authenticatedUser);
     }
 
-    @Override
-    public double getBalance(String username) {
+    public double getBalance(String username) throws SQLException {
         if (authenticatedUser == null || !authenticatedUser.equals(username)) {
             throw new RuntimeException("Пользователь не аутентифицирован. Введите регистрационные данные.");
         }
         Player player = playerRepository.getPlayer(username);
         return player != null ? player.getBalance() : 0;
     }
+
 
     public void debit(String username, String transactionId, double amount) throws Exception {
         Player player = playerRepository.getPlayer(username);
@@ -83,15 +84,15 @@ public class PlayerServiceImpl implements PlayerService {
         if (player.getBalance() < amount) {
             throw new Exception("Недостаточно средств на счете");
         }
-        if (transactionRepository.getTransaction(transactionId) != null) {
-            throw new Exception("Транзакция с этим идентификатором уже существует");
-        }
-
         player.debit(transactionId, amount);
+
         Transaction transaction = new Transaction(transactionId, amount, TransactionType.DEBIT);
-        transactionRepository.addTransaction(transaction);
+        transactionRepository.addTransaction(username, transaction);
+
         boolean result = transactionRepository.getTransaction(transactionId) != null;
         addAction(username, "Дебит", result ? "Успешно" : "Неудачно");
+
+        playerRepository.updatePlayer(username, player.getBalance());
     }
 
     public void credit(String username, String transactionId, double amount) throws Exception {
@@ -99,31 +100,35 @@ public class PlayerServiceImpl implements PlayerService {
         if (player == null) {
             throw new Exception("Игрок не найден");
         }
-        if (transactionRepository.getTransaction(transactionId) != null) {
-            throw new Exception("Транзакция с этим идентификатором уже существует");
-        }
 
         player.credit(transactionId, amount);
+
         Transaction transaction = new Transaction(transactionId, amount, TransactionType.CREDIT);
-        transactionRepository.addTransaction(transaction);
+        transactionRepository.addTransaction(username, transaction);
+
         boolean result = transactionRepository.getTransaction(transactionId) != null;
         addAction(username, "Кредит", result ? "Успешно" : "Неудачно");
+
+        playerRepository.updatePlayer(username, player.getBalance());
     }
 
-
     @Override
-    public List<Transaction> getTransactionHistory(String username) {
+    public List<Transaction> getTransactionHistory(String username) throws SQLException {
         if (authenticatedUser == null || !authenticatedUser.equals(username)) {
             throw new RuntimeException("Пользователь не аутентифицирован. Введите регистрационные данные.");
         }
-        Player player = playerRepository.getPlayer(username);
-        return player != null ? new ArrayList<>(player.getTransactions()) : new ArrayList<>();
+        return transactionRepository.getAllTransactions(username);
     }
 
 
     public void logout(String username) {
         addAction(username, "Выход из системы", "");
-        playerRepository.removePlayer(username);
+        try {
+            playerRepository.removePlayer(username);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
         authenticatedUser = null;
     }
 

@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import wallet_service.in.controller.TransactionType;
 import wallet_service.in.repository.PlayerRepository;
 
+import java.sql.SQLException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerTest {
@@ -14,7 +16,7 @@ public class PlayerTest {
     private Player player;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws SQLException {
         playerRepository = new PlayerRepository();
         player = new Player("username", "password");
         playerRepository.addPlayer(player);

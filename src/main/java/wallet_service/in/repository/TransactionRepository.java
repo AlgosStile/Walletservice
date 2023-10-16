@@ -1,45 +1,76 @@
 package wallet_service.in.repository;
 
 import wallet_service.in.config.DBConnection;
+import wallet_service.in.controller.TransactionType;
 import wallet_service.in.model.Transaction;
 
-import java.sql.Statement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.Collection;
-import java.util.Map;
+import java.util.List;
 
 public class TransactionRepository {
-    private Map<String, Transaction> transactions; // Коллекция транзакций
 
-    public TransactionRepository() {
-        this.transactions = new ConcurrentHashMap<>();
+    private static final String INSERT_SQL = "INSERT INTO transactions(id, username, amount, type) VALUES (nextval('transaction_id_seq'), ?, ?, ?)";
+    private static final String SELECT_SQL = "SELECT * FROM transactions WHERE id = ?";
+    private static final String SELECT_ALL_SQL = "SELECT * FROM transactions WHERE username = ?";
 
-        try (Connection connection = DBConnection.getInstance().getConnection()) {
-            try (Statement statement = connection.createStatement()) {
-                statement.execute("CREATE TABLE IF NOT EXISTS transactions (id TEXT PRIMARY KEY, username TEXT, amount NUMERIC, type TEXT)");
+    private Connection connection;
+
+    public TransactionRepository() throws SQLException {
+        connection = DBConnection.getInstance().getConnection();
+    }
+
+    public void addTransaction(String username, Transaction transaction) throws SQLException {
+        try {
+            connection.setAutoCommit(false);
+            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SQL);
+            preparedStatement.setString(1, username);
+            preparedStatement.setDouble(2, transaction.getAmount());
+            preparedStatement.setString(3, transaction.getType().toString());
+            preparedStatement.executeUpdate();
+
+            preparedStatement.close();
+            connection.commit();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            if (connection != null) {
+                try {
+                    System.out.println("Транзакция отменена");
+                    connection.rollback();
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 
-
-
-    public void addTransaction(Transaction transaction) {
-        transactions.put(transaction.getId(), transaction);
+    public Transaction getTransaction(String id) throws SQLException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SQL)) {
+            preparedStatement.setString(1, id);
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                if (rs.next()) {
+                    return new Transaction(rs.getString("id"),
+                            rs.getDouble("amount"),
+                            TransactionType.valueOf(rs.getString("type")));
+                }
+            }
+        }
+        return null;
     }
 
-
-    public Transaction getTransaction(String id) {
-        return transactions.get(id);
+    public List<Transaction> getAllTransactions(String username) throws SQLException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_SQL)) {
+            preparedStatement.setString(1, username);
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                while (rs.next()) {
+                    System.out.println("Transaction ID: " + rs.getString("id") +
+                            ", Amount: " + rs.getDouble("amount") +
+                            ", Type: " + rs.getString("type"));
+                }
+            }
+        }
+        return null;
     }
-
-
-    public Collection<Transaction> getAllTransactions() {
-        return transactions.values();
-    }
-
-
 }

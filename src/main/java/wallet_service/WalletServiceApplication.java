@@ -9,6 +9,7 @@ import wallet_service.in.repository.TransactionRepository;
 import wallet_service.in.service.PlayerService;
 import wallet_service.in.service.PlayerServiceImpl;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -104,7 +105,7 @@ public class WalletServiceApplication {
     }
 
 
-    private void displayTransactionHistory() {
+    private void displayTransactionHistory() throws SQLException {
         String username = readLineFromUser("Введите имя пользователя: ");
         List<Transaction> transactions = (List<Transaction>) transactionController.getTransactionHistory(username);
         for (Transaction transaction : transactions) {
