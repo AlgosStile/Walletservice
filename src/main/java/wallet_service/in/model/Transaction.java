@@ -4,29 +4,25 @@ import wallet_service.in.controller.TransactionType;
 
 
 public class Transaction {
-    private String id; // Идентификатор транзакции
+    private int id; // Идентификатор транзакции
     private double amount; // Сумма транзакции
     private TransactionType type; // Тип транзакции
 
 
     public Transaction(String id, double amount, TransactionType type) {
-        this.id = id;
+        this.id = Integer.parseInt(id);
         this.amount = amount;
         this.type = type;
 
     }
 
-
-
-    public String getId() {
+    public int getId() {
         return id;
     }
-
 
     public double getAmount() {
         return amount;
     }
-
 
     public TransactionType getType() {
         return type;

@@ -2,6 +2,7 @@ package wallet_service.in.controller;
 
 import wallet_service.in.service.PlayerService;
 import wallet_service.in.model.Action;
+import wallet_service.in.service.PlayerServiceImpl;
 
 
 import java.sql.SQLException;
@@ -12,19 +13,24 @@ public class PlayerController {
     private final PlayerService playerService;
 
 
-    public PlayerController(PlayerService playerService) {
-        this.playerService = playerService;
+//    public PlayerController(PlayerService playerService) {
+//        this.playerService = playerService;
+//    }
+    public PlayerController(PlayerService playerService) throws SQLException {
+
+        this.playerService = new PlayerServiceImpl();
     }
 
 
     public void registerPlayer(String username, String password) {
         try {
             playerService.registerPlayer(username, password);
-            System.out.println("Игрок успешно зарегистрирован");
+            System.out.println("Игрок успешно зарегистрирован 😀");
         } catch (Exception e) {
-            System.out.println("Ошибка при регистрации: " + e.getMessage());
+            System.out.println("Ошибка при регистрации: " + e.getMessage() + " 😞");
         }
     }
+
 
 
     public void authenticatePlayer(String username, String password) throws SQLException {

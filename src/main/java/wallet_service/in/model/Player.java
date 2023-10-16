@@ -21,6 +21,11 @@ public class Player {
         this.balance = 0;
         this.transactions = new ArrayList<>();
     }
+
+    public Player() {
+        this.transactions = new ArrayList<>();
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -72,5 +77,13 @@ public class Player {
         this.balance += amount;
         Transaction transaction = new Transaction(id, amount, TransactionType.CREDIT);
         transactions.add(transaction);
+    }
+
+    public void setUserName(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

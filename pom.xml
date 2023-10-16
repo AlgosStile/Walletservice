@@ -55,15 +55,36 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.liquibase/liquibase-core -->
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
             <version>4.24.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.microsoft.jfr</groupId>
-            <artifactId>jfr-streaming</artifactId>
-            <version>1.2.0</version>
-        </dependency>
+
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>3.6.1</version>
+                <configuration>
+                    <propertyFile>src/main/resources/db/changelog/liquibase.properties</propertyFile>
+                    <driver>oracle.jdbc.driver.OracleDriver</driver>
+                    <url>jdbc:postgresql://localhost:5432/wallet_db</url>
+                    <username>postgres</username>
+                    <password>wallet</password>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>update</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

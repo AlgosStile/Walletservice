@@ -12,9 +12,9 @@ import java.util.List;
 
 public class TransactionRepository {
 
-    private static final String INSERT_SQL = "INSERT INTO transactions(id, username, amount, type) VALUES (nextval('transaction_id_seq'), ?, ?, ?)";
-    private static final String SELECT_SQL = "SELECT * FROM transactions WHERE id = ?";
-    private static final String SELECT_ALL_SQL = "SELECT * FROM transactions WHERE username = ?";
+    private static final String INSERT_SQL = "INSERT INTO wallet.transactions(id, username, amount, type, balance) VALUES (nextval('transaction_id_seq'), ?, ?, ?)";
+    private static final String SELECT_SQL = "SELECT * FROM wallet.transactions WHERE id = ?";
+    private static final String SELECT_ALL_SQL = "SELECT * FROM wallet.transactions WHERE username = ?";
 
     private Connection connection;
 
@@ -48,7 +48,7 @@ public class TransactionRepository {
 
     public Transaction getTransaction(String id) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SQL)) {
-            preparedStatement.setString(1, id);
+            preparedStatement.setInt(1, Integer.parseInt(id));
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 if (rs.next()) {
                     return new Transaction(rs.getString("id"),

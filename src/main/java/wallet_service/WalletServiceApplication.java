@@ -13,7 +13,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
-
 public class WalletServiceApplication {
   
     private static final String MENU_ITEM_1 = "1. Регистрировать игрока";
@@ -39,7 +38,7 @@ public class WalletServiceApplication {
         application.run();
     }
 
-    public WalletServiceApplication(PlayerService playerService) {
+    public WalletServiceApplication(PlayerService playerService) throws SQLException {
         scanner = new Scanner(System.in);
 
         playerController = new PlayerController(playerService);

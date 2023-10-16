@@ -18,7 +18,7 @@ public class TransactionTest {
     public void GetIdTest() {
         Transaction transaction = new Transaction("id", 100.0, TransactionType.DEBIT);
 
-        String id = transaction.getId();
+        Integer id = transaction.getId();
 
         assertEquals("id", id);
     }

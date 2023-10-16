@@ -7,16 +7,18 @@ import java.sql.*;
 
 public class PlayerRepository {
 
-    private static final String INSERT_SQL = "INSERT INTO players(username, password, balance) VALUES (?, ?, ?)";
-    private static final String SELECT_SQL = "SELECT * FROM players WHERE username = ?";
-    private static final String UPDATE_SQL = "UPDATE players SET balance = ? WHERE username = ?";
-    private static final String DELETE_SQL = "DELETE FROM players WHERE username = ?";
+    private static final String INSERT_SQL = "INSERT INTO wallet.players(username, password, balance) VALUES (?, ?, ?)";
+    private static final String SELECT_SQL = "SELECT * FROM wallet.players WHERE username = ?";
+    private static final String UPDATE_SQL = "UPDATE wallet.players SET balance = ? WHERE username = ?";
+    private static final String DELETE_SQL = "DELETE FROM wallet.players WHERE username = ?";
+
 
     private Connection connection;
 
     public PlayerRepository() throws SQLException {
         connection = DBConnection.getInstance().getConnection();
     }
+
 
     public int addPlayer(Player player) throws SQLException {
         int newPlayerId = 0;
@@ -48,6 +50,7 @@ public class PlayerRepository {
         }
         return newPlayerId;
     }
+
     public Player getPlayer(String username) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SQL)) {
             preparedStatement.setString(1, username);

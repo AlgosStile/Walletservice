@@ -1,5 +1,6 @@
 package wallet_service.in.service;
 
+import wallet_service.in.config.DBConnection;
 import wallet_service.in.controller.TransactionType;
 import wallet_service.in.model.Action;
 import wallet_service.in.model.Player;
@@ -17,11 +18,19 @@ public class PlayerServiceImpl implements PlayerService {
     private List<Action> actions;
     private String authenticatedUser;
 
+
     public PlayerServiceImpl(PlayerRepository playerRepository, TransactionRepository transactionRepository) {
         this.playerRepository = playerRepository;
         this.transactionRepository = transactionRepository;
-
+        this.actions = new ArrayList<>();
     }
+
+    public PlayerServiceImpl() throws SQLException {
+        this.playerRepository = new PlayerRepository();
+        this.transactionRepository = new TransactionRepository();
+        this.actions = new ArrayList<>();
+    }
+
 
     public synchronized void addAction(String username, String action, String detail) {
         actions.add(new Action(username, action, detail));
@@ -42,10 +51,9 @@ public class PlayerServiceImpl implements PlayerService {
         if (existingPlayer != null) {
             throw new RuntimeException("Имя пользователя уже занято!");
         }
-
         Player player = new Player(username, password);
-        int playerId = playerRepository.addPlayer(player);  // Тут мы присвоили id нашему игроку после сохранения в базе
-        player.setId(playerId);
+        playerRepository.addPlayer(player);
+        addAction(username, "Регистрация игрока", "");
     }
 
     public boolean authenticatePlayer(String username, String password) throws SQLException {
@@ -93,6 +101,7 @@ public class PlayerServiceImpl implements PlayerService {
         addAction(username, "Дебит", result ? "Успешно" : "Неудачно");
 
         playerRepository.updatePlayer(username, player.getBalance());
+        DBConnection.getInstance().getConnection().commit();
     }
 
     public void credit(String username, String transactionId, double amount) throws Exception {
@@ -110,6 +119,7 @@ public class PlayerServiceImpl implements PlayerService {
         addAction(username, "Кредит", result ? "Успешно" : "Неудачно");
 
         playerRepository.updatePlayer(username, player.getBalance());
+        DBConnection.getInstance().getConnection().commit();
     }
 
     @Override
