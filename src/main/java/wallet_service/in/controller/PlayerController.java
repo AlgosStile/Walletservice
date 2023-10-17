@@ -1,8 +1,9 @@
 package wallet_service.in.controller;
 
+import wallet_service.in.model.Player;
+import wallet_service.in.repository.PlayerRepository;
 import wallet_service.in.service.PlayerService;
 import wallet_service.in.model.Action;
-import wallet_service.in.service.PlayerServiceImpl;
 
 
 import java.sql.SQLException;
@@ -10,15 +11,16 @@ import java.util.List;
 
 
 public class PlayerController {
-    private final PlayerService playerService;
 
 
-//    public PlayerController(PlayerService playerService) {
-//        this.playerService = playerService;
-//    }
+    private PlayerService playerService;
+
+    private PlayerRepository playerRepository;
+
+
     public PlayerController(PlayerService playerService) throws SQLException {
-
-        this.playerService = new PlayerServiceImpl();
+        this.playerService = playerService;
+        this.playerRepository = new PlayerRepository();
     }
 
 
@@ -45,10 +47,9 @@ public class PlayerController {
 
 
     public void getBalance(String username) throws SQLException {
-        double balance = 0;
-        if (playerService.isUserRegistered(username) && playerService.isUserAuthenticated(username)) {
-            balance = playerService.getBalance(username);
-            System.out.println("Баланс: " + balance);
+        Player player = playerRepository.getPlayer(username);
+        if (player != null) {
+            System.out.println("Баланс: " + player.getBalance());
         } else {
             System.out.println("Пользователь не аутентифицирован в системе! Введите регистрационные данные.");
         }
@@ -56,7 +57,6 @@ public class PlayerController {
 
 
     public void logoutPlayer(String username) {
-        // Вызываем метод logout из объекта playerService для выхода игрока из системы
         playerService.logout(username);
     }
 

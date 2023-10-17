@@ -58,6 +58,14 @@ public class DBConnection {
                             "type VARCHAR(20), " +
                             "balance DOUBLE PRECISION)"
             );
+            stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS wallet.actions (" +
+                            "id SERIAL PRIMARY KEY, " +
+                            "username VARCHAR(50), " +
+                            "action VARCHAR(50), " +
+                            "detail TEXT)"
+            );
+
         }
     }
 

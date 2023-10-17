@@ -7,7 +7,10 @@ import wallet_service.in.model.Player;
 import wallet_service.in.model.Transaction;
 import wallet_service.in.repository.PlayerRepository;
 import wallet_service.in.repository.TransactionRepository;
+import wallet_service.in.repository.ActionRepository;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.SQLException;
@@ -17,24 +20,43 @@ public class PlayerServiceImpl implements PlayerService {
     private TransactionRepository transactionRepository;
     private List<Action> actions;
     private String authenticatedUser;
-
-
-    public PlayerServiceImpl(PlayerRepository playerRepository, TransactionRepository transactionRepository) {
-        this.playerRepository = playerRepository;
-        this.transactionRepository = transactionRepository;
-        this.actions = new ArrayList<>();
-    }
+    private ActionRepository actionRepository;
 
     public PlayerServiceImpl() throws SQLException {
         this.playerRepository = new PlayerRepository();
-        this.transactionRepository = new TransactionRepository();
+        this.transactionRepository = new TransactionRepository(this.playerRepository);
         this.actions = new ArrayList<>();
+        this.actionRepository = new ActionRepository();
+    }
+
+    public PlayerServiceImpl(PlayerRepository playerRepository, TransactionRepository transactionRepository) throws SQLException {
+        if (playerRepository == null || transactionRepository == null) {
+            throw new IllegalArgumentException("PlayerRepository и TransactionRepository не могут быть null");
+        }
+        this.playerRepository = playerRepository;
+        this.transactionRepository = transactionRepository;
+        this.actions = new ArrayList<>();
+        this.actionRepository = new ActionRepository();
     }
 
 
+
+    @Override
     public synchronized void addAction(String username, String action, String detail) {
-        actions.add(new Action(username, action, detail));
+        Action actionObject = new Action(username, action, detail);
+
+        actions.add(actionObject);
+
+        try {
+            actionRepository.addAction(actionObject); // Записываем действия в БД
+        }
+        catch(SQLException e) {
+            // Обработка исключения
+            e.printStackTrace();
+        }
     }
+
+
 
     public List<Action> getPlayerActions(String username) {
         List<Action> playerActions = new ArrayList<>();
@@ -75,12 +97,14 @@ public class PlayerServiceImpl implements PlayerService {
         return username.equals(authenticatedUser);
     }
 
+    @Override
     public double getBalance(String username) throws SQLException {
-        if (authenticatedUser == null || !authenticatedUser.equals(username)) {
-            throw new RuntimeException("Пользователь не аутентифицирован. Введите регистрационные данные.");
-        }
         Player player = playerRepository.getPlayer(username);
-        return player != null ? player.getBalance() : 0;
+        if (player != null) {
+            return player.getBalance();
+        } else {
+            throw new RuntimeException("Пользователь не аутентифицирован: " + username);
+        }
     }
 
 
@@ -93,17 +117,16 @@ public class PlayerServiceImpl implements PlayerService {
             throw new Exception("Недостаточно средств на счете");
         }
         player.debit(transactionId, amount);
-
-        // Немедленное обновление баланса в БД после дебетовой транзакции
         playerRepository.updatePlayer(username, player.getBalance());
-
         Transaction transaction = new Transaction(transactionId, amount, TransactionType.DEBIT);
         transactionRepository.addTransaction(username, transaction);
+
 
         boolean result = transactionRepository.getTransaction(transactionId) != null;
         addAction(username, "Дебит", result ? "Успешно" : "Неудачно");
 
         DBConnection.getInstance().getConnection().commit();
+
     }
 
     public void credit(String username, int transactionId, double amount) throws Exception {
@@ -113,8 +136,6 @@ public class PlayerServiceImpl implements PlayerService {
         }
 
         player.credit(transactionId, amount);
-
-        // Обновление баланса в БД после кредитной транзакции
         playerRepository.updatePlayer(username, player.getBalance());
 
         Transaction transaction = new Transaction(transactionId, amount, TransactionType.CREDIT);
@@ -122,8 +143,6 @@ public class PlayerServiceImpl implements PlayerService {
 
         boolean result = transactionRepository.getTransaction(transactionId) != null;
         addAction(username, "Кредит", result ? "Успешно" : "Неудачно");
-
-        // Добавление commit после выполнения операции
         DBConnection.getInstance().getConnection().commit();
     }
 
@@ -147,5 +166,6 @@ public class PlayerServiceImpl implements PlayerService {
         }
         authenticatedUser = null;
     }
+
 
 }

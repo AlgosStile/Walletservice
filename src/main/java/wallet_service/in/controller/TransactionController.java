@@ -16,9 +16,9 @@ public class TransactionController {
     }
 
 
-    public void debitTransaction(String username, int transactionId, double amount) throws Exception {
+    public void debitTransaction(String username, int id, double amount) throws Exception {
         try {
-            playerService.debit(username, transactionId, amount);
+            playerService.debit(username, id, amount);
             System.out.println("Дебетовая транзакция прошла успешно");
         } catch (Exception e) {
             System.out.println("Дебетовая транзакция не удалась: " + e.getMessage());
@@ -26,9 +26,9 @@ public class TransactionController {
     }
 
 
-    public void creditTransaction(String username, int transactionId, double amount) throws Exception {
+    public void creditTransaction(String username, int id, double amount) throws Exception {
         try {
-            playerService.credit(username, transactionId, amount);
+            playerService.credit(username, id, amount);
             System.out.println("Кредитная транзакция прошла успешно --> $");
         } catch (Exception e) {
             System.out.println("Кредитная транзакция не удалась ¯\\_(ツ)_/¯ : " + e.getMessage());

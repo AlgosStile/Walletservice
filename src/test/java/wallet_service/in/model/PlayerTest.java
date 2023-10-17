@@ -67,7 +67,7 @@ public class PlayerTest {
 
     @Test
     @DisplayName("Debit Insufficient Balance Should Not Change Balance Test")
-    public void Debit_insufficientBalance_shouldNotChangeBalanceTest() {
+    public void Debit_insufficientBalance_shouldNotChangeBalanceTest() throws SQLException {
         Player player = new Player("username", "password");
 
         assertThrows(Exception.class, () -> player.debit(Integer.parseInt("transactionId"), 50.0));
@@ -124,7 +124,7 @@ public class PlayerTest {
 
     @Test
     @DisplayName("Credit Negative Amount Test")
-    public void credit_negativeAmountTest() {
+    public void credit_negativeAmountTest() throws SQLException {
         Player player = new Player("username", "password");
 
         assertThrows(Exception.class, () -> player.credit(Integer.parseInt("transactionId"), -100.0));
@@ -146,7 +146,7 @@ public class PlayerTest {
 
     @Test
     @DisplayName("Debit Insufficient Balance Test")
-    public void Debit_insufficientBalanceTest() {
+    public void Debit_insufficientBalanceTest() throws SQLException {
         Player player = new Player("username", "password");
 
         assertThrows(Exception.class, () -> player.debit(Integer.parseInt("transactionId"), 50.0));

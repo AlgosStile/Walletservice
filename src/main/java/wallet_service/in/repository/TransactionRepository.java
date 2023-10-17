@@ -2,17 +2,19 @@ package wallet_service.in.repository;
 
 import wallet_service.in.config.DBConnection;
 import wallet_service.in.controller.TransactionType;
+import wallet_service.in.model.Player;
 import wallet_service.in.model.Transaction;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TransactionRepository {
 
-    private static final String INSERT_SQL = "INSERT INTO wallet.transactions(id, username, amount, type, balance) VALUES (nextval('transaction_id_seq'), ?, ?, ?)";
+    private static final String INSERT_SQL = "INSERT INTO wallet.transactions(username, amount, type, balance) VALUES (?, ?, ?, ?)";
     private static final String SELECT_SQL = "SELECT * FROM wallet.transactions WHERE id = ?";
     private static final String SELECT_ALL_SQL = "SELECT * FROM wallet.transactions WHERE username = ?";
 
@@ -22,6 +24,15 @@ public class TransactionRepository {
         connection = DBConnection.getInstance().getConnection();
     }
 
+
+
+    private PlayerRepository playerRepository;
+    public TransactionRepository(PlayerRepository playerRepository) {
+        this.playerRepository = playerRepository;
+    }
+
+
+
     public void addTransaction(String username, Transaction transaction) throws SQLException {
         try {
             connection.setAutoCommit(false);
@@ -29,6 +40,15 @@ public class TransactionRepository {
             preparedStatement.setString(1, username);
             preparedStatement.setDouble(2, transaction.getAmount());
             preparedStatement.setString(3, transaction.getType().toString());
+
+            // update balance
+            Player player = playerRepository.getPlayer(username);
+            double newBalance = transaction.getType() == TransactionType.DEBIT
+                    ? player.getBalance() - transaction.getAmount()
+                    : player.getBalance() + transaction.getAmount();
+            playerRepository.updatePlayer(username, newBalance);
+            preparedStatement.setDouble(4, newBalance);
+
             preparedStatement.executeUpdate();
 
             preparedStatement.close();
@@ -46,6 +66,7 @@ public class TransactionRepository {
         }
     }
 
+
     public Transaction getTransaction(int id) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SQL)) {
             preparedStatement.setInt(1, id);
@@ -61,6 +82,7 @@ public class TransactionRepository {
     }
 
     public List<Transaction> getAllTransactions(String username) throws SQLException {
+        List<Transaction> transactionList = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_SQL)) {
             preparedStatement.setString(1, username);
             try (ResultSet rs = preparedStatement.executeQuery()) {
@@ -68,9 +90,15 @@ public class TransactionRepository {
                     System.out.println("Transaction ID: " + rs.getString("id") +
                             ", Amount: " + rs.getDouble("amount") +
                             ", Type: " + rs.getString("type"));
+                    Transaction transaction = new Transaction(
+                            rs.getInt("id"),
+                            rs.getDouble("amount"),
+                            TransactionType.valueOf(rs.getString("type")));
+                    transactionList.add(transaction);
                 }
             }
         }
-        return null;
+        return transactionList;
     }
+
 }

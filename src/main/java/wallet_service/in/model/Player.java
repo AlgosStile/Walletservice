@@ -1,7 +1,9 @@
 package wallet_service.in.model;
 
 import wallet_service.in.controller.TransactionType;
+import wallet_service.in.repository.PlayerRepository;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +28,7 @@ public class Player {
         this.transactions = new ArrayList<>();
     }
 
+
     public void setId(int id) {
         this.id = id;
     }
@@ -38,11 +41,6 @@ public class Player {
 
     public String getPassword() {
         return password;
-    }
-
-
-    public double getBalance() {
-        return balance;
     }
 
 
@@ -77,6 +75,10 @@ public class Player {
         this.balance += amount;
         Transaction transaction = new Transaction(transactionId, amount, TransactionType.CREDIT);
         transactions.add(transaction);
+    }
+
+    public double getBalance() {
+        return balance;
     }
 
     public void setUserName(String username) {
