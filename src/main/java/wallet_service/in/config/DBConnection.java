@@ -1,9 +1,6 @@
 package wallet_service.in.config;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class DBConnection {
     private static DBConnection instance;
@@ -19,12 +16,18 @@ public class DBConnection {
         password = config.getProperty("db.password");
         connection = DriverManager.getConnection(url, username, password);
         createTablesIfNotExist();
+        createSequenceIfNotExist();
     }
 
 
     public static synchronized DBConnection getInstance() throws SQLException {
         if (instance == null) {
-            instance = new DBConnection();
+            try {
+                instance = new DBConnection();
+            } catch (SQLException e) {
+                System.out.println("Ошибка при создании соединения с базой данных: " + e.getMessage());
+                throw e;
+            }
         }
         return instance;
     }
@@ -33,39 +36,26 @@ public class DBConnection {
         return connection;
     }
 
-    public void createTablesIfNotExist() throws SQLException {
+    private final String sequenceQuery = "CREATE SEQUENCE IF NOT EXISTS wallet.transaction_id_seq;";
+
+    private void createSequenceIfNotExist() throws SQLException {
         try (Statement stmt = connection.createStatement()) {
+            stmt.execute(sequenceQuery);
+        }
+    }
 
-            stmt.execute("CREATE SCHEMA IF NOT EXISTS wallet;");
 
-            stmt.execute(
-                    "CREATE SEQUENCE IF NOT EXISTS wallet.transaction_id_seq;" // создание последовательности
-            );
-
-            stmt.execute(
-                    "CREATE TABLE IF NOT EXISTS wallet.players (" +
-                            "id SERIAL PRIMARY KEY, " +
-                            "username VARCHAR(50), " +
-                            "password VARCHAR(50), " +
-                            "balance DOUBLE PRECISION)"
-            );
-
-            stmt.execute(
-                    "CREATE TABLE IF NOT EXISTS wallet.transactions (" +
-                            "id INTEGER PRIMARY KEY DEFAULT nextval('wallet.transaction_id_seq'), " + // использование последовательности
-                            "username VARCHAR(50), " +
-                            "amount DOUBLE PRECISION, " +
-                            "type VARCHAR(20), " +
-                            "balance DOUBLE PRECISION)"
-            );
-            stmt.execute(
-                    "CREATE TABLE IF NOT EXISTS wallet.actions (" +
-                            "id SERIAL PRIMARY KEY, " +
-                            "username VARCHAR(50), " +
-                            "action VARCHAR(50), " +
-                            "detail TEXT)"
-            );
-
+    public void createTablesIfNotExist() throws SQLException {
+        try (
+                PreparedStatement stmt1 = connection.prepareStatement("CREATE SCHEMA IF NOT EXISTS wallet;");
+                PreparedStatement stmt2 = connection.prepareStatement("CREATE TABLE IF NOT EXISTS wallet.players (id SERIAL PRIMARY KEY, username VARCHAR(50), password VARCHAR(50), balance DOUBLE PRECISION)");
+                PreparedStatement stmt3 = connection.prepareStatement("CREATE TABLE IF NOT EXISTS wallet.transactions (id INTEGER PRIMARY KEY DEFAULT nextval('wallet.transaction_id_seq'), username VARCHAR(50), amount DOUBLE PRECISION, type VARCHAR(20), balance DOUBLE PRECISION)");
+                PreparedStatement stmt4 = connection.prepareStatement("CREATE TABLE IF NOT EXISTS wallet.actions (id SERIAL PRIMARY KEY, username VARCHAR(50), action VARCHAR(50), detail TEXT)")
+        ) {
+            stmt1.execute();
+            stmt2.execute();
+            stmt3.execute();
+            stmt4.execute();
         }
     }
 

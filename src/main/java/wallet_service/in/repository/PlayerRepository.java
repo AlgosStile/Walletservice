@@ -4,6 +4,7 @@ import wallet_service.in.config.DBConnection;
 import wallet_service.in.model.Player;
 
 import java.sql.*;
+import java.sql.PreparedStatement;
 
 public class PlayerRepository {
 
@@ -13,7 +14,7 @@ public class PlayerRepository {
     private static final String DELETE_SQL = "DELETE FROM wallet.players WHERE username = ?";
 
 
-    private Connection connection;
+    private final Connection connection;
 
     public PlayerRepository() throws SQLException {
         connection = DBConnection.getInstance().getConnection();
@@ -30,6 +31,15 @@ public class PlayerRepository {
             preparedStatement.setDouble(3, player.getBalance());
             preparedStatement.executeUpdate();
 
+            PreparedStatement sequenceStatement = connection.prepareStatement("SELECT nextval('wallet.transaction_id_seq')");
+            ResultSet rsSequence = sequenceStatement.executeQuery();
+            if (rsSequence.next()) {
+                int transactionId = rsSequence.getInt(1);
+                player.setId(transactionId);
+            }
+            rsSequence.close();
+            sequenceStatement.close();
+
             ResultSet rs = preparedStatement.getGeneratedKeys();
             if (rs.next()) {
                 newPlayerId = rs.getInt(1);
@@ -41,13 +51,15 @@ public class PlayerRepository {
             System.out.println(ex.getMessage());
             if (connection != null) {
                 try {
-                    System.out.println("Транзакция отменена");
                     connection.rollback();
                 } catch (SQLException e) {
                     System.out.println(e.getMessage());
                 }
             }
+        } finally {
+            connection.setAutoCommit(true);
         }
+
         return newPlayerId;
     }
 
@@ -78,5 +90,18 @@ public class PlayerRepository {
             preparedStatement.executeUpdate();
         }
     }
+    public double getBalance(String username) throws SQLException {
+        String sql = "SELECT balance FROM wallet.players WHERE username = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, username);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("balance");
+            } else {
+                throw new RuntimeException("Пользователь " + username + " не найден.");
+            }
+        }
+    }
 
 }
+

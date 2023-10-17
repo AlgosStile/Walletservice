@@ -4,6 +4,7 @@ package wallet_service.in.service;
 import wallet_service.in.model.Action;
 import wallet_service.in.model.Player;
 import wallet_service.in.model.Transaction;
+import wallet_service.in.repository.PlayerRepository;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -25,4 +26,6 @@ public interface PlayerService {
     void addAction(String username, String action, String detail);
 
     double getBalance(String username) throws SQLException;
+
+    PlayerRepository getPlayerRepository();
 }

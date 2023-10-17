@@ -1,6 +1,7 @@
 package wallet_service.in.service;
 
 import wallet_service.in.config.DBConnection;
+import wallet_service.in.controller.TransactionController;
 import wallet_service.in.controller.TransactionType;
 import wallet_service.in.model.Action;
 import wallet_service.in.model.Player;
@@ -9,36 +10,24 @@ import wallet_service.in.repository.PlayerRepository;
 import wallet_service.in.repository.TransactionRepository;
 import wallet_service.in.repository.ActionRepository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.SQLException;
 
 public class PlayerServiceImpl implements PlayerService {
-    private PlayerRepository playerRepository;
-    private TransactionRepository transactionRepository;
-    private List<Action> actions;
+    private final PlayerRepository playerRepository;
+    private final TransactionRepository transactionRepository;
+    private final List<Action> actions;
     private String authenticatedUser;
-    private ActionRepository actionRepository;
-
-    public PlayerServiceImpl() throws SQLException {
-        this.playerRepository = new PlayerRepository();
-        this.transactionRepository = new TransactionRepository(this.playerRepository);
-        this.actions = new ArrayList<>();
-        this.actionRepository = new ActionRepository();
-    }
+    private final ActionRepository actionRepository;
 
     public PlayerServiceImpl(PlayerRepository playerRepository, TransactionRepository transactionRepository) throws SQLException {
-        if (playerRepository == null || transactionRepository == null) {
-            throw new IllegalArgumentException("PlayerRepository и TransactionRepository не могут быть null");
-        }
         this.playerRepository = playerRepository;
         this.transactionRepository = transactionRepository;
         this.actions = new ArrayList<>();
         this.actionRepository = new ActionRepository();
     }
-
 
 
     @Override
@@ -97,14 +86,22 @@ public class PlayerServiceImpl implements PlayerService {
         return username.equals(authenticatedUser);
     }
 
-    @Override
     public double getBalance(String username) throws SQLException {
         Player player = playerRepository.getPlayer(username);
         if (player != null) {
+            double newBalance = playerRepository.getBalance(username);
+            player.setBalance(newBalance);
             return player.getBalance();
         } else {
-            throw new RuntimeException("Пользователь не аутентифицирован: " + username);
+            System.out.println("Пользователь не аутентифицирован в системе! Введите регистрационные данные.");
+            // тут позже можно вернуть значение по умолчанию.
+            return 0.0;
         }
+    }
+
+    @Override
+    public PlayerRepository getPlayerRepository() {
+        return playerRepository;
     }
 
 

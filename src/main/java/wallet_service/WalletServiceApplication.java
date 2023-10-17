@@ -28,10 +28,12 @@ public class WalletServiceApplication {
     private static Scanner scanner;
     private static TransactionController transactionController;
     private static PlayerController playerController;
+    private static PlayerRepository playerRepository; // Удалил инициализацию тут
+    private static TransactionRepository transactionRepository;
 
     public static void main(String[] args) throws Exception {
         PlayerRepository playerRepository = new PlayerRepository();
-        TransactionRepository transactionRepository = new TransactionRepository();
+        TransactionRepository transactionRepository = new TransactionRepository(playerRepository);
         PlayerService playerService = new PlayerServiceImpl(playerRepository, transactionRepository);
 
         WalletServiceApplication application = new WalletServiceApplication(playerService);
@@ -40,9 +42,8 @@ public class WalletServiceApplication {
 
     public WalletServiceApplication(PlayerService playerService) throws SQLException {
         scanner = new Scanner(System.in);
-
         playerController = new PlayerController(playerService);
-        transactionController = new TransactionController(playerService);
+        transactionController = new TransactionController(playerService, playerRepository, transactionRepository);
     }
 
 

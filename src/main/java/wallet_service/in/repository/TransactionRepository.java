@@ -40,8 +40,12 @@ public class TransactionRepository {
             preparedStatement.setString(1, username);
             preparedStatement.setDouble(2, transaction.getAmount());
             preparedStatement.setString(3, transaction.getType().toString());
+            preparedStatement.setDouble(4, playerRepository.getPlayer(username).getBalance());
+            preparedStatement.executeUpdate();
 
-            // update balance
+            preparedStatement.close();
+            connection.commit();
+
             Player player = playerRepository.getPlayer(username);
             double newBalance = transaction.getType() == TransactionType.DEBIT
                     ? player.getBalance() - transaction.getAmount()
@@ -57,12 +61,14 @@ public class TransactionRepository {
             System.out.println(ex.getMessage());
             if (connection != null) {
                 try {
-                    System.out.println("Транзакция отменена");
                     connection.rollback();
                 } catch (SQLException e) {
                     System.out.println(e.getMessage());
                 }
             }
+        } finally {
+            assert connection != null;
+            connection.setAutoCommit(true);
         }
     }
 

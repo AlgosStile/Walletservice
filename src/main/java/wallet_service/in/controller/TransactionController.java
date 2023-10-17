@@ -1,18 +1,24 @@
 package wallet_service.in.controller;
 
 import wallet_service.in.model.Transaction;
+import wallet_service.in.repository.PlayerRepository;
+import wallet_service.in.repository.TransactionRepository;
 import wallet_service.in.service.PlayerService;
 
 import java.sql.SQLException;
 import java.util.List;
 
 
+
 public class TransactionController {
+    private PlayerService playerService;
+    private PlayerRepository playerRepository;
+    private TransactionRepository transactionRepository;
 
-    private final PlayerService playerService;
-
-    public TransactionController(PlayerService playerService) {
+    public TransactionController(PlayerService playerService, PlayerRepository playerRepository, TransactionRepository transactionRepository) {
         this.playerService = playerService;
+        this.playerRepository = playerRepository;
+        this.transactionRepository = transactionRepository;
     }
 
 
@@ -30,9 +36,15 @@ public class TransactionController {
         try {
             playerService.credit(username, id, amount);
             System.out.println("Кредитная транзакция прошла успешно --> $");
-        } catch (Exception e) {
-            System.out.println("Кредитная транзакция не удалась ¯\\_(ツ)_/¯ : " + e.getMessage());
+//        } catch (Exception e) {
+//            System.out.println("Кредитная транзакция не удалась ¯\\_(ツ)_/¯ : " + e.getMessage());
+//        }
         }
+            catch (Exception exception) {
+                String message = "Кредитная транзакция " + id + " не удалась: " + exception.getMessage();
+                System.out.println(message);
+                throw new Exception(message);
+            }
     }
 
 
