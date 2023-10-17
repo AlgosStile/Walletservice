@@ -4,6 +4,7 @@ import wallet_service.in.config.DBConnection;
 import wallet_service.in.model.Player;
 
 import java.sql.*;
+import java.util.Collection;
 
 public class PlayerRepository {
 
@@ -78,4 +79,5 @@ public class PlayerRepository {
             preparedStatement.executeUpdate();
         }
     }
+
 }

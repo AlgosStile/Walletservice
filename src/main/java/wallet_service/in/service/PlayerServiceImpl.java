@@ -84,7 +84,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
 
-    public void debit(String username, String transactionId, double amount) throws Exception {
+    public void debit(String username, int transactionId, double amount) throws Exception {
         Player player = playerRepository.getPlayer(username);
         if (player == null) {
             throw new Exception("Игрок не найден");
@@ -94,17 +94,19 @@ public class PlayerServiceImpl implements PlayerService {
         }
         player.debit(transactionId, amount);
 
+        // Немедленное обновление баланса в БД после дебетовой транзакции
+        playerRepository.updatePlayer(username, player.getBalance());
+
         Transaction transaction = new Transaction(transactionId, amount, TransactionType.DEBIT);
         transactionRepository.addTransaction(username, transaction);
 
         boolean result = transactionRepository.getTransaction(transactionId) != null;
         addAction(username, "Дебит", result ? "Успешно" : "Неудачно");
 
-        playerRepository.updatePlayer(username, player.getBalance());
         DBConnection.getInstance().getConnection().commit();
     }
 
-    public void credit(String username, String transactionId, double amount) throws Exception {
+    public void credit(String username, int transactionId, double amount) throws Exception {
         Player player = playerRepository.getPlayer(username);
         if (player == null) {
             throw new Exception("Игрок не найден");
@@ -112,15 +114,19 @@ public class PlayerServiceImpl implements PlayerService {
 
         player.credit(transactionId, amount);
 
+        // Обновление баланса в БД после кредитной транзакции
+        playerRepository.updatePlayer(username, player.getBalance());
+
         Transaction transaction = new Transaction(transactionId, amount, TransactionType.CREDIT);
         transactionRepository.addTransaction(username, transaction);
 
         boolean result = transactionRepository.getTransaction(transactionId) != null;
         addAction(username, "Кредит", result ? "Успешно" : "Неудачно");
 
-        playerRepository.updatePlayer(username, player.getBalance());
+        // Добавление commit после выполнения операции
         DBConnection.getInstance().getConnection().commit();
     }
+
 
     @Override
     public List<Transaction> getTransactionHistory(String username) throws SQLException {

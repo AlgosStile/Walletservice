@@ -9,8 +9,8 @@ public class Transaction {
     private TransactionType type; // Тип транзакции
 
 
-    public Transaction(String id, double amount, TransactionType type) {
-        this.id = Integer.parseInt(id);
+    public Transaction(int id, double amount, TransactionType type) {
+        this.id = id;
         this.amount = amount;
         this.type = type;
 

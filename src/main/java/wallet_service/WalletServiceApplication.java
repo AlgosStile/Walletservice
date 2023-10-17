@@ -74,13 +74,17 @@ public class WalletServiceApplication {
                     break;
                 case 4:
                     String username4 = readLineFromUser("Введите имя пользователя: ");
-                    String transactionId4 = readLineFromUser("Введите ID транзакции: ");
+                    System.out.print("Введите ID транзакции: ");  // Добавьте запрос на ввод ID транзакции
+                    int transactionId4 = scanner.nextInt(); // Считайте ID транзакции как целое число
+                    scanner.nextLine();
                     double amount4 = readDoubleFromUser("Введите сумму: ");
                     transactionController.debitTransaction(username4, transactionId4, amount4);
                     break;
                 case 5:
                     String username5 = readLineFromUser("Введите имя пользователя: ");
-                    String transactionId5 = readLineFromUser("Введите ID транзакции: ");
+                    System.out.print("Введите ID транзакции: ");
+                    int transactionId5 = scanner.nextInt();
+                    scanner.nextLine();
                     double amount5 = readDoubleFromUser("Введите сумму: ");
                     transactionController.creditTransaction(username5, transactionId5, amount5);
                     break;

@@ -46,12 +46,12 @@ public class TransactionRepository {
         }
     }
 
-    public Transaction getTransaction(String id) throws SQLException {
+    public Transaction getTransaction(int id) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SQL)) {
-            preparedStatement.setInt(1, Integer.parseInt(id));
+            preparedStatement.setInt(1, id);
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 if (rs.next()) {
-                    return new Transaction(rs.getString("id"),
+                    return new Transaction(rs.getInt("id"),
                             rs.getDouble("amount"),
                             TransactionType.valueOf(rs.getString("type")));
                 }

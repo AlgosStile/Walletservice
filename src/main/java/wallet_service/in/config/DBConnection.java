@@ -36,12 +36,12 @@ public class DBConnection {
     public void createTablesIfNotExist() throws SQLException {
         try (Statement stmt = connection.createStatement()) {
 
+            stmt.execute("CREATE SCHEMA IF NOT EXISTS wallet;");
+
             stmt.execute(
-                    "CREATE SCHEMA IF NOT EXISTS wallet;"
+                    "CREATE SEQUENCE IF NOT EXISTS wallet.transaction_id_seq;" // создание последовательности
             );
-            stmt.execute(
-                    "CREATE SEQUENCE IF NOT EXISTS wallet.transaction_id_seq;"
-            );
+
             stmt.execute(
                     "CREATE TABLE IF NOT EXISTS wallet.players (" +
                             "id SERIAL PRIMARY KEY, " +
@@ -49,9 +49,10 @@ public class DBConnection {
                             "password VARCHAR(50), " +
                             "balance DOUBLE PRECISION)"
             );
+
             stmt.execute(
                     "CREATE TABLE IF NOT EXISTS wallet.transactions (" +
-                            "id VARCHAR PRIMARY KEY DEFAULT nextval('wallet.transaction_id_seq'), " +
+                            "id INTEGER PRIMARY KEY DEFAULT nextval('wallet.transaction_id_seq'), " + // использование последовательности
                             "username VARCHAR(50), " +
                             "amount DOUBLE PRECISION, " +
                             "type VARCHAR(20), " +
@@ -59,4 +60,6 @@ public class DBConnection {
             );
         }
     }
+
 }
+

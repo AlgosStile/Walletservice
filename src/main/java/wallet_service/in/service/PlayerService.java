@@ -16,10 +16,11 @@ public interface PlayerService {
     double getBalance(String username) throws SQLException;
     boolean isUserRegistered(String username) throws SQLException;
     boolean isUserAuthenticated(String username);
-    void debit(String username, String transactionId, double amount) throws Exception;
-    void credit(String username, String transactionId, double amount) throws Exception;
+    void debit(String username, int transactionId, double amount) throws Exception;
+    void credit(String username, int transactionId, double amount) throws Exception;
     List<Transaction> getTransactionHistory(String username) throws SQLException;
 
     void logout(String username);
 
+    void addAction(String username, String action, String detail);
 }

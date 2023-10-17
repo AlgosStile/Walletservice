@@ -56,7 +56,7 @@ public class Player {
     }
 
 
-    public void debit(String id, double amount) throws Exception {
+    public void debit(int transactionId, double amount) throws Exception {
         if (amount < 0) {
             throw new Exception("Сумма не может быть отрицательной");
         }
@@ -65,17 +65,17 @@ public class Player {
         }
 
         this.balance -= amount;
-        Transaction transaction = new Transaction(id, amount, TransactionType.DEBIT);
+        Transaction transaction = new Transaction(transactionId, amount, TransactionType.DEBIT);
         transactions.add(transaction);
     }
 
 
-    public void credit(String id, double amount) throws Exception {
+    public void credit(int transactionId, double amount) throws Exception {
         if (amount < 0) {
             throw new Exception("Некорректная сумма");
         }
         this.balance += amount;
-        Transaction transaction = new Transaction(id, amount, TransactionType.CREDIT);
+        Transaction transaction = new Transaction(transactionId, amount, TransactionType.CREDIT);
         transactions.add(transaction);
     }
 
