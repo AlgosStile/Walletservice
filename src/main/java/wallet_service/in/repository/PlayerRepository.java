@@ -25,7 +25,7 @@ public class PlayerRepository {
         int newPlayerId = 0;
         try {
             connection.setAutoCommit(false);
-            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SQL, PreparedStatement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, player.getUsername());
             preparedStatement.setString(2, player.getPassword());
             preparedStatement.setDouble(3, player.getBalance());

@@ -24,7 +24,11 @@ public class TransactionRepository {
         connection = DBConnection.getInstance().getConnection();
     }
 
-
+    public void closeConnection() throws SQLException {
+        if (connection != null) {
+            connection.close();
+        }
+    }
 
     private PlayerRepository playerRepository;
     public TransactionRepository(PlayerRepository playerRepository) {

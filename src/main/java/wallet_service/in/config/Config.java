@@ -22,7 +22,7 @@ public class Config {
         try (InputStream is = Config.class.getResourceAsStream("/db.properties")) {
             configFile.load(is);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Ошибка при загрузке конфигурации: " + e.getMessage());
         }
     }
 

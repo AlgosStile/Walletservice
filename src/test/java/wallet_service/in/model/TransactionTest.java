@@ -16,9 +16,10 @@ public class TransactionTest {
     @Test
     @DisplayName("Get Id Test")
     public void GetIdTest() {
-        Transaction transaction = new Transaction("id", 100.0, TransactionType.DEBIT);
+        Integer id = null;
+        Transaction transaction = new Transaction(id, 100.0, TransactionType.DEBIT);
 
-        Integer id = transaction.getId();
+        id = transaction.getId();
 
         assertEquals("id", id);
     }
@@ -26,7 +27,8 @@ public class TransactionTest {
     @Test
     @DisplayName("Get Amount Test")
     public void GetAmountTest() {
-        Transaction transaction = new Transaction("id", 100.0, TransactionType.DEBIT);
+        Integer id = null;
+        Transaction transaction = new Transaction(id, 100.0, TransactionType.DEBIT);
 
         double amount = transaction.getAmount();
 
@@ -35,8 +37,8 @@ public class TransactionTest {
 
     @Test
     @DisplayName("Get Type Test")
-    public void getTypeTest() {
-        Transaction transaction = new Transaction("id", 100.0, TransactionType.DEBIT);
+    public void getTypeTest(int id) {
+        Transaction transaction = new Transaction(id, 100.0, TransactionType.DEBIT);
 
         TransactionType type = transaction.getType();
 

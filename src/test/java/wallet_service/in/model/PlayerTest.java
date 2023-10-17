@@ -85,17 +85,6 @@ public class PlayerTest {
         assertEquals(0, player.getTransactions().size());
     }
 
-//    @Test
-//    @DisplayName("Add Transaction Test")
-//    public void AddTransactionTest() {
-//        Player player = new Player("username", "password");
-//        Transaction transaction = new Transaction("id", 100.0, TransactionType.DEBIT);
-//
-//        player.addTransaction(transaction);
-//
-//        assertEquals(1, player.getTransactions().size());
-//        assertTrue(player.getTransactions().contains(transaction));
-//    }
 
     @Test
     @DisplayName("Debit Test")
