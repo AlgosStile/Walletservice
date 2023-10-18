@@ -6,15 +6,10 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <changeSet id="001-create-schema" author="Algosstile">
-        <sql>
-            CREATE SCHEMA IF NOT EXISTS migration;
-        </sql>
-    </changeSet>
-
     <changeSet id="create-table-player" author="Algosstile">
-        <createTable schemaName="migration" tableName="player">
-            <column name="username" type="varchar(255)">
+        <createTable schemaName="wallet" tableName="player">
+
+        <column name="username" type="varchar(255)">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="password" type="varchar(255)">
@@ -27,7 +22,7 @@
     </changeSet>
 
     <changeSet id="create-table-transaction" author="Algosstile">
-        <createTable schemaName="migration" tableName="transaction">
+        <createTable schemaName="wallet" tableName="transaction">
             <column name="id" type="varchar(255)">
                 <constraints nullable="false" primaryKey="true"/>
             </column>

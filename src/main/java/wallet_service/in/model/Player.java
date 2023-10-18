@@ -1,9 +1,6 @@
 package wallet_service.in.model;
 
 import wallet_service.in.controller.TransactionType;
-import wallet_service.in.repository.PlayerRepository;
-
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -5,9 +5,11 @@ import liquibase.LabelExpression;
 import liquibase.Liquibase;
 import liquibase.database.DatabaseConnection;
 import liquibase.database.jvm.JdbcConnection;
+import liquibase.exception.ChangeLogParseException;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
 import wallet_service.in.config.DBConnection;
+import wallet_service.in.config.LiquibaseConfiguration;
 import wallet_service.in.controller.PlayerController;
 import wallet_service.in.controller.TransactionController;
 import wallet_service.in.model.Action;
@@ -44,21 +46,11 @@ public class WalletServiceApplication {
         transactionRepository = TransactionRepository.getInstance(playerRepository);
         PlayerService playerService = new PlayerServiceImpl(playerRepository, transactionRepository);
         WalletServiceApplication application = new WalletServiceApplication(playerService, playerRepository, transactionRepository);
-        DBConnection.getInstance();
-        application.runLiquibase();
+        LiquibaseConfiguration liquibaseConfiguration = new LiquibaseConfiguration(DBConnection.getInstance());
+        liquibaseConfiguration.updateDatabase();
+
         application.run();
 
-    }
-
-    private void runLiquibase() {
-        try {
-            DatabaseConnection databaseConnection = new JdbcConnection(DBConnection.getInstance().getConnection());
-            Liquibase liquibase = new liquibase.Liquibase("src/main/resources/db/changelog/db.changelog-master.xml", new ClassLoaderResourceAccessor(), databaseConnection);
-            liquibase.update(new Contexts(), new LabelExpression());
-        } catch (LiquibaseException e) {
-            System.err.println("Ошибка при выполнении Liquibase: " + e.getMessage());
-            e.printStackTrace();
-        }
     }
 
 
