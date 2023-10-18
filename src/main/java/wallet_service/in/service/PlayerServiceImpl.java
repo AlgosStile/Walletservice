@@ -1,7 +1,6 @@
 package wallet_service.in.service;
 
 import wallet_service.in.config.DBConnection;
-import wallet_service.in.controller.TransactionController;
 import wallet_service.in.controller.TransactionType;
 import wallet_service.in.model.Action;
 import wallet_service.in.model.Player;
@@ -103,8 +102,7 @@ public class PlayerServiceImpl implements PlayerService {
     public PlayerRepository getPlayerRepository() {
         return playerRepository;
     }
-
-
+    @Override
     public void debit(String username, int transactionId, double amount) throws Exception {
         Player player = playerRepository.getPlayer(username);
         if (player == null) {
@@ -115,17 +113,20 @@ public class PlayerServiceImpl implements PlayerService {
         }
         player.debit(transactionId, amount);
         playerRepository.updatePlayer(username, player.getBalance());
+
+
+        player.setBalance(playerRepository.getBalance(username));
+
         Transaction transaction = new Transaction(transactionId, amount, TransactionType.DEBIT);
         transactionRepository.addTransaction(username, transaction);
 
-
-        boolean result = transactionRepository.getTransaction(transactionId) != null;
-        addAction(username, "Дебит", result ? "Успешно" : "Неудачно");
-
         DBConnection.getInstance().getConnection().commit();
-
+        player.setBalance(playerRepository.getBalance(username));
     }
 
+
+
+    @Override
     public void credit(String username, int transactionId, double amount) throws Exception {
         Player player = playerRepository.getPlayer(username);
         if (player == null) {
@@ -135,13 +136,17 @@ public class PlayerServiceImpl implements PlayerService {
         player.credit(transactionId, amount);
         playerRepository.updatePlayer(username, player.getBalance());
 
+        // Обновляем баланс в объекте Player из БД
+        player.setBalance(playerRepository.getBalance(username));
+
         Transaction transaction = new Transaction(transactionId, amount, TransactionType.CREDIT);
         transactionRepository.addTransaction(username, transaction);
 
-        boolean result = transactionRepository.getTransaction(transactionId) != null;
-        addAction(username, "Кредит", result ? "Успешно" : "Неудачно");
         DBConnection.getInstance().getConnection().commit();
+        player.setBalance(playerRepository.getBalance(username));
     }
+
+
 
 
     @Override

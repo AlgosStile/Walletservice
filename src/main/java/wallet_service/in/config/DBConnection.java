@@ -17,18 +17,31 @@ public class DBConnection {
         username = config.getProperty("db.user");
         password = config.getProperty("db.password");
         connection = DriverManager.getConnection(url, username, password);
-        createTablesIfNotExist();
-        createSequenceIfNotExist();
+//        createTablesIfNotExist();
+//        createSequenceIfNotExist();
     }
 
 
-    public static synchronized DBConnection getInstance() throws SQLException {
+    public static synchronized DBConnection getInstance() {
         if (instance == null) {
-            try {
-                instance = new DBConnection();
-            } catch (SQLException e) {
-                System.out.println("Ошибка при создании соединения с базой данных: " + e.getMessage());
-                throw e;
+            int attempts = 0;
+            while (attempts < 3) {
+                try {
+                    instance = new DBConnection();
+                } catch (SQLException e) {
+                    attempts++;
+                    System.out.println("Не удалось подключиться к базе данных, попытка номер " + attempts);
+                    try {
+                        Thread.sleep(2000); // Подождите 2 секунды перед следующей попыткой.
+                    } catch (InterruptedException ie) {
+                        ie.printStackTrace();
+                    }
+                    continue;
+                }
+                break;
+            }
+            if (instance == null) {
+                throw new RuntimeException("Не удалось подключиться к базе данных.");
             }
         }
         return instance;
@@ -38,28 +51,7 @@ public class DBConnection {
         return connection;
     }
 
-    private final String sequenceQuery = "CREATE SEQUENCE IF NOT EXISTS wallet.transaction_id_seq;";
 
-    private void createSequenceIfNotExist() throws SQLException {
-        try (Statement stmt = connection.createStatement()) {
-            stmt.execute(sequenceQuery);
-        }
-    }
-
-
-    public void createTablesIfNotExist() throws SQLException {
-        try (
-                PreparedStatement stmt1 = connection.prepareStatement("CREATE SCHEMA IF NOT EXISTS wallet;");
-                PreparedStatement stmt2 = connection.prepareStatement("CREATE TABLE IF NOT EXISTS wallet.players (id SERIAL PRIMARY KEY, username VARCHAR(50), password VARCHAR(50), balance DOUBLE PRECISION)");
-                PreparedStatement stmt3 = connection.prepareStatement("CREATE TABLE IF NOT EXISTS wallet.transactions (id INTEGER PRIMARY KEY DEFAULT nextval('wallet.transaction_id_seq'), username VARCHAR(50), amount DOUBLE PRECISION, type VARCHAR(20), balance DOUBLE PRECISION)");
-                PreparedStatement stmt4 = connection.prepareStatement("CREATE TABLE IF NOT EXISTS wallet.actions (id SERIAL PRIMARY KEY, username VARCHAR(50), action VARCHAR(50), detail TEXT)")
-        ) {
-            stmt1.execute();
-            stmt2.execute();
-            stmt3.execute();
-            stmt4.execute();
-        }
-    }
 
 }
 

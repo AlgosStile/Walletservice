@@ -7,6 +7,7 @@ import java.sql.*;
 import java.sql.PreparedStatement;
 
 public class PlayerRepository {
+    private static PlayerRepository instance;
 
     private static final String INSERT_SQL = "INSERT INTO wallet.players(username, password, balance) VALUES (?, ?, ?)";
     private static final String SELECT_SQL = "SELECT * FROM wallet.players WHERE username = ?";
@@ -20,6 +21,12 @@ public class PlayerRepository {
         connection = DBConnection.getInstance().getConnection();
     }
 
+    public static synchronized PlayerRepository getInstance() throws SQLException {
+        if (instance == null) {
+            instance = new PlayerRepository();
+        }
+        return instance;
+    }
 
     public int addPlayer(Player player) throws SQLException {
         int newPlayerId = 0;

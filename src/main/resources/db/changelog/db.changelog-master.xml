@@ -11,8 +11,9 @@
         <tagDatabase tag="db_init"/>
     </changeSet>
 
-    <include file="001-create-tables.xml" relativeToChangelogFile="true"/>
-    <include file="002-insert-data.xml" relativeToChangelogFile="true"/>
+    <include file="db/changelog/001-create-tables.xml" relativeToChangelogFile="true"/>
+    <include file="db/changelog/002-insert-data.xml" relativeToChangelogFile="true"/>
+    <include file="db/changelog/003-create-schema-and-tables.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>
 
 

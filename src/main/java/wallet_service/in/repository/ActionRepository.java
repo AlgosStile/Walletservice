@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public class ActionRepository {
     private static final String INSERT_SQL = "INSERT INTO wallet.actions(username, action, detail) VALUES (?, ?, ?)";
 
-    private PreparedStatement insertStatement;
+    private final PreparedStatement insertStatement;
 
     public ActionRepository() throws SQLException {
         insertStatement = DBConnection.getInstance().getConnection().prepareStatement(INSERT_SQL);

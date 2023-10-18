@@ -1,5 +1,13 @@
 package wallet_service;
 
+import liquibase.Contexts;
+import liquibase.LabelExpression;
+import liquibase.Liquibase;
+import liquibase.database.DatabaseConnection;
+import liquibase.database.jvm.JdbcConnection;
+import liquibase.exception.LiquibaseException;
+import liquibase.resource.ClassLoaderResourceAccessor;
+import wallet_service.in.config.DBConnection;
 import wallet_service.in.controller.PlayerController;
 import wallet_service.in.controller.TransactionController;
 import wallet_service.in.model.Action;
@@ -28,23 +36,33 @@ public class WalletServiceApplication {
     private static Scanner scanner;
     private static TransactionController transactionController;
     private static PlayerController playerController;
-    private static PlayerRepository playerRepository; // Удалил инициализацию тут
+    private static PlayerRepository playerRepository;
     private static TransactionRepository transactionRepository;
 
     public static void main(String[] args) throws Exception {
-        PlayerRepository playerRepository = new PlayerRepository();
-        TransactionRepository transactionRepository = new TransactionRepository(playerRepository);
+        playerRepository = PlayerRepository.getInstance();
+        transactionRepository = TransactionRepository.getInstance(playerRepository);
         PlayerService playerService = new PlayerServiceImpl(playerRepository, transactionRepository);
-
-        WalletServiceApplication application = new WalletServiceApplication(playerService);
+        WalletServiceApplication application = new WalletServiceApplication(playerService, playerRepository, transactionRepository);
+        DBConnection.getInstance();
+        application.runLiquibase();
         application.run();
+
     }
 
-    public WalletServiceApplication(PlayerService playerService) throws SQLException {
+    private void runLiquibase() throws LiquibaseException {
+        DatabaseConnection databaseConnection = new JdbcConnection(DBConnection.getInstance().getConnection());
+        Liquibase liquibase = new liquibase.Liquibase("db/changelog/db.changelog-master.xml", new ClassLoaderResourceAccessor(), databaseConnection);
+        liquibase.update(new Contexts(), new LabelExpression());
+    }
+
+
+    public WalletServiceApplication(PlayerService playerService, PlayerRepository playerRepository, TransactionRepository transactionRepository) throws SQLException {
         scanner = new Scanner(System.in);
-        playerController = new PlayerController(playerService);
+        playerController = new PlayerController(playerService, playerRepository);
         transactionController = new TransactionController(playerService, playerRepository, transactionRepository);
     }
+
 
 
     public void run() throws Exception {
@@ -111,7 +129,7 @@ public class WalletServiceApplication {
 
     private void displayTransactionHistory() throws SQLException {
         String username = readLineFromUser("Введите имя пользователя: ");
-        List<Transaction> transactions = (List<Transaction>) transactionController.getTransactionHistory(username);
+        List<Transaction> transactions = transactionController.getTransactionHistory(username); // Здесь вызывается getTransactionHistory
         for (Transaction transaction : transactions) {
             System.out.println(transaction.getType() + " " + transaction.getAmount() + " " + transaction.getId());
         }

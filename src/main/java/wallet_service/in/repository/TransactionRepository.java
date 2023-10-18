@@ -19,20 +19,24 @@ public class TransactionRepository {
     private static final String SELECT_ALL_SQL = "SELECT * FROM wallet.transactions WHERE username = ?";
 
     private Connection connection;
+    private PlayerRepository playerRepository;
+    private static TransactionRepository instance;
 
     public TransactionRepository() throws SQLException {
         connection = DBConnection.getInstance().getConnection();
+        this.connection = DBConnection.getInstance().getConnection();
     }
 
-    public void closeConnection() throws SQLException {
-        if (connection != null) {
-            connection.close();
-        }
-    }
 
-    private PlayerRepository playerRepository;
     public TransactionRepository(PlayerRepository playerRepository) {
         this.playerRepository = playerRepository;
+    }
+
+    public static synchronized TransactionRepository getInstance(PlayerRepository playerRepository) throws SQLException {
+        if (instance == null) {
+            instance = new TransactionRepository(playerRepository);
+        }
+        return instance;
     }
 
 
