@@ -50,11 +50,17 @@ public class WalletServiceApplication {
 
     }
 
-    private void runLiquibase() throws LiquibaseException {
-        DatabaseConnection databaseConnection = new JdbcConnection(DBConnection.getInstance().getConnection());
-        Liquibase liquibase = new liquibase.Liquibase("db/changelog/db.changelog-master.xml", new ClassLoaderResourceAccessor(), databaseConnection);
-        liquibase.update(new Contexts(), new LabelExpression());
+    private void runLiquibase() {
+        try {
+            DatabaseConnection databaseConnection = new JdbcConnection(DBConnection.getInstance().getConnection());
+            Liquibase liquibase = new liquibase.Liquibase("src/main/resources/db/changelog/db.changelog-master.xml", new ClassLoaderResourceAccessor(), databaseConnection);
+            liquibase.update(new Contexts(), new LabelExpression());
+        } catch (LiquibaseException e) {
+            System.err.println("Ошибка при выполнении Liquibase: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
+
 
 
     public WalletServiceApplication(PlayerService playerService, PlayerRepository playerRepository, TransactionRepository transactionRepository) throws SQLException {
