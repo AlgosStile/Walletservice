@@ -30,6 +30,7 @@ public class TransactionRepository {
 
     public TransactionRepository(PlayerRepository playerRepository) {
         this.playerRepository = playerRepository;
+        this.connection = DBConnection.getInstance().getConnection();
     }
 
     public static synchronized TransactionRepository getInstance(PlayerRepository playerRepository) throws SQLException {
@@ -38,7 +39,6 @@ public class TransactionRepository {
         }
         return instance;
     }
-
 
 
     public void addTransaction(String username, Transaction transaction) throws SQLException {
@@ -50,50 +50,49 @@ public class TransactionRepository {
             preparedStatement.setString(3, transaction.getType().toString());
             preparedStatement.setDouble(4, playerRepository.getPlayer(username).getBalance());
             preparedStatement.executeUpdate();
-
             preparedStatement.close();
-            connection.commit();
 
             Player player = playerRepository.getPlayer(username);
             double newBalance = transaction.getType() == TransactionType.DEBIT
                     ? player.getBalance() - transaction.getAmount()
                     : player.getBalance() + transaction.getAmount();
             playerRepository.updatePlayer(username, newBalance);
-            preparedStatement.setDouble(4, newBalance);
 
-            preparedStatement.executeUpdate();
-
-            preparedStatement.close();
-            connection.commit();
+            if (!connection.getAutoCommit()) {
+                connection.commit();
+            }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            if (connection != null) {
+            if (connection !=null) {
                 try {
+                    System.err.print("Transaction is being rolled back");
                     connection.rollback();
-                } catch (SQLException e) {
-                    System.out.println(e.getMessage());
+                } catch(SQLException excep) {
+                    excep.printStackTrace();
                 }
             }
         } finally {
-            assert connection != null;
-            connection.setAutoCommit(true);
-        }
-    }
-
-
-    public Transaction getTransaction(int id) throws SQLException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SQL)) {
-            preparedStatement.setInt(1, id);
-            try (ResultSet rs = preparedStatement.executeQuery()) {
-                if (rs.next()) {
-                    return new Transaction(rs.getInt("id"),
-                            rs.getDouble("amount"),
-                            TransactionType.valueOf(rs.getString("type")));
-                }
+            if (connection != null) {
+                connection.setAutoCommit(true);
             }
         }
-        return null;
     }
+
+// <<<<<<<<<<<<Для привязки транзакции по ID>>>>>>>>>>>>>
+
+//    public Transaction getTransaction(int id) throws SQLException {
+//        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SQL)) {
+//            preparedStatement.setInt(1, id);
+//            try (ResultSet rs = preparedStatement.executeQuery()) {
+//                if (rs.next()) {
+//                    return new Transaction(rs.getInt("id"),
+//                            rs.getDouble("amount"),
+//                            TransactionType.valueOf(rs.getString("type")));
+//                }
+//            }
+//        }
+//        return null;
+//    }
 
     public List<Transaction> getAllTransactions(String username) throws SQLException {
         List<Transaction> transactionList = new ArrayList<>();

@@ -12,10 +12,8 @@ import wallet_service.in.repository.TransactionRepository;
 import wallet_service.in.service.PlayerService;
 import wallet_service.in.service.PlayerServiceImpl;
 
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Properties;
+import java.util.List;;
 import java.util.Scanner;
 
 public class WalletServiceApplication {
@@ -154,6 +152,7 @@ public class WalletServiceApplication {
 
     private void shutdown() {
         System.out.println("Завершение работы...");
+        scanner.close();
     }
 
 

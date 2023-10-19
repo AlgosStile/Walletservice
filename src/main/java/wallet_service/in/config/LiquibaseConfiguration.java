@@ -27,13 +27,9 @@ public class LiquibaseConfiguration {
             System.out.println("Ошибка: " + e);
             throw new RuntimeException("Не смог начать Liquibase", e);
         } finally {
-
-
             // Здесь нужно, закрыть только в конце жизненного цикла приложения
             // Иначе Liquibase не сможет работать
-
         }
     }
-
 }
 

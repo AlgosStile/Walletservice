@@ -1,29 +1,36 @@
 package wallet_service.in.controller;
 
+import wallet_service.in.config.DBConnection;
 import wallet_service.in.model.Transaction;
 import wallet_service.in.repository.PlayerRepository;
 import wallet_service.in.repository.TransactionRepository;
 import wallet_service.in.service.PlayerService;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-
 
 
 public class TransactionController {
     private PlayerService playerService;
     private PlayerRepository playerRepository;
     private TransactionRepository transactionRepository;
+    private Connection connection;
 
     public TransactionController(PlayerService playerService, PlayerRepository playerRepository, TransactionRepository transactionRepository) {
         this.playerService = playerService;
         this.playerRepository = playerRepository;
         this.transactionRepository = transactionRepository;
+        this.connection = DBConnection.getInstance().getConnection();
     }
 
 
     public void debitTransaction(String username, int id, double amount) throws Exception {
         try {
+
+            if (connection.getAutoCommit()) { // Новый код
+                connection.setAutoCommit(false);
+            }
             playerService.debit(username, id, amount);
             System.out.println("Дебетовая транзакция прошла успешно");
         } catch (Exception e) {
@@ -31,17 +38,50 @@ public class TransactionController {
         }
     }
 
+//    public void creditTransaction(String username, int id, double amount) throws Exception {
+//        try {
+//
+//            if (connection.getAutoCommit()) { // Новый код
+//                connection.setAutoCommit(false);
+//            }
+//            playerService.credit(username, id, amount);
+//            System.out.println("Кредитная транзакция прошла успешно --> $");
+//        } catch (Exception exception) {
+//            String message = "Кредитная транзакция " + id + " не удалась ¯\\\\_(ツ)_/¯ : "+ exception.getMessage();
+//            System.out.println(message);
+//            throw new Exception(message);
+//        }
+//    }
 
     public void creditTransaction(String username, int id, double amount) throws Exception {
         try {
+            if (connection.getAutoCommit()) { // Если autoCommit включен
+                connection.setAutoCommit(false); // Выключаем autoCommit
+            }
             playerService.credit(username, id, amount);
             System.out.println("Кредитная транзакция прошла успешно --> $");
-        }
-            catch (Exception exception) {
-                String message = "Кредитная транзакция " + id + " не удалась ¯\\\\_(ツ)_/¯ : " + exception.getMessage();
-                System.out.println(message);
-                throw new Exception(message);
+            connection.commit(); // Коммитим транзакцию
+        } catch (Exception exception) {
+            if (connection != null) { // Если была ошибка, проверяем состояние соединения
+                try {
+                    System.err.print("Transaction is being rolled back"); // Сообщаем об откате
+                    connection.rollback(); // Откатываем всё сделанное после последнего commit-а
+                } catch (SQLException rollbackExcep) {
+                    System.out.println("Couldn't roll back transaction: " + rollbackExcep.getMessage());
+                }
             }
+            String message = "Кредитная транзакция завершилась неудачно. Возникла ошибка: " + exception.getMessage();
+            System.err.println(message);
+            throw exception;
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.setAutoCommit(true); // Включаем обратно режим автоподтверждения
+                } catch (SQLException setAutoCommitExcep) {
+                    System.out.println("Couldn't set auto commit: " + setAutoCommitExcep.getMessage());
+                }
+            }
+        }
     }
 
 
