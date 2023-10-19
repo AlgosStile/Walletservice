@@ -14,11 +14,9 @@ public class DBConnection {
     private DBConnection() throws SQLException {
         Config config = Config.getInstance();
         url = config.getProperty("db.url");
-        username = config.getProperty("db.user");
+        username = config.getProperty("db.username");
         password = config.getProperty("db.password");
         connection = DriverManager.getConnection(url, username, password);
-//        createTablesIfNotExist();
-//        createSequenceIfNotExist();
     }
 
 
@@ -31,6 +29,7 @@ public class DBConnection {
                 } catch (SQLException e) {
                     attempts++;
                     System.out.println("Не удалось подключиться к базе данных, попытка номер " + attempts);
+                    e.printStackTrace();
                     try {
                         Thread.sleep(2000); // Подождите 2 секунды перед следующей попыткой.
                     } catch (InterruptedException ie) {
@@ -50,7 +49,6 @@ public class DBConnection {
     public Connection getConnection() {
         return connection;
     }
-
 
 
 }

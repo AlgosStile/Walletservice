@@ -1,13 +1,6 @@
 package wallet_service;
 
-import liquibase.Contexts;
-import liquibase.LabelExpression;
-import liquibase.Liquibase;
-import liquibase.database.DatabaseConnection;
-import liquibase.database.jvm.JdbcConnection;
-import liquibase.exception.ChangeLogParseException;
-import liquibase.exception.LiquibaseException;
-import liquibase.resource.ClassLoaderResourceAccessor;
+
 import wallet_service.in.config.DBConnection;
 import wallet_service.in.config.LiquibaseConfiguration;
 import wallet_service.in.controller.PlayerController;
@@ -19,8 +12,10 @@ import wallet_service.in.repository.TransactionRepository;
 import wallet_service.in.service.PlayerService;
 import wallet_service.in.service.PlayerServiceImpl;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Properties;
 import java.util.Scanner;
 
 public class WalletServiceApplication {
@@ -42,17 +37,14 @@ public class WalletServiceApplication {
     private static TransactionRepository transactionRepository;
 
     public static void main(String[] args) throws Exception {
+        LiquibaseConfiguration.startLiquibase();
         playerRepository = PlayerRepository.getInstance();
         transactionRepository = TransactionRepository.getInstance(playerRepository);
         PlayerService playerService = new PlayerServiceImpl(playerRepository, transactionRepository);
         WalletServiceApplication application = new WalletServiceApplication(playerService, playerRepository, transactionRepository);
-        LiquibaseConfiguration liquibaseConfiguration = new LiquibaseConfiguration(DBConnection.getInstance());
-        liquibaseConfiguration.updateDatabase();
-
         application.run();
 
     }
-
 
 
     public WalletServiceApplication(PlayerService playerService, PlayerRepository playerRepository, TransactionRepository transactionRepository) throws SQLException {
@@ -60,7 +52,6 @@ public class WalletServiceApplication {
         playerController = new PlayerController(playerService, playerRepository);
         transactionController = new TransactionController(playerService, playerRepository, transactionRepository);
     }
-
 
 
     public void run() throws Exception {
@@ -123,6 +114,7 @@ public class WalletServiceApplication {
             }
         }
     }
+
 
 
     private void displayTransactionHistory() throws SQLException {

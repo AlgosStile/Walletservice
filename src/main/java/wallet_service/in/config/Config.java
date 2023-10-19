@@ -1,6 +1,5 @@
 package wallet_service.in.config;
 
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -19,7 +18,7 @@ public class Config {
     }
 
     private void loadConfig() {
-        try (InputStream is = Config.class.getResourceAsStream("/db.properties")) {
+        try (InputStream is = Config.class.getResourceAsStream("/db/changelog/liquibase.properties")) {
             configFile.load(is);
         } catch (IOException e) {
             System.out.println("Ошибка при загрузке конфигурации: " + e.getMessage());

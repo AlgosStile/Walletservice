@@ -10,13 +10,8 @@
     <changeSet id="0" author="Algosstile">
         <tagDatabase tag="db_init"/>
     </changeSet>
-    <changeSet id="0-create-schema" author="Algosstile">
-        <createSchema schemaName="wallet"/>
-    </changeSet>
-
-    <include file="001-create-tables.xml" relativeToChangelogFile="true"/>
+    <include file="001-create-schema-and-tables.xml" relativeToChangelogFile="true"/>
     <include file="002-insert-data.xml" relativeToChangelogFile="true"/>
-    <include file="003-create-schema-and-tables.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>
 
 

@@ -20,6 +20,7 @@ public class ActionRepository {
         insertStatement.setString(1, action.getUsername());
         insertStatement.setString(2, action.getAction());
         insertStatement.setString(3, action.getDetail());
+
         insertStatement.executeUpdate();
     }
 

@@ -56,12 +56,10 @@ public class PlayerRepository {
             connection.commit();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            if (connection != null) {
-                try {
-                    connection.rollback();
-                } catch (SQLException e) {
-                    System.out.println(e.getMessage());
-                }
+            try {
+                connection.rollback();
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
             }
         } finally {
             connection.setAutoCommit(true);
