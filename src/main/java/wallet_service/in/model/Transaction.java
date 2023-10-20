@@ -5,8 +5,8 @@ import wallet_service.in.controller.TransactionType;
 
 /**
  * Класс Transaction представляет транзакцию с ее данными.
- * Автор: Олег Тодор
- * Версия: 2.0.0
+ * @author Олег Тодор
+ * @since 1.0.0
  */
 public class Transaction {
     private int id;

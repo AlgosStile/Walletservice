@@ -8,8 +8,8 @@ import java.util.List;
 
 /**
  * Класс Player представляет игрока с его данными и операциями.
- * Автор: Олег Тодор
- * Версия: 2.0.0
+ * @author Олег Тодор
+ * @since 1.0.0
  */
 public class Player {
     private int id;

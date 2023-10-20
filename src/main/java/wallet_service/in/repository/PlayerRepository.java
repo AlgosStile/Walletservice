@@ -5,7 +5,13 @@ import wallet_service.in.model.Player;
 
 import java.sql.*;
 import java.sql.PreparedStatement;
-
+/**
+ * Класс PlayerRepository управляет данными игроков в базе данных.
+ * Реализует CRUD операции для объектов Player.
+ *
+ * @author Олег Тодор
+ * @since 1.0.0
+ */
 public class PlayerRepository {
     private static PlayerRepository instance;
 
@@ -16,18 +22,33 @@ public class PlayerRepository {
 
 
     private final Connection connection;
-
+    /**
+     * Конструктор PlayerRepository. Инициализирует подключение к базе данных.
+     *
+     * @throws SQLException если возникают проблемы с подключением
+     */
     public PlayerRepository() throws SQLException {
         connection = DBConnection.getInstance().getConnection();
     }
-
+    /**
+     * Возвращает текущий экземпляр репозитория или создает новый, если он еще не был инициализирован.
+     *
+     * @return текущий экземпляр репозитория
+     * @throws SQLException если возникают проблемы с подключением
+     */
     public static synchronized PlayerRepository getInstance() throws SQLException {
         if (instance == null) {
             instance = new PlayerRepository();
         }
         return instance;
     }
-
+    /**
+     * Добавляет игрока в базу данных.
+     *
+     * @param player объект игрока для добавления
+     * @return идентификатор нового игрока в базе данных
+     * @throws SQLException если возникают проблемы с выполнением SQL запроса
+     */
     public int addPlayer(Player player) throws SQLException {
         int newPlayerId = 0;
         try {
@@ -67,7 +88,13 @@ public class PlayerRepository {
 
         return newPlayerId;
     }
-
+    /**
+     * Возвращает объект Player из базы данных по заданному имени пользователя.
+     *
+     * @param username имя пользователя для поиска
+     * @return объект Player или null, если пользователь с таким именем не найден
+     * @throws SQLException если возникают проблемы с выполнением SQL запроса
+     */
     public Player getPlayer(String username) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SQL)) {
             preparedStatement.setString(1, username);
@@ -80,7 +107,13 @@ public class PlayerRepository {
         }
         return null;
     }
-
+    /**
+     * Обновляет баланс игрока в базе данных.
+     *
+     * @param username имя пользователя, для которого нужно обновить баланс
+     * @param balance новый баланс игрока
+     * @throws SQLException если возникают проблемы с выполнением SQL запроса
+     */
     public void updatePlayer(String username, double balance) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL)) {
             preparedStatement.setDouble(1, balance);
@@ -88,14 +121,25 @@ public class PlayerRepository {
             preparedStatement.executeUpdate();
         }
     }
-
+    /**
+     * Удаляет игрока из базы данных.
+     *
+     * @param username имя пользователя для удаления
+     * @throws SQLException если возникают проблемы с выполнением SQL запроса
+     */
     public void removePlayer(String username) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_SQL)) {
             preparedStatement.setString(1, username);
             preparedStatement.executeUpdate();
         }
     }
-
+    /**
+     * Возвращает текущий баланс игрока.
+     *
+     * @param username имя пользователя, баланс которого нужно вернуть
+     * @return текущий баланс игрока
+     * @throws SQLException если возникают проблемы с выполнением SQL запроса
+     */
     public double getBalance(String username) throws SQLException {
         String sql = "SELECT balance FROM wallet.players WHERE username = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -108,7 +152,12 @@ public class PlayerRepository {
             }
         }
     }
-
+    /**
+     * Обновляет статус игрока на "logged out".
+     *
+     * @param username имя пользователя, который завершает сеанс
+     * @throws SQLException если возникают проблемы с выполнением SQL запроса
+     */
     public void logoutPlayer(String username) throws SQLException {
         String sql = "UPDATE wallet.players SET status = ? WHERE username = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {

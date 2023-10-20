@@ -11,7 +11,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Класс TransactionRepository управляет данными транзакций в базе данных.
+ * Реализует операции добавления и выборки транзакций для указанного игрока.
+ *
+ * @author Олег Тодор
+ * @since 1.0.0
+ */
 public class TransactionRepository {
 
     private static final String INSERT_SQL = "INSERT INTO wallet.transactions(username, amount, type, balance) VALUES (?, ?, ?, ?)";
@@ -21,18 +27,32 @@ public class TransactionRepository {
     private Connection connection;
     private PlayerRepository playerRepository;
     private static TransactionRepository instance;
-
+    /**
+     * Конструктор TransactionRepository. Инициализирует подключение к базе данных.
+     *
+     * @throws SQLException если возникают проблемы с подключением
+     */
     public TransactionRepository() throws SQLException {
         connection = DBConnection.getInstance().getConnection();
         this.connection = DBConnection.getInstance().getConnection();
     }
 
-
+    /**
+     * Конструктор TransactionRepository. Инициализирует подключение к базе данных и задает переданный репозиторий игроков.
+     *
+     * @param playerRepository репозиторий игроков
+     */
     public TransactionRepository(PlayerRepository playerRepository) {
         this.playerRepository = playerRepository;
         this.connection = DBConnection.getInstance().getConnection();
     }
-
+    /**
+     * Возвращает текущий экземпляр репозитория или создает новый, если он еще не был инициализирован.
+     *
+     * @param playerRepository репозиторий игроков
+     * @return текущий экземпляр репозитория
+     * @throws SQLException если возникают проблемы с подключением
+     */
     public static synchronized TransactionRepository getInstance(PlayerRepository playerRepository) throws SQLException {
         if (instance == null) {
             instance = new TransactionRepository(playerRepository);
@@ -40,7 +60,13 @@ public class TransactionRepository {
         return instance;
     }
 
-
+    /**
+     * Добавляет транзакцию в базу данных и обновляет баланс соответствующего игрока.
+     *
+     * @param username имя пользователя, для которого добавляется транзакция
+     * @param transaction транзакция для добавления
+     * @throws SQLException если возникают проблемы с выполнением SQL запроса
+     */
     public void addTransaction(String username, Transaction transaction) throws SQLException {
         try {
             connection.setAutoCommit(false);
@@ -93,7 +119,13 @@ public class TransactionRepository {
 //        }
 //        return null;
 //    }
-
+    /**
+     * Возвращает список всех транзакций указанного пользователя.
+     *
+     * @param username имя пользователя, транзакции которого требуется получить
+     * @return список транзакций
+     * @throws SQLException если возникают проблемы с выполнением SQL запроса
+     */
     public List<Transaction> getAllTransactions(String username) throws SQLException {
         List<Transaction> transactionList = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_SQL)) {
