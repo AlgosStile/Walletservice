@@ -16,8 +16,16 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
-;
 
+/**
+ * WalletServiceApplication является основным классом приложения, запускающим сервер и обеспечивающим взаимодействие с пользователями.
+ * <p>
+ * WalletServiceApplication управляет всеми операциями, включая регистрацию и аутентификацию игроков, проведение дебетовых и кредитных операций,
+ * просмотр баланса, вывод истории транзакций и прочее.
+ *
+ * @author Олег Тодор
+ * @since 1.0.0
+ */
 public class WalletServiceApplication {
 
     private static final String MENU_ITEM_1 = "1. Регистрировать игрока";
@@ -35,7 +43,9 @@ public class WalletServiceApplication {
     private static PlayerController playerController;
     private static PlayerRepository playerRepository;
     private static TransactionRepository transactionRepository;
-
+    /**
+     * Основной метод приложения, который инициализирует базу данных и запускает основной цикл обработки команд пользователя.
+     */
     public static void main(String[] args) throws Exception {
         LiquibaseConfiguration.startLiquibase();
         playerRepository = PlayerRepository.getInstance();
@@ -46,13 +56,26 @@ public class WalletServiceApplication {
 
     }
 
-
+    /**
+     * Конструктор класса WalletServiceApplication, который инициализирует объекты контроллера и сканера.
+     *
+     * @param playerService        объект сервиса игроков.
+     * @param playerRepository     объект репозитория игроков.
+     * @param transactionRepository объект репозитория транзакций.
+     * @throws SQLException в случае возникновения ошибки при взаимодействии с базой данных.
+     */
     public WalletServiceApplication(PlayerService playerService, PlayerRepository playerRepository, TransactionRepository transactionRepository) throws SQLException {
         scanner = new Scanner(System.in);
         playerController = new PlayerController(playerService, playerRepository);
         transactionController = new TransactionController(playerService, playerRepository, transactionRepository);
     }
 
+    /**
+     * Запускает основной цикл приложения, включающий меню выбора для пользователя.
+     * Пользователи могут выбирать из меню опции для регистрации, авторизации, совершения операций и т. д.
+     *
+     * @throws Exception в случае необработанных ошибок.
+     */
 
     public void run() throws Exception {
         boolean running = true;
@@ -115,7 +138,11 @@ public class WalletServiceApplication {
         }
     }
 
-
+    /**
+     * Выводит на экран историю транзакций пользователя.
+     *
+     * @throws SQLException в случае возникновения ошибки при взаимодействии с базой данных.
+     */
     private void displayTransactionHistory() throws SQLException {
         String username = readLineFromUser("Введите имя пользователя: ");
         List<Transaction> transactions = transactionController.getTransactionHistory(username); // Здесь вызывается getTransactionHistory
@@ -123,13 +150,18 @@ public class WalletServiceApplication {
             System.out.println(transaction.getType() + " " + transaction.getAmount() + " " + transaction.getId());
         }
     }
-
+    /**
+     * Завершает сессию пользователя.
+     */
     private void logoutPlayer() {
         String username = readLineFromUser("Введите имя пользователя: ");
         playerController.logoutPlayer(username);
         System.out.println("Игрок" + " " + username + " успешно вышел из системы");
     }
 
+    /**
+     * Выводит историю действий пользователя.
+     */
     private void displayActionHistory() {
         String username = readLineFromUser("Введите имя пользователя: ");
         List<Action> actions = playerController.getPlayerActions(username);
@@ -137,20 +169,32 @@ public class WalletServiceApplication {
             System.out.println(action.getAction() + " " + action.getDetail());
         }
     }
-
+    /**
+     * Вспомогательный метод для чтения строки от пользователя.
+     *
+     * @param prompt текст подсказки перед вводом данных пользователем.
+     * @return Строка, считанная от пользователя.
+     */
     private String readLineFromUser(String prompt) {
         System.out.print(prompt);
         return scanner.nextLine();
     }
 
-
+    /**
+     * Вспомогательный метод для чтения числа типа double от пользователя.
+     *
+     * @param prompt текст подсказки перед вводом данных пользователем.
+     * @return Значение double, введенное пользователем.
+     */
     private double readDoubleFromUser(String prompt) {
         System.out.print(prompt);
         double value = scanner.nextDouble();
         scanner.nextLine();
         return value;
     }
-
+    /**
+     * Завершает работу приложения, закрывает подключение к базе данных и выводит сообщение.
+     */
     private void shutdown() {
         System.out.println("Closing connection...");
         try {
