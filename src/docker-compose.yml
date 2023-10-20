@@ -3,6 +3,7 @@ services:
   db:
     image: postgres
     restart: always
+    command: ["mvn", "test"]
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: wallet
