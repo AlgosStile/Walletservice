@@ -1,15 +1,41 @@
+#version: '3'
+#services:
+#  db:
+#    image: postgres
+#    restart: always
+#    command: ["mvn", "test"]
+#    environment:
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: wallet
+#      POSTGRES_DB: wallet_db
+#
+#    ports:
+#      - "5432:5432"
+#__________________________________________________________________________
 version: '3'
 services:
   db:
     image: postgres
     restart: always
-    command: ["mvn", "test"]
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: wallet
       POSTGRES_DB: wallet_db
-
     ports:
       - "5432:5432"
+
+  app:
+    build: .
+    environment:
+      DB_USER: postgres
+      DB_PASSWORD: wallet
+      DB_NAME: wallet_db
+      DB_HOST: db
+    links:
+      - db
+    volumes:
+      - ./target:/usr/src/app/target
+    command: ["/bin/sh", "-c", "mvn clean install -DskipTests && mvn test -f /usr/src/app/target"]
+
 
 

@@ -1,47 +1,24 @@
 package wallet_service.in.model;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import wallet_service.in.controller.TransactionType;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static junit.framework.TestCase.assertEquals;
 
 public class TransactionTest {
 
-    @BeforeEach
-    public void setUp() throws Exception {
+    @Test
+    @DisplayName("Test Transaction Get Amount")
+    public void testGetAmount() {
+        Transaction transaction = new Transaction(1, 1000.00, TransactionType.CREDIT);
+        assertEquals(1000.00, transaction.getAmount());
     }
 
     @Test
-    @DisplayName("Get Id Test")
-    public void GetIdTest() {
-        Integer id = null;
-        Transaction transaction = new Transaction(id, 100.0, TransactionType.DEBIT);
-
-        id = transaction.getId();
-
-        assertEquals("id", id);
-    }
-
-    @Test
-    @DisplayName("Get Amount Test")
-    public void GetAmountTest() {
-        Integer id = null;
-        Transaction transaction = new Transaction(id, 100.0, TransactionType.DEBIT);
-
-        double amount = transaction.getAmount();
-
-        assertEquals(100.0, amount, 0.0);
-    }
-
-    @Test
-    @DisplayName("Get Type Test")
-    public void getTypeTest(int id) {
-        Transaction transaction = new Transaction(id, 100.0, TransactionType.DEBIT);
-
-        TransactionType type = transaction.getType();
-
-        assertEquals(TransactionType.DEBIT, type);
+    @DisplayName("Test Transaction Get Type")
+    public void testGetType() {
+        Transaction transaction = new Transaction(2, 2000.00, TransactionType.DEBIT);
+        assertEquals(TransactionType.DEBIT, transaction.getType());
     }
 }

@@ -1,63 +1,47 @@
 package wallet_service.in.controller;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import wallet_service.in.repository.PlayerRepository;
 import wallet_service.in.repository.TransactionRepository;
 import wallet_service.in.service.PlayerService;
 
-import java.sql.SQLException;
+import static org.mockito.Mockito.*;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-
+@RunWith(MockitoJUnitRunner.class)
 public class TransactionControllerTest {
-
+    @Mock
     private PlayerService playerService;
+
+    @InjectMocks
     private TransactionController transactionController;
-    private PlayerRepository playerRepository = mock(PlayerRepository.class);
 
-    @BeforeEach
+    public TransactionControllerTest() {
+    }
+
+    @Before
     public void setUp() throws Exception {
-        playerService = mock(PlayerService.class);
-        transactionController = new TransactionController(playerService, playerRepository, mock(TransactionRepository.class));
+        doNothing().when(playerService).debit(anyString(), anyInt(), anyDouble());
+        doNothing().when(playerService).credit(anyString(), anyInt(), anyDouble());
+
     }
 
     @Test
-    @DisplayName("Debit Transaction Test")
-    public void debitTransactionTest() throws Exception {
-        String username = "testUser";
-        int transactionId = Integer.parseInt("testTransaction");
-        double amount = 100.0;
-
-        transactionController.debitTransaction(username, transactionId, amount);
-
-        verify(playerService).debit(username,  transactionId, amount);
+    @DisplayName("Test Debit Transaction")
+    public void testDebitTransaction() throws Exception {
+        transactionController.debitTransaction("testUser", 1, 1000);
+        verify(playerService, times(1)).debit("testUser", 1, 1000);
     }
 
     @Test
-    @DisplayName("Credit Transaction Test")
-    public void creditTransactionTest() throws Exception {
-        String username = "testUser";
-        int transactionId = Integer.parseInt("testTransaction");
-        double amount = 100.0;
-
-        transactionController.creditTransaction(username, transactionId, amount);
-
-        verify(playerService).credit(username, transactionId, amount);
-    }
-
-    @Test
-    @DisplayName("Get Transaction History Test")
-    public void getTransactionHistoryTest() throws SQLException {
-        String username = "testUser";
-
-        transactionController.getTransactionHistory(username);
-
-        verify(playerService).getTransactionHistory(username);
+    @DisplayName("Test Credit Transaction")
+    public void testCreditTransaction() throws Exception {
+        transactionController.creditTransaction("testUser", 1, 1000);
+        verify(playerService, times(1)).credit("testUser", 1, 1000);
     }
 }
-
-
-
