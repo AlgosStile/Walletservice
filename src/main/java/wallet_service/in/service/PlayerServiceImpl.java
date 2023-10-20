@@ -116,20 +116,18 @@ public class PlayerServiceImpl implements PlayerService {
         return result;
     }
     /**
-
-     Проверяет, зарегистрирован ли пользователь.
-     @param username имя пользователя
-     @return true, если пользователь зарегистрирован, иначе false
-     @throws SQLException если возникает ошибка при работе с базой данных */
+     *  Проверяет, зарегистрирован ли пользователь.
+     * @param username имя пользователя
+     * @return true, если пользователь зарегистрирован, иначе false
+     * @throws SQLException если возникает ошибка при работе с базой данных */
     public boolean isUserRegistered(String username) throws SQLException {
         Player player = playerRepository.getPlayer(username);
         return player != null;
     }
     /**
-
-     Проверяет, является ли пользователь аутентифицированным.
-     @param username имя пользователя
-     @return true, если пользователь аутентифицирован, иначе false */
+     * Проверяет, является ли пользователь аутентифицированным.
+     * @param username имя пользователя
+     * @return true, если пользователь аутентифицирован, иначе false */
     public boolean isUserAuthenticated(String username) {
         return username.equals(authenticatedUser);
     }
