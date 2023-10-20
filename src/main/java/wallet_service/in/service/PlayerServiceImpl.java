@@ -102,25 +102,29 @@ public class PlayerServiceImpl implements PlayerService {
     public PlayerRepository getPlayerRepository() {
         return playerRepository;
     }
+
+
+
     @Override
     public void debit(String username, int transactionId, double amount) throws Exception {
         Player player = playerRepository.getPlayer(username);
         if (player == null) {
             throw new Exception("Игрок не найден");
         }
-        if (player.getBalance() < amount) {
-            throw new Exception("Недостаточно средств на счете");
-        }
+
+        // Обновляем баланс игрока из БД перед дебетовой операцией
+        double currentBalance = playerRepository.getBalance(username);
+        player.setBalance(currentBalance);
+
         player.debit(transactionId, amount);
         playerRepository.updatePlayer(username, player.getBalance());
 
-
+        // Обновляем баланс игрока после дебетовой операции
         player.setBalance(playerRepository.getBalance(username));
 
         Transaction transaction = new Transaction(transactionId, amount, TransactionType.DEBIT);
         transactionRepository.addTransaction(username, transaction);
 
-        DBConnection.getInstance().getConnection().commit();
         player.setBalance(playerRepository.getBalance(username));
     }
 
@@ -142,7 +146,6 @@ public class PlayerServiceImpl implements PlayerService {
         Transaction transaction = new Transaction(transactionId, amount, TransactionType.CREDIT);
         transactionRepository.addTransaction(username, transaction);
 
-        DBConnection.getInstance().getConnection().commit();
         player.setBalance(playerRepository.getBalance(username));
     }
 

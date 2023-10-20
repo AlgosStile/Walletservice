@@ -48,10 +48,14 @@ public void getBalance(String username) throws SQLException {
     System.out.println("Баланс: " + balance);
 }
 
-
-    public void logoutPlayer(String username) {
-        playerService.logout(username);
+public void logoutPlayer(String username) {
+    try {
+        playerRepository.logoutPlayer(username);
+        System.out.println("Игрок успешно вышел из системы");
+    } catch (SQLException e) {
+        System.out.println("Произошла ошибка при выходе из системы: " + e.getMessage());
     }
+}
 
 
     public List<Action> getPlayerActions(String username) {

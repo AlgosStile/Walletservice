@@ -95,6 +95,7 @@ public class PlayerRepository {
             preparedStatement.executeUpdate();
         }
     }
+
     public double getBalance(String username) throws SQLException {
         String sql = "SELECT balance FROM wallet.players WHERE username = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -108,5 +109,13 @@ public class PlayerRepository {
         }
     }
 
+    public void logoutPlayer(String username) throws SQLException {
+        String sql = "UPDATE wallet.players SET status = ? WHERE username = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, "logged out");
+            preparedStatement.setString(2, username);
+            preparedStatement.executeUpdate();
+        }
+    }
 }
 

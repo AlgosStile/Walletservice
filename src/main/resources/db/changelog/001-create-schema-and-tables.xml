@@ -21,6 +21,16 @@
                         startValue="1"
                         incrementBy="1" />
     </changeSet>
+    <changeSet id="007-add-status-to-player" author="YourName">
+        <sql>
+            SET search_path TO wallet;
+        </sql>
+        <addColumn tableName="players">
+            <column name="status" type="varchar(255)" defaultValue="active">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
 
     <changeSet id="003-create-table-player" author="Algosstile">
     <sql>
@@ -39,6 +49,7 @@
             <column name="balance" type="double">
             <constraints nullable="false"/>
             </column>
+
 <!--            <column name="amount" type="double">-->
 <!--                <constraints nullable="false"/>-->
 <!--            </column>-->

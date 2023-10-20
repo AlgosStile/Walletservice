@@ -24,48 +24,45 @@ public class TransactionController {
         this.connection = DBConnection.getInstance().getConnection();
     }
 
-
     public void debitTransaction(String username, int id, double amount) throws Exception {
         try {
-
-            if (connection.getAutoCommit()) { // Новый код
+            if (connection.getAutoCommit()) {
                 connection.setAutoCommit(false);
             }
             playerService.debit(username, id, amount);
-            System.out.println("Дебетовая транзакция прошла успешно");
-        } catch (Exception e) {
-            System.out.println("Дебетовая транзакция не удалась ¯\\\\_(ツ)_/¯ : " + e.getMessage());
+            System.out.println("Дебетовая транзакция прошла успешно --> $");
+            connection.commit(); //коммитим дебет транз тут
+        } catch (Exception exception) {
+            if (connection != null) {
+                try {
+                    System.err.print("Transaction is being rolled back");
+                    connection.rollback();
+                } catch (SQLException rollbackExcep) {
+                    System.out.println("Couldn't roll back transaction: " + rollbackExcep.getMessage());
+                }
+            }
+            throw exception;
+        } finally {
+            if (connection != null) {
+                connection.setAutoCommit(true);
+            }
         }
     }
 
-//    public void creditTransaction(String username, int id, double amount) throws Exception {
-//        try {
-//
-//            if (connection.getAutoCommit()) { // Новый код
-//                connection.setAutoCommit(false);
-//            }
-//            playerService.credit(username, id, amount);
-//            System.out.println("Кредитная транзакция прошла успешно --> $");
-//        } catch (Exception exception) {
-//            String message = "Кредитная транзакция " + id + " не удалась ¯\\\\_(ツ)_/¯ : "+ exception.getMessage();
-//            System.out.println(message);
-//            throw new Exception(message);
-//        }
-//    }
 
     public void creditTransaction(String username, int id, double amount) throws Exception {
         try {
-            if (connection.getAutoCommit()) { // Если autoCommit включен
-                connection.setAutoCommit(false); // Выключаем autoCommit
+            if (connection.getAutoCommit()) {
+                connection.setAutoCommit(false);
             }
             playerService.credit(username, id, amount);
             System.out.println("Кредитная транзакция прошла успешно --> $");
-            connection.commit(); // Коммитим транзакцию
+            connection.commit(); // Коммитим транзакцию кредита
         } catch (Exception exception) {
-            if (connection != null) { // Если была ошибка, проверяем состояние соединения
+            if (connection != null) {
                 try {
-                    System.err.print("Transaction is being rolled back"); // Сообщаем об откате
-                    connection.rollback(); // Откатываем всё сделанное после последнего commit-а
+                    System.err.print("Transaction is being rolled back");
+                    connection.rollback();
                 } catch (SQLException rollbackExcep) {
                     System.out.println("Couldn't roll back transaction: " + rollbackExcep.getMessage());
                 }
