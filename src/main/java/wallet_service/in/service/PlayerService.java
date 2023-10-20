@@ -9,7 +9,13 @@ import wallet_service.in.repository.PlayerRepository;
 import java.sql.SQLException;
 import java.util.List;
 
-
+/**
+ * Интерфейс PlayerService определяет сервис, который предоставляет функциональность для управления игроками и их транзакциями.
+ * Он включает в себя операции регистрации, аутентификации, управления балансом, получения истории транзакций, действий и т.д.
+ *
+ * @author Олег Тодор
+ * @since 1.0.0
+ */
 public interface PlayerService {
 
     List<Action> getPlayerActions(String username);
