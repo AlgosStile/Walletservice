@@ -31,7 +31,7 @@ public class TransactionController {
             }
             playerService.debit(username, id, amount);
             System.out.println("Дебетовая транзакция прошла успешно --> $");
-            connection.commit(); //коммитим дебет транз тут
+//            connection.commit(); //коммитим дебет транз тут
         } catch (Exception exception) {
             if (connection != null) {
                 try {
@@ -57,7 +57,7 @@ public class TransactionController {
             }
             playerService.credit(username, id, amount);
             System.out.println("Кредитная транзакция прошла успешно --> $");
-            connection.commit(); // Коммитим транзакцию кредита
+//            connection.commit(); // Коммитим транзакцию кредита
         } catch (Exception exception) {
             if (connection != null) {
                 try {
@@ -73,7 +73,7 @@ public class TransactionController {
         } finally {
             if (connection != null) {
                 try {
-                    connection.setAutoCommit(true); // Включаем обратно режим автоподтверждения
+                    connection.setAutoCommit(true);
                 } catch (SQLException setAutoCommitExcep) {
                     System.out.println("Couldn't set auto commit: " + setAutoCommitExcep.getMessage());
                 }

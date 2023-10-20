@@ -31,7 +31,7 @@ public class DBConnection {
                     System.out.println("Не удалось подключиться к базе данных, попытка номер " + attempts);
                     e.printStackTrace();
                     try {
-                        Thread.sleep(2000); // Подождите 2 секунды перед следующей попыткой.
+                        Thread.sleep(2000);
                     } catch (InterruptedException ie) {
                         ie.printStackTrace();
                     }

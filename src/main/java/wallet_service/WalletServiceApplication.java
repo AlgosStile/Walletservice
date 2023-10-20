@@ -13,11 +13,13 @@ import wallet_service.in.service.PlayerService;
 import wallet_service.in.service.PlayerServiceImpl;
 
 import java.sql.SQLException;
-import java.util.List;;
+import java.util.List;
 import java.util.Scanner;
 
+;
+
 public class WalletServiceApplication {
-  
+
     private static final String MENU_ITEM_1 = "1. Регистрировать игрока";
     private static final String MENU_ITEM_2 = "2. Аутентифицировать игрока";
     private static final String MENU_ITEM_3 = "3. Баланс";
@@ -114,7 +116,6 @@ public class WalletServiceApplication {
     }
 
 
-
     private void displayTransactionHistory() throws SQLException {
         String username = readLineFromUser("Введите имя пользователя: ");
         List<Transaction> transactions = transactionController.getTransactionHistory(username); // Здесь вызывается getTransactionHistory
@@ -151,8 +152,14 @@ public class WalletServiceApplication {
     }
 
     private void shutdown() {
-        System.out.println("Завершение работы...");
-        scanner.close();
+        System.out.println("Closing connection...");
+        try {
+            DBConnection.getInstance().getConnection().close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Приложение завершено успешно!");
+        System.exit(0);
     }
 
 
