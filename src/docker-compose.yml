@@ -1,17 +1,3 @@
-#version: '3'
-#services:
-#  db:
-#    image: postgres
-#    restart: always
-#    command: ["mvn", "test"]
-#    environment:
-#      POSTGRES_USER: postgres
-#      POSTGRES_PASSWORD: wallet
-#      POSTGRES_DB: wallet_db
-#
-#    ports:
-#      - "5432:5432"
-#__________________________________________________________________________
 version: '3'
 services:
   db:
@@ -23,19 +9,19 @@ services:
       POSTGRES_DB: wallet_db
     ports:
       - "5432:5432"
-
-  app:
-    build: .
-    environment:
-      DB_USER: postgres
-      DB_PASSWORD: wallet
-      DB_NAME: wallet_db
-      DB_HOST: db
-    links:
-      - db
     volumes:
-      - ./target:/usr/src/app/target
-    command: ["/bin/sh", "-c", "mvn clean install -DskipTests && mvn test -f /usr/src/app/target"]
+        - ./data:/var/lib/postgresql/data
 
+  tests:
+        build:
+          context: .
+          dockerfile: Dockerfile
 
+        depends_on:
+          - db
+        command: ["mvn", "test"]
+        volumes:
+          - ./tests:/test
 
+#  docker-compose exec tests mvn test - запускаем тесты внутри контейнера
+# docker-compose down  - после выполнения контейнера останавливаем этой командой
