@@ -1,71 +1,121 @@
 package wallet_service.in.controller;
 
+import wallet_service.in.config.DBConnection;
 import wallet_service.in.model.Transaction;
+import wallet_service.in.repository.PlayerRepository;
+import wallet_service.in.repository.TransactionRepository;
 import wallet_service.in.service.PlayerService;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
+
 /**
- * Класс TransactionController является контроллером для обработки транзакций игрока.
- * Он использует сервис PlayerService для выполнения операций с транзакциями.
+ * Класс TransactionController отвечает за управление транзакциями, связанными с игроками.
+ * @author Олег Тодор
+ * @since 1.0.0
  */
 public class TransactionController {
-
-    private final PlayerService playerService;
+    private PlayerService playerService;
+    private PlayerRepository playerRepository;
+    private TransactionRepository transactionRepository;
+    private Connection connection;
 
     /**
-     * Конструктор класса TransactionController, который принимает в качестве параметра объект PlayerService.
+     * Конструктор класса TransactionController с указанными зависимостями.
      *
-     * @param playerService объект сервиса для выполнения операций с транзакциями
+     * @param playerService        сервис для выполнения операций с игроками
+     * @param playerRepository     репозиторий для доступа к данным игроков
+     * @param transactionRepository репозиторий для доступа к данным транзакций
      */
-    public TransactionController(PlayerService playerService) {
+    public TransactionController(PlayerService playerService, PlayerRepository playerRepository, TransactionRepository transactionRepository) {
         this.playerService = playerService;
+        this.playerRepository = playerRepository;
+        this.transactionRepository = transactionRepository;
+        this.connection = DBConnection.getInstance().getConnection();
     }
 
     /**
-     * Метод debitTransaction используется для выполнения дебетовой транзакции.
-     * В случае успешного выполнения выводится сообщение о успешной транзакции, в противном случае выводится сообщение об ошибке.
+     * Выполняет дебетовую транзакцию для игрока.
      *
-     * @param username      имя пользователя, для которого будет выполнена транзакция
-     * @param transactionId идентификатор транзакции
-     * @param amount        сумма транзакции
-     * @throws Exception если транзакция не может быть выполнена
+     * @param username имя пользователя игрока
+     * @param id       идентификатор игрока
+     * @param amount   сумма дебета
+     * @throws Exception если произошла ошибка во время выполнения дебетовой транзакции
      */
-    public void debitTransaction(String username, String transactionId, double amount) throws Exception {
+    public void debitTransaction(String username, int id, double amount) throws Exception {
         try {
-            playerService.debit(username, transactionId, amount);
-            System.out.println("Дебетовая транзакция прошла успешно");
-        } catch (Exception e) {
-            System.out.println("Дебетовая транзакция не удалась: " + e.getMessage());
+            if (connection.getAutoCommit()) {
+                connection.setAutoCommit(false);
+            }
+            playerService.debit(username, id, amount);
+            System.out.println("Дебетовая транзакция прошла успешно --> $");
+//            connection.commit(); // Коммит дебетовой транзакции здесь
+        } catch (Exception exception) {
+            if (connection != null) {
+                try {
+                    System.err.print("Транзакция откатывается");
+                    connection.rollback();
+                } catch (SQLException rollbackExcep) {
+                    System.out.println("Не удалось выполнить откат транзакции: " + rollbackExcep.getMessage());
+                }
+            }
+            throw exception;
+        } finally {
+            if (connection != null) {
+                connection.setAutoCommit(true);
+            }
         }
     }
 
     /**
-     * Метод creditTransaction используется для выполнения кредитной транзакции.
-     * В случае успешного выполнения выводится сообщение о успешной транзакции, в противном случае выводится сообщение об ошибке.
+     * Выполняет кредитную транзакцию для игрока.
      *
-     * @param username      имя пользователя, для которого будет выполнена транзакция
-     * @param transactionId идентификатор транзакции
-     * @param amount        сумма транзакции
-     * @throws Exception если транзакция не может быть выполнена
+     * @param username имя пользователя игрока
+     * @param id       идентификатор игрока
+     * @param amount   сумма кредита
+     * @throws Exception если произошла ошибка во время выполнения кредитной транзакции
      */
-    public void creditTransaction(String username, String transactionId, double amount) throws Exception {
+    public void creditTransaction(String username, int id, double amount) throws Exception {
         try {
-            playerService.credit(username, transactionId, amount);
+            if (connection.getAutoCommit()) {
+                connection.setAutoCommit(false);
+            }
+            playerService.credit(username, id, amount);
             System.out.println("Кредитная транзакция прошла успешно --> $");
-        } catch (Exception e) {
-            System.out.println("Кредитная транзакция не удалась ¯\\_(ツ)_/¯ : " + e.getMessage());
+//            connection.commit(); // Коммит кредитной транзакции здесь
+        } catch (Exception exception) {
+            if (connection != null) {
+                try {
+                    System.err.print("Транзакция откатывается");
+                    connection.rollback();
+                } catch (SQLException rollbackExcep) {
+                    System.out.println("Не удалось выполнить откат транзакции: " + rollbackExcep.getMessage());
+                }
+            }
+            String message = "Кредитная транзакция завершилась неудачно. Возникла ошибка: " + exception.getMessage();
+            System.err.println(message);
+            throw exception;
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.setAutoCommit(true);
+                } catch (SQLException setAutoCommitExcep) {
+                    System.out.println("Не удалось установить автоматическое подтверждение: " + setAutoCommitExcep.getMessage());
+                }
+            }
         }
     }
 
     /**
-     * Метод getTransactionHistory используется для получения истории транзакций пользователя.
+     * Возвращает историю транзакций для игрока.
      *
-     * @param username имя пользователя, для которого нужно получить историю транзакций
-     * @return список объектов Transaction, содержащих информацию о транзакциях пользователя
+     * @param username имя пользователя игрока
+     * @return список транзакций, представляющих историю транзакций игрока
+     * @throws SQLException если произошла ошибка при получении истории транзакций
      */
-    public List<Transaction> getTransactionHistory(String username) {
+    public List<Transaction> getTransactionHistory(String username) throws SQLException {
         return playerService.getTransactionHistory(username);
     }
-
 }

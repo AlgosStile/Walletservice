@@ -8,45 +8,39 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import wallet_service.in.config.DBConnection;
-import wallet_service.in.model.Player;
+import wallet_service.in.model.Action;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.SQLException;
 
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 
 @RunWith(MockitoJUnitRunner.class)
-public class PlayerRepositoryTest {
+public class ActionRepositoryTest {
     @Mock
     DBConnection dbConnection;
 
     @Mock
     Connection connection;
-
     @Mock
     PreparedStatement preparedStatement;
-
-    @Mock
-    ResultSet resultSet;
-
-    PlayerRepository playerRepository;
+    ActionRepository actionRepository;
 
     @Before
     public void setUp() throws Exception {
         Mockito.when(dbConnection.getConnection()).thenReturn(connection);
-        Mockito.when(connection.prepareStatement(anyString(), anyInt())).thenReturn(preparedStatement);
         Mockito.when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        Mockito.when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        playerRepository = PlayerRepository.getInstance();
+        actionRepository = new ActionRepository();
     }
 
     @Test
-    @DisplayName("Add Player Successfully")
-    public void addPlayerSuccessfully() throws Exception {
-        Player player = new Player("testUser", "testPassword");
-        playerRepository.addPlayer(player);
+    @DisplayName("Add Action Successfully")
+    public void addActionSuccessfully() throws Exception {
+        Action action = new Action("testUser", "testAction", "testDetail");
+        actionRepository.addAction(action);
     }
 
 }
+
+

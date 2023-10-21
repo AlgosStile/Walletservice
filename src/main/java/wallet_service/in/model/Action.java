@@ -1,21 +1,22 @@
 package wallet_service.in.model;
 
+
 /**
- * Класс, представляющий действие пользователя.
- *
+ * Класс Action представляет действие, связанное с пользователем.
  * @author Олег Тодор
+ * @since 1.0.0
  */
 public class Action {
-    private String username; // Имя пользователя
-    private String action; // Действие
-    private String detail; // Детали действия
+    private String username;
+    private String action;
+    private String detail;
 
     /**
-     * Конструктор класса Action.
+     * Конструктор класса Action с указанными параметрами.
      *
-     * @param username Имя пользователя
-     * @param action   Действие
-     * @param detail   Детали действия
+     * @param username имя пользователя
+     * @param action   действие
+     * @param detail   детали действия
      */
     public Action(String username, String action, String detail) {
         this.username = username;
@@ -23,29 +24,28 @@ public class Action {
         this.detail = detail;
     }
 
-
     /**
-     * Получить имя пользователя.
+     * Возвращает имя пользователя.
      *
-     * @return Имя пользователя
+     * @return имя пользователя
      */
     public String getUsername() {
         return username;
     }
 
     /**
-     * Получить действие.
+     * Возвращает действие.
      *
-     * @return Действие
+     * @return действие
      */
     public String getAction() {
         return action;
     }
 
     /**
-     * Получить детали действия.
+     * Возвращает детали действия.
      *
-     * @return Детали действия
+     * @return детали действия
      */
     public String getDetail() {
         return detail;

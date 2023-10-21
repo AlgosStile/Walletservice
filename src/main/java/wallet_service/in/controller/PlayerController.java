@@ -1,44 +1,69 @@
 package wallet_service.in.controller;
 
+import wallet_service.in.repository.PlayerRepository;
 import wallet_service.in.service.PlayerService;
 import wallet_service.in.model.Action;
 
 
+import java.sql.SQLException;
 import java.util.List;
 
+
 /**
- * Класс PlayerController является контроллером для обработки запросов игрока.
- * Он использует сервис PlayerService для выполнения операций с игроками.
+ * PlayerController является классом представления, который взаимодействует с
+ * пользователем и делегирует другим сервисам и репозиториям выполнение логики приложения.
+ *
+ * PlayerController предоставляет методы для регистрации, авторизации,
+ * получения баланса, выхода из системы и получения списка действий игрока.
+ *
+ * @author Олег Тодор
+ * @since 1.0.0
  */
+
 public class PlayerController {
-    private final PlayerService playerService;
+    private PlayerService playerService;
+    private PlayerRepository playerRepository;
+
 
     /**
-     * Конструктор класса PlayerController, который принимает в качестве параметра объект PlayerService.
-     * @param playerService объект сервиса для выполнения операций с игроками
+     * Конструктор класса PlayerController.
+     *
+     * @param playerService     сервис игрока, который обрабатывает логику, связанную с игроком.
+     * @param playerRepository  репозиторий игрока, который обеспечивает взаимодействие с базой данных игрока.
+     *
+     * @throws SQLException     если во время создания объекта произошла ошибка доступа к базе данных.
      */
-    public PlayerController(PlayerService playerService) {
+    public PlayerController(PlayerService playerService, PlayerRepository playerRepository) throws SQLException {
         this.playerService = playerService;
+        this.playerRepository = playerRepository;
     }
 
+
     /**
-     * Метод registerPlayer используется для регистрации нового игрока.
-     * В случае успешной регистрации выводится сообщение об успехе, в противном случае выводится сообщение об ошибке.
-     * @param username имя пользователя, которое будет использоваться при регистрации
-     * @param password пароль, который будет использоваться при регистрации
+     * Метод регистрации нового игрока.
+     *
+     * @param username      имя нового игрока.
+     * @param password      пароль нового игрока.
      */
     public void registerPlayer(String username, String password) {
-        playerService.registerPlayer(username, password);
-        System.out.println("Игрок успешно зарегистрировался");
+        try {
+            playerService.registerPlayer(username, password);
+            System.out.println("Игрок успешно зарегистрирован 😀");
+        } catch (Exception e) {
+            System.out.println("Ошибка при регистрации: " + e.getMessage() + " 😞");
+        }
     }
 
+
     /**
-     * Метод authenticatePlayer используется для аутентификации игрока.
-     * В случае успешной аутентификации выводится сообщение об успехе, в противном случае выводится сообщение об ошибке.
-     * @param username имя пользователя, который будет использоваться для аутентификации
-     * @param password пароль, который будет использоваться для аутентификации
+     * Метод аутентификации игрока.
+     *
+     * @param username      имя игрока.
+     * @param password      пароль игрока.
+     *
+     * @throws SQLException если произошла ошибка доступа к базе данных.
      */
-    public void authenticatePlayer(String username, String password) {
+    public void authenticatePlayer(String username, String password) throws SQLException {
         boolean isAuthenticated = playerService.authenticatePlayer(username, password);
 
         if (isAuthenticated) {
@@ -48,34 +73,40 @@ public class PlayerController {
         }
     }
 
+
     /**
-     * Метод getBalance используется для получения баланса игрока.
-     * В случае успешного получения баланса выводится сообщение с его значением, в противном случае выводится сообщение об ошибке.
-     * @param username имя пользователя, для которого нужно получить баланс
+     * Метод для получения баланса игрока.
+     *
+     * @param username      имя игрока.
+     *
+     * @throws SQLException если произошла ошибка доступа к базе данных.
      */
-    public void getBalance(String username) {
-        double balance = 0;
-        if (playerService.isUserRegistered(username) && playerService.isUserAuthenticated(username)) {
-            balance = playerService.getBalance(username);
-            System.out.println("Баланс: " + balance);
-        } else {
-            System.out.println("Пользователь не аутентифицирован в системе! Введите регистрационные данные.");
+    public void getBalance(String username) throws SQLException {
+        double balance = playerRepository.getBalance(username);
+        System.out.println("Баланс: " + balance);
+    }
+
+    /**
+     * Метод для выхода игрока из системы.
+     *
+     * @param username      имя игрока.
+     */
+    public void logoutPlayer(String username) {
+        try {
+            playerRepository.logoutPlayer(username);
+            System.out.println("Игрок успешно вышел из системы");
+        } catch (SQLException e) {
+            System.out.println("Произошла ошибка при выходе из системы: " + e.getMessage());
         }
     }
 
-    /**
-     * Метод logoutPlayer используется для выхода игрока из системы.
-     * @param username имя пользователя, который будет выходить из системы
-     */
-    public void logoutPlayer(String username) {
-        // Вызываем метод logout из объекта playerService для выхода игрока из системы
-        playerService.logout(username);
-    }
 
     /**
-     * Метод getPlayerActions используется для получения списка действий игрока.
-     * @param username имя пользователя, для которого нужно получить список действий
-     * @return список объектов Action, содержащих информацию о действиях игрока
+     * Метод для получения списка действий игрока.
+     *
+     * @param username      имя игрока.
+     *
+     * @return список действий игрока.
      */
     public List<Action> getPlayerActions(String username) {
         return playerService.getPlayerActions(username);
