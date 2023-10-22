@@ -1,11 +1,12 @@
-package wallet_service.in.service;
+package wallet_service.out.service;
 
-import wallet_service.in.controller.TransactionType;
+import wallet_service.out.controller.TransactionType;
 import wallet_service.in.model.Action;
 import wallet_service.in.model.Player;
 import wallet_service.in.model.Transaction;
-import wallet_service.in.repository.PlayerRepository;
-import wallet_service.in.repository.TransactionRepository;
+import wallet_service.out.dto.PlayerDto;
+import wallet_service.out.repository.PlayerRepository;
+import wallet_service.out.repository.TransactionRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,12 @@ public class PlayerServiceImpl implements PlayerService {
         this.playerRepository = playerRepository;
         this.transactionRepository = transactionRepository;
         this.actions = new CopyOnWriteArrayList<>();
+    }
+
+    public PlayerServiceImpl() {
+        this.playerRepository = new PlayerRepository();
+        this.transactionRepository = new TransactionRepository();
+        this.actions = new ArrayList<>();
     }
 
     public synchronized void addAction(String username, String action, String detail) {
@@ -123,6 +130,17 @@ public class PlayerServiceImpl implements PlayerService {
 
     public void logout(String username) {
         addAction(username, "Выход из системы", "");
+        playerRepository.removePlayer(username);
+        authenticatedUser = null;
+    }
+
+    @Override
+    public PlayerDto getPlayer(String username) {
+        return null;
+    }
+
+    @Override
+    public void logoutPlayer(String username) {
         playerRepository.removePlayer(username);
         authenticatedUser = null;
     }

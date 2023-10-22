@@ -4,16 +4,18 @@ package wallet_service.in.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 
-import wallet_service.in.controller.TransactionType;
+import wallet_service.out.controller.TransactionType;
 import wallet_service.in.model.Action;
 import wallet_service.in.model.Player;
 import wallet_service.in.model.Transaction;
-import wallet_service.in.repository.PlayerRepository;
+import wallet_service.out.repository.PlayerRepository;
 
-import wallet_service.in.repository.TransactionRepository;
+import wallet_service.out.repository.TransactionRepository;
 
 
 import org.junit.jupiter.api.Test;
+import wallet_service.out.service.PlayerService;
+import wallet_service.out.service.PlayerServiceImpl;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;

@@ -1,25 +1,18 @@
 package wallet_service;
 
-import wallet_service.in.controller.PlayerController;
-import wallet_service.in.controller.TransactionController;
+import wallet_service.out.controller.PlayerController;
+import wallet_service.out.controller.TransactionController;
 import wallet_service.in.model.Action;
 import wallet_service.in.model.Transaction;
-import wallet_service.in.repository.PlayerRepository;
-import wallet_service.in.repository.TransactionRepository;
-import wallet_service.in.service.PlayerService;
-import wallet_service.in.service.PlayerServiceImpl;
+import wallet_service.out.repository.PlayerRepository;
+import wallet_service.out.repository.TransactionRepository;
+import wallet_service.out.service.PlayerService;
+import wallet_service.out.service.PlayerServiceImpl;
 
 import java.util.List;
 import java.util.Scanner;
 
-/**
- * Класс WalletServiceApplication представляет собой командно-строковый интерфейс банковского сервиса,
- * осуществляющего управление счетами игроков. Пользователи могут регистрироваться, аутентифицироваться,
- * проводить транзакции и просматривать историю транзакций и действий.
- * Это главный класс приложения, он использует PlayerService для бизнес-логики и PlayerRepository для хранения данных.
- *
- * @author Олег Тодор
- */
+
 public class WalletServiceApplication {
     private static final String MENU_ITEM_1 = "1. Регистрировать игрока";
     private static final String MENU_ITEM_2 = "2. Аутентифицировать игрока";

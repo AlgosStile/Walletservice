@@ -3,7 +3,8 @@ package wallet_service.in.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import wallet_service.in.service.PlayerService;
+import wallet_service.out.service.PlayerService;
+import wallet_service.out.controller.PlayerController;
 
 import static org.mockito.Mockito.*;
 

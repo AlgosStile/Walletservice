@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import wallet_service.in.model.Player;
+import wallet_service.out.repository.PlayerRepository;
 
 import java.util.Collection;
 

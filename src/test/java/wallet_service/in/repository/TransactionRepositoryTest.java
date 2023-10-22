@@ -3,8 +3,9 @@ package wallet_service.in.repository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import wallet_service.in.controller.TransactionType;
+import wallet_service.out.controller.TransactionType;
 import wallet_service.in.model.Transaction;
+import wallet_service.out.repository.TransactionRepository;
 
 import java.util.Collection;
 
