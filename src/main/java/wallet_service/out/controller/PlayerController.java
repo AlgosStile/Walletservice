@@ -69,15 +69,16 @@ public class PlayerController extends HttpServlet {
         BufferedReader reader = req.getReader();
         PlayerDto playerDto = objectMapper.readValue(reader, PlayerDto.class);
 
-        if (playerService.authenticatePlayer(playerDto.getUsername(), playerDto.getPassword())) {
-            resp.setStatus(HttpServletResponse.SC_OK); // Устанавливаем код ответа 200 OK если аутентификация прошла успешно
+        try {
+            playerService.updatePlayer(playerDto.getUsername(), playerDto.getPassword());
+            resp.setStatus(HttpServletResponse.SC_OK); // Устанавливаем код ответа 200 OK если обновление успешно
             String playerJson = objectMapper.writeValueAsString(playerDto);
             resp.setContentType("application/json");
             resp.getWriter().write(playerJson);
-        } else {
-            resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // Устанавливаем код ответа 401 Unauthorized если аутентификация не удалась
+        } catch (RuntimeException e) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST); // Устанавливаем код ответа 400 Bad Request если обновление не удалось
             Map<String, String> response = new HashMap<>();
-            response.put("error", "Аутентификация не удалась");
+            response.put("error", e.getMessage());
             String jsonResponse = objectMapper.writeValueAsString(response);
             resp.getWriter().write(jsonResponse);
         }

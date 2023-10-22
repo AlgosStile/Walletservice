@@ -33,4 +33,7 @@ public class PlayerRepository {
     public void removePlayer(String username) {
         players.remove(username);
     }
+
+    public void updatePlayer(String username, String password) {
+    }
 }

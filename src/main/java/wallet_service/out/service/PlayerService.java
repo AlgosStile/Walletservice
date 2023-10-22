@@ -33,4 +33,6 @@ public interface PlayerService {
     PlayerDto getPlayer(String username);
 
     void logoutPlayer(String username);
+
+    void updatePlayer(String username, String password);
 }

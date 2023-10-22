@@ -145,6 +145,12 @@ public class PlayerServiceImpl implements PlayerService {
         authenticatedUser = null;
     }
 
+    @Override
+    public void updatePlayer(String username, String password) {
+        playerRepository.updatePlayer(username, password);
+
+    }
+
 }
 
 
