@@ -26,15 +26,28 @@ public class PlayerDto {
         this.password = "";
     }
 
+    public PlayerDto() {
+
+    }
+
+
     public String getUsername() {
         return username;
+    }
+
+
+    public String getPassword() {
+        return password;
     }
 
     public double getBalance() {
         return balance;
     }
 
-    public String getPassword() {
-        return password;
+    public void setUsername(String test) {
+
+    }
+
+    public void setPassword(String test) {
     }
 }

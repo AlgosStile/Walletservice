@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class TransactionHistoryController extends HttpServlet {
     private PlayerService playerService;
 
-    public TransactionHistoryController() {
+    public TransactionHistoryController(PlayerService playerService) {
         this.playerService = new PlayerServiceImpl();
     }
 
@@ -31,7 +31,7 @@ public class TransactionHistoryController extends HttpServlet {
 
 
         List<TransactionDto> transactionDtos = transactions.stream()
-                .map(transaction -> TransactionMapper.INSTANCE.transactionToTransactionDto(transaction))
+                .map(TransactionMapper.INSTANCE::transactionToTransactionDto)
                 .collect(Collectors.toList());
 
         ObjectMapper objectMapper = new ObjectMapper();

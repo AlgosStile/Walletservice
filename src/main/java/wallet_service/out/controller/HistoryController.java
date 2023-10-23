@@ -26,6 +26,7 @@ public class HistoryController extends HttpServlet {
 
     public HistoryController(PlayerService playerService) {
         this.playerService = playerService;
+        this.objectMapper = new ObjectMapper();
     }
 
     public void init() {

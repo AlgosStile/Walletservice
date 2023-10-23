@@ -14,6 +14,7 @@ public class Action {
     }
 
 
+
     public String getUsername() {
         return username;
     }
@@ -27,4 +28,6 @@ public class Action {
     public String getDetail() {
         return detail;
     }
+
+
 }
