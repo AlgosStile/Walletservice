@@ -12,4 +12,5 @@ public interface TransactionMapper {
 
     TransactionDto transactionToTransactionDto(Transaction transaction);
     Transaction transactionDtoToTransaction(TransactionDto transactionDto);
+
 }

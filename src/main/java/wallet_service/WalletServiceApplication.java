@@ -1,15 +1,14 @@
 package wallet_service;
 
-import wallet_service.out.controller.PlayerController;
-import wallet_service.out.controller.TransactionController;
 import wallet_service.in.model.Action;
 import wallet_service.in.model.Transaction;
-import wallet_service.out.repository.PlayerRepository;
-import wallet_service.out.repository.TransactionRepository;
+import wallet_service.out.controller.PlayerController;
+import wallet_service.out.controller.TransactionController;
+import wallet_service.in.repository.PlayerRepository;
+import wallet_service.in.repository.TransactionRepository;
 import wallet_service.out.service.PlayerService;
 import wallet_service.out.service.PlayerServiceImpl;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Scanner;
 

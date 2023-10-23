@@ -1,4 +1,4 @@
-package wallet_service.out.controller;
+package wallet_service.in.controller;
 
 
 

@@ -1,4 +1,4 @@
-package wallet_service.out.repository;
+package wallet_service.in.repository;
 
 import wallet_service.in.model.Player;
 

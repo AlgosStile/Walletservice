@@ -1,6 +1,6 @@
 package wallet_service.in.model;
 
-import wallet_service.out.controller.TransactionType;
+import wallet_service.in.controller.TransactionType;
 
 
 public class Transaction {

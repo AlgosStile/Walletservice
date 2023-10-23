@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import wallet_service.out.controller.TransactionType;
+import wallet_service.in.controller.TransactionType;
 
 
 @Getter

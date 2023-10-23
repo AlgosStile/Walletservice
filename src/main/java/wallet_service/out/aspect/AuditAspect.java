@@ -9,7 +9,9 @@ import org.aspectj.lang.annotation.Pointcut;
 public class AuditAspect  {
 
     @Pointcut("execution(* wallet_service.out.controller.*.*(..))")
-    private void selectAll(){}
+    private void selectAll(){
+
+    }
 
     @After("selectAll()")
     public void afterAdvice(JoinPoint jp){

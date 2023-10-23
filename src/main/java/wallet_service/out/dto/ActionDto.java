@@ -5,20 +5,12 @@ import jakarta.validation.constraints.NotBlank;
 public class ActionDto {
     @NotBlank(message = "Username cannot be blank")
     private String username;
-
-    @NotBlank(message = "Action cannot be blank")
-    private String action;
-
-    @NotBlank(message = "Detail cannot be blank")
-    private String detail;
+    @NotBlank(message = "Action detail cannot be blank")
+    private String actionDetail;
+    @NotBlank(message = "Action performed cannot be blank")
+    private String actionPerformed;
 
     public ActionDto() {
-    }
-
-    public ActionDto(String username, String action, String detail) {
-        this.username = username;
-        this.action = action;
-        this.detail = detail;
     }
 
     public String getUsername() {
@@ -29,19 +21,19 @@ public class ActionDto {
         this.username = username;
     }
 
-    public String getAction() {
-        return action;
+    public String getActionDetail() {
+        return actionDetail;
     }
 
-    public void setAction(String action) {
-        this.action = action;
+    public void setActionDetail(String actionDetail) {
+        this.actionDetail = actionDetail;
     }
 
-    public String getDetail() {
-        return detail;
+    public String getActionPerformed() {
+        return actionPerformed;
     }
 
-    public void setDetail(String detail) {
-        this.detail = detail;
+    public void setActionPerformed(String actionPerformed) {
+        this.actionPerformed = actionPerformed;
     }
 }

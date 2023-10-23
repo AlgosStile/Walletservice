@@ -5,9 +5,8 @@ import wallet_service.in.model.Transaction;
 import wallet_service.out.service.PlayerService;
 
 import java.util.List;
-import wallet_service.out.dto.PlayerDto;
+
 import wallet_service.out.dto.TransactionDto;
-import wallet_service.out.service.PlayerServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -21,8 +20,12 @@ import java.util.Map;
 
 public class TransactionController extends HttpServlet {
 
-    private final PlayerService playerService;
+    private PlayerService playerService;
     private ObjectMapper objectMapper;
+
+    public TransactionController() {
+        // конструктор без параметров для web.xml
+    }
 
     public TransactionController(PlayerService playerService) {
         this.playerService = playerService;

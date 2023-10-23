@@ -6,7 +6,9 @@ import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import wallet_service.in.model.Action;
+import wallet_service.out.dto.ActionDto;
 import wallet_service.out.dto.PlayerDto;
+import wallet_service.out.mapper.ActionMapper;
 import wallet_service.out.service.PlayerService;
 import wallet_service.out.service.PlayerServiceImpl;
 
@@ -21,6 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 import wallet_service.out.util.JwtProvider;
 
 @WebServlet("/player")
@@ -30,6 +34,10 @@ public class PlayerController extends HttpServlet {
     private ObjectMapper objectMapper;
     private HttpServletRequest req;
     private HttpServletResponse resp;
+
+    public PlayerController() {
+        // конструктор без параметров для web.xml
+    }
 
     public PlayerController(PlayerService playerService) {
         this.playerService = playerService;
@@ -61,16 +69,21 @@ public class PlayerController extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String username = req.getParameter("username");
-        PlayerDto playerDto = getPlayerDto(username);
+        List<Action> actions = playerService.getPlayerActions(username);
+
+        List<ActionDto> actionDtos = actions.stream()
+                .map(action -> ActionMapper.INSTANCE.actionToActionDto(action))
+                .collect(Collectors.toList());
 
         ObjectMapper objectMapper = new ObjectMapper();
-        String playerJson = objectMapper.writeValueAsString(playerDto);
+        String actionsJson = objectMapper.writeValueAsString(actionDtos);
 
         resp.setContentType("application/json");
-        resp.getWriter().print(playerJson);
+        resp.getWriter().print(actionsJson);
     }
+
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

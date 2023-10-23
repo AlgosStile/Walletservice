@@ -1,12 +1,12 @@
 package wallet_service.out.service;
 
-import wallet_service.out.controller.TransactionType;
+import wallet_service.in.controller.TransactionType;
 import wallet_service.in.model.Action;
 import wallet_service.in.model.Player;
 import wallet_service.in.model.Transaction;
 import wallet_service.out.dto.PlayerDto;
-import wallet_service.out.repository.PlayerRepository;
-import wallet_service.out.repository.TransactionRepository;
+import wallet_service.in.repository.PlayerRepository;
+import wallet_service.in.repository.TransactionRepository;
 
 import java.util.ArrayList;
 import java.util.List;
