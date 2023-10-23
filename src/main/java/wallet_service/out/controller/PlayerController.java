@@ -1,6 +1,10 @@
 package wallet_service.out.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 import wallet_service.in.model.Action;
 import wallet_service.out.dto.PlayerDto;
 import wallet_service.out.service.PlayerService;
@@ -16,11 +20,16 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import wallet_service.out.util.JwtProvider;
 
 @WebServlet("/player")
 public class PlayerController extends HttpServlet {
+    private JwtProvider jwtProvider;
     private PlayerService playerService;
     private ObjectMapper objectMapper;
+    private HttpServletRequest req;
+    private HttpServletResponse resp;
 
     public PlayerController(PlayerService playerService) {
         this.playerService = playerService;
@@ -29,6 +38,16 @@ public class PlayerController extends HttpServlet {
     public void init() {
         this.playerService = new PlayerServiceImpl();
         this.objectMapper = new ObjectMapper();
+        this.jwtProvider = new JwtProvider();
+    }
+    private void validate(Object object) throws ServletException {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<Object>> violations = validator.validate(object);
+
+        if (!violations.isEmpty()) {
+            throw new ServletException("Validation errors: " + violations);
+        }
     }
 
     private String readJsonFromRequest(HttpServletRequest req) throws IOException {
@@ -55,21 +74,43 @@ public class PlayerController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String action = req.getParameter("action");
         PlayerDto playerDto = objectMapper.readValue(req.getReader(), PlayerDto.class);
 
         try {
-            playerService.registerPlayer(playerDto.getUsername(), playerDto.getPassword());
-            resp.setStatus(HttpServletResponse.SC_CREATED); // Return HTTP code 201 (Created)
-            String playerJson = objectMapper.writeValueAsString(playerDto);
-            resp.setContentType("application/json");
-            resp.getWriter().write(playerJson);
+            switch (action) {
+                case "register":
+                    playerService.registerPlayer(playerDto.getUsername(), playerDto.getPassword());
+                    returnTokenAndStatus(resp, HttpServletResponse.SC_CREATED, playerDto); // 201 Created
+                    break;
+                case "login":
+                    boolean authStatus = playerService.authenticatePlayer(playerDto.getUsername(), playerDto.getPassword());
+                    if (authStatus)
+                        returnTokenAndStatus(resp, HttpServletResponse.SC_OK, playerDto); // 200 OK
+                    else
+                        returnErrorAndStatus(resp, HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized"); // 401 Unauthorized
+                    break;
+                default:
+                    returnErrorAndStatus(resp, HttpServletResponse.SC_BAD_REQUEST, "Invalid Action"); // 400 Bad Request
+                    break;
+            }
         } catch (RuntimeException e) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST); // Return HTTP code 400 (Bad Request)
-            Map<String, String> response = new HashMap<>();
-            response.put("error", e.getMessage());
-            String jsonResponse = objectMapper.writeValueAsString(response);
-            resp.getWriter().write(jsonResponse);
+            returnErrorAndStatus(resp, HttpServletResponse.SC_BAD_REQUEST, "An error occurred: " + e.getMessage()); // 400 Bad Request
         }
+    }
+
+    private void returnTokenAndStatus(HttpServletResponse resp, int status, PlayerDto playerDto) throws IOException {
+        String token = jwtProvider.generateToken(playerDto.getUsername());
+        resp.setStatus(status);
+        resp.setHeader("Authorization", "Bearer " + token);
+    }
+
+    private void returnErrorAndStatus(HttpServletResponse resp, int status, String message) throws IOException {
+        resp.setStatus(status);
+        Map<String, String> response = new HashMap<>();
+        response.put("error", message);
+        String jsonResponse = objectMapper.writeValueAsString(response);
+        resp.getWriter().write(jsonResponse);
     }
 
 
@@ -78,6 +119,7 @@ public class PlayerController extends HttpServlet {
         String json = readJsonFromRequest(req);
         ObjectMapper objectMapper = new ObjectMapper();
         PlayerDto playerDto = objectMapper.readValue(json, PlayerDto.class);
+        validate(playerDto);
 
         try {
             playerService.updatePlayer(playerDto.getUsername(), playerDto.getPassword());
@@ -97,14 +139,16 @@ public class PlayerController extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String json = readJsonFromRequest(req);
         String username = req.getParameter("username");
         playerService.logoutPlayer(username);
         resp.setStatus(HttpServletResponse.SC_OK); // Устанавливаем код ответа 200 OK если выход прошел успешно
     }
 
 
-    private PlayerDto getPlayerDto(String username) {
+    private PlayerDto getPlayerDto(String username) throws ServletException {
         PlayerDto playerDto = playerService.getPlayer(username);
+        validate(playerDto);
         return playerDto;
     }
 
@@ -114,16 +158,6 @@ public class PlayerController extends HttpServlet {
         System.out.println("Игрок успешно зарегистрировался");
     }
 
-
-    public void authenticatePlayer(String username, String password) {
-        boolean isAuthenticated = playerService.authenticatePlayer(username, password);
-
-        if (isAuthenticated) {
-            System.out.println("Игрок успешно авторизован!");
-        } else {
-            System.out.println("Неправильное имя пользователя или пароль");
-        }
-    }
 
 
     public void getBalance(String username) {
@@ -144,5 +178,9 @@ public class PlayerController extends HttpServlet {
 
     public List<Action> getPlayerActions(String username) {
         return playerService.getPlayerActions(username);
+    }
+
+    public void authenticatePlayer(String username, String password) {
+        playerService.authenticatePlayer(username, password);
     }
 }

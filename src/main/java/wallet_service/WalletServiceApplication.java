@@ -9,6 +9,7 @@ import wallet_service.out.repository.TransactionRepository;
 import wallet_service.out.service.PlayerService;
 import wallet_service.out.service.PlayerServiceImpl;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Scanner;
 
@@ -63,9 +64,10 @@ public class WalletServiceApplication {
                     playerController.registerPlayer(username1, password1);
                     break;
                 case 2:
-                    String username2 = readLineFromUser("Введите имя пользователя: ");
-                    String password2 = readLineFromUser("Введите пароль: ");
-                    playerController.authenticatePlayer(username2, password2);
+                    String username = readLineFromUser("Введите имя пользователя: ");
+                    String password = readLineFromUser("Введите пароль: ");
+
+                    playerController.authenticatePlayer(username, password);
                     break;
                 case 3:
                     String username3 = readLineFromUser("Введите имя пользователя: ");
