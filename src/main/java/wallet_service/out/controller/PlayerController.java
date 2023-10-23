@@ -31,6 +31,16 @@ public class PlayerController extends HttpServlet {
         this.objectMapper = new ObjectMapper();
     }
 
+    private String readJsonFromRequest(HttpServletRequest req) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        BufferedReader reader = req.getReader();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            sb.append(line);
+        }
+        return sb.toString();
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, IOException {
         String username = req.getParameter("username");
@@ -45,17 +55,16 @@ public class PlayerController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        BufferedReader reader = req.getReader();
-        PlayerDto playerDto = objectMapper.readValue(reader, PlayerDto.class);
+        PlayerDto playerDto = objectMapper.readValue(req.getReader(), PlayerDto.class);
 
         try {
             playerService.registerPlayer(playerDto.getUsername(), playerDto.getPassword());
-            resp.setStatus(HttpServletResponse.SC_CREATED); // Устанавливаем код ответа 201 Created
+            resp.setStatus(HttpServletResponse.SC_CREATED); // Return HTTP code 201 (Created)
             String playerJson = objectMapper.writeValueAsString(playerDto);
             resp.setContentType("application/json");
             resp.getWriter().write(playerJson);
         } catch (RuntimeException e) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST); // Устанавливаем код ответа 400 Bad Request если регистрация не удалась
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST); // Return HTTP code 400 (Bad Request)
             Map<String, String> response = new HashMap<>();
             response.put("error", e.getMessage());
             String jsonResponse = objectMapper.writeValueAsString(response);
@@ -66,17 +75,18 @@ public class PlayerController extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        BufferedReader reader = req.getReader();
-        PlayerDto playerDto = objectMapper.readValue(reader, PlayerDto.class);
+        String json = readJsonFromRequest(req);
+        ObjectMapper objectMapper = new ObjectMapper();
+        PlayerDto playerDto = objectMapper.readValue(json, PlayerDto.class);
 
         try {
             playerService.updatePlayer(playerDto.getUsername(), playerDto.getPassword());
-            resp.setStatus(HttpServletResponse.SC_OK); // Устанавливаем код ответа 200 OK если обновление успешно
-            String playerJson = objectMapper.writeValueAsString(playerDto);
+            resp.setStatus(HttpServletResponse.SC_OK);
+            String jsonResponse = objectMapper.writeValueAsString(playerDto);
             resp.setContentType("application/json");
-            resp.getWriter().write(playerJson);
+            resp.getWriter().write(jsonResponse);
         } catch (RuntimeException e) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST); // Устанавливаем код ответа 400 Bad Request если обновление не удалось
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             Map<String, String> response = new HashMap<>();
             response.put("error", e.getMessage());
             String jsonResponse = objectMapper.writeValueAsString(response);

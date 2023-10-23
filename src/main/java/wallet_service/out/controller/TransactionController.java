@@ -31,15 +31,15 @@ public class TransactionController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String username = req.getParameter("username");
-        String transactionId = req.getParameter("transactionId");
-        double amount = Double.parseDouble(req.getParameter("amount"));
+        String json = readJsonFromRequest(req);
+        ObjectMapper objectMapper = new ObjectMapper();
+        TransactionDto transactionDto = objectMapper.readValue(json, TransactionDto.class);
 
         try {
-            playerService.credit(username, transactionId, amount);
+            playerService.debit(transactionDto.getUsername(), transactionDto.getId(), transactionDto.getAmount());
             resp.setStatus(HttpServletResponse.SC_CREATED);
             Map<String, String> response = new HashMap<>();
-            response.put("success", "Credit operation successful");
+            response.put("success", "Debit operation successful");
             String jsonResponse = objectMapper.writeValueAsString(response);
             resp.getWriter().write(jsonResponse);
         } catch (Exception e) {
@@ -51,17 +51,27 @@ public class TransactionController extends HttpServlet {
         }
     }
 
+    private String readJsonFromRequest(HttpServletRequest req) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        BufferedReader reader = req.getReader();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            sb.append(line);
+        }
+        return sb.toString();
+    }
+
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String username = req.getParameter("username");
-        String transactionId = req.getParameter("transactionId");
-        double amount = Double.parseDouble(req.getParameter("amount"));
+        String json = readJsonFromRequest(req);
+        ObjectMapper objectMapper = new ObjectMapper();
+        TransactionDto transactionDto = objectMapper.readValue(json, TransactionDto.class);
 
         try {
-            playerService.debit(username, transactionId, amount);
+            playerService.credit(transactionDto.getUsername(), transactionDto.getId(), transactionDto.getAmount());
             resp.setStatus(HttpServletResponse.SC_OK);
             Map<String, String> response = new HashMap<>();
-            response.put("success", "Debit operation successful");
+            response.put("success", "Credit operation successful");
             String jsonResponse = objectMapper.writeValueAsString(response);
             resp.getWriter().write(jsonResponse);
         } catch (Exception e) {
