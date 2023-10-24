@@ -5,20 +5,34 @@
         http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          id="WebApp_ID" version="4.0">
     <display-name>wallet_service</display-name>
-
     <servlet>
         <servlet-name>PlayerController</servlet-name>
         <servlet-class>wallet_service.out.controller.PlayerController</servlet-class>
+        <init-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/META-INF/web.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
     </servlet>
 
     <servlet>
         <servlet-name>TransactionController</servlet-name>
         <servlet-class>wallet_service.out.controller.TransactionController</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>/META-INF/web.xml</param-value>
+        </init-param>
+        <load-on-startup>2</load-on-startup>
     </servlet>
 
     <servlet>
         <servlet-name>HistoryController</servlet-name>
         <servlet-class>wallet_service.out.controller.HistoryController</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>/META-INF/web.xml</param-value>
+        </init-param>
+        <load-on-startup>3</load-on-startup>
     </servlet>
 
     <servlet-mapping>
@@ -34,6 +48,10 @@
     <servlet-mapping>
         <servlet-name>HistoryController</servlet-name>
         <url-pattern>/wallet_service/player/history</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TransactionController</servlet-name>
+        <url-pattern>/wallet_service/transaction/history</url-pattern>
     </servlet-mapping>
 
     <filter>

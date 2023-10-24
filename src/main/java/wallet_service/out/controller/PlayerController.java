@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 import wallet_service.out.util.JwtProvider;
 
-@WebServlet("/player")
+@WebServlet({"/player"})
 public class PlayerController extends HttpServlet {
     private JwtProvider jwtProvider;
     private PlayerService playerService;

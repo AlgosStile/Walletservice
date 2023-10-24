@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@WebServlet("/player/history")
+@WebServlet({"/player/history"})
 public class HistoryController extends HttpServlet {
     private ObjectMapper objectMapper;
     private PlayerService playerService;

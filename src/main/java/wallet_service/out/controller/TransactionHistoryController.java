@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@WebServlet("/transaction/history")
+@WebServlet({"/transaction/history"})
 public class TransactionHistoryController extends HttpServlet {
     private PlayerService playerService;
 
