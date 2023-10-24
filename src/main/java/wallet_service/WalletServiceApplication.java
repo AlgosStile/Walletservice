@@ -12,7 +12,16 @@ import wallet_service.out.service.PlayerServiceImpl;
 import java.util.List;
 import java.util.Scanner;
 
-
+/**
+ * Класс WalletServiceApplication представляет собой главную логику сервера
+ * обслуживания электронных кошельков игроков.
+ * Позволяет зарегистрировать нового игрока, аутентифицировать игрока,
+ * проверить баланс игрока, выполнить дебетовую и кредитную операции по счету,
+ * просмотреть историю транзакций и действий, завершить работу игрока и выйти
+ * из системы.
+ *
+ * @author Олег Тодор
+ */
 public class WalletServiceApplication {
     private static final String MENU_ITEM_1 = "1. Регистрировать игрока";
     private static final String MENU_ITEM_2 = "2. Аутентифицировать игрока";
@@ -28,6 +37,12 @@ public class WalletServiceApplication {
     private static TransactionController transactionController;
     private static PlayerController playerController;
 
+    /**
+     * Стартовый метод приложения.
+     *
+     * @param args аргументы командной строки
+     * @throws Exception в случае любых исключений
+     */
     public static void main(String[] args) throws Exception {
         PlayerRepository playerRepository = new PlayerRepository();
         TransactionRepository transactionRepository = new TransactionRepository();
@@ -37,6 +52,11 @@ public class WalletServiceApplication {
         application.run();
     }
 
+    /**
+     * Конструктор класса WalletServiceApplication.
+     *
+     * @param playerService сервис для работы с пользователями
+     */
     public WalletServiceApplication(PlayerService playerService) {
         scanner = new Scanner(System.in);
 
@@ -45,6 +65,12 @@ public class WalletServiceApplication {
     }
 
 
+    /**
+     * Запускает основной цикл приложения, предоставляя пользователю меню
+     * для выбора действий.
+     *
+     * @throws Exception в случае любых исключений
+     */
     public void run() throws Exception {
         boolean running = true;
         while (running) {
@@ -103,7 +129,9 @@ public class WalletServiceApplication {
         }
     }
 
-
+    /**
+     * Отображает историю транзакций указанного пользователя.
+     */
     private void displayTransactionHistory() {
         String username = readLineFromUser("Введите имя пользователя: ");
         List<Transaction> transactions = (List<Transaction>) transactionController.getTransactionHistory(username);
@@ -112,12 +140,21 @@ public class WalletServiceApplication {
         }
     }
 
+
+    /**
+     * Разлогинивает указанного игрока.
+     */
     private void logoutPlayer() {
         String username = readLineFromUser("Введите имя пользователя: ");
         playerController.logoutPlayer(username);
         System.out.println("Игрок" + " " + username + " успешно вышел из системы");
     }
 
+
+
+    /**
+     * Отображает историю действий указанного пользователя.
+     */
     private void displayActionHistory() {
         String username = readLineFromUser("Введите имя пользователя: ");
         List<Action> actions = playerController.getPlayerActions(username);
@@ -126,12 +163,26 @@ public class WalletServiceApplication {
         }
     }
 
+
+    /**
+     * Считывает строку данных от пользователя.
+     *
+     * @param prompt сообщение для пользователя
+     * @return строка данных, введенных пользователем
+     */
     private String readLineFromUser(String prompt) {
         System.out.print(prompt);
         return scanner.nextLine();
     }
 
 
+
+    /**
+     * Считывает число с плавающей запятой от пользователя.
+     *
+     * @param prompt сообщение для пользователя
+     * @return число, введенное пользователем
+     */
     private double readDoubleFromUser(String prompt) {
         System.out.print(prompt);
         double value = scanner.nextDouble();
@@ -139,6 +190,10 @@ public class WalletServiceApplication {
         return value;
     }
 
+
+    /**
+     * Выполняет завершение работы приложения.
+     */
     private void shutdown() {
         System.out.println("Завершение работы...");
     }
