@@ -11,9 +11,9 @@ package wallet_service.in.model;
  */
 public class Action {
 
-    private String username; // Имя пользователя
-    private String action; // Действие
-    private String detail; // Детали действия
+    private String username;
+    private String action;
+    private String detail;
 
     /**
      * Создает экземпляр класса Action с указанными параметрами.
