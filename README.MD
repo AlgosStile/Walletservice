@@ -10,7 +10,9 @@
 
 Для сборки приложения необходимо выполнить следующие шаги:
 
-### Используя IntelliJ IDEA:
+### 1. Установите необходимые зависимости в pom.xml!
+
+### 2. Используйте IntelliJ IDEA:
 
 1. Откройте IntelliJ IDEA.
 2. Нажмите на `File` -> `Open`.
@@ -18,15 +20,28 @@
 4. Теперь IntelliJ IDEA собирает проект автоматически.
 5. В случае ошибки или для ручной сборки, перейдите к шагу `Build` -> `Build Project`.
 
-### Используя Maven:
+### 3. Используйте Maven:
 
 1. Установите Maven, если это еще не сделано.
 2. Откройте терминал или командную строку.
 3. Напишите и выполните команду `mvn clean package`.
 
+### 4. Используйте PostgreSQL:
+1. Установите pgAdmin 4 (server 13 и выше) .
+2. Установите соединение с сервером в интегрированной в idea postgreSQL.
+3. Все настройки указаны в файле db.properties.
+
+### 5. Используйте Docker:
+1. Установите Docker.
+2. Запустите командой в терминале `docker-compose up -d`. 
+3. Docker создаст 2 контейнера и развернет в своей среде.
+4. 1 контейнер будет с PostgreSQL, а во втором будут запущены тесты.
+5. Команды: `docker-compose exec tests mvn test` - запускаем тесты внутри контейнера
+# `docker-compose down` останавливаем этой командой контейнер.
+
 ## Как запустить:
 
-### Используя IntelliJ IDEA:
+### Используйте IntelliJ IDEA:
 
 1. В IntelliJ IDEA найти файл `WalletServiceApplication.java`.
 2. Кликнуть правой кнопкой мыши на файле -> `Run` -> `Run 'WalletServiceApplication'`.
@@ -58,7 +73,5 @@ upd. Onion-архитектура:
 * Transaction.java, Action.java, и Player.java -расположены на уровне model, так как они представляют бизнес объект.
 * PlayerService.java и PlayerServiceImpl.java находятся на уровне service, это сервисный слой, обрабатывающий 
   бизнес-логику приложения.
-* PlayerRepository.java и TransactionRepository.java находятся на уровне repository, они реализуют операции с данными 
-  на персистентном уровне (в моем случае это просто кэш в оперативной памяти, но в будущем планируется, 
-  что эта архитектура будет применима к базам данных).
+* PlayerRepository.java и TransactionRepository.java находятся на уровне repository, они реализуют операции с BD.
 * Основной файл для запуска приложения WalletServiceApplication на самом верхнем уровне.

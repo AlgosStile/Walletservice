@@ -1,5 +1,8 @@
 package wallet_service;
 
+
+import wallet_service.in.config.DBConnection;
+import wallet_service.in.config.LiquibaseConfiguration;
 import wallet_service.in.controller.PlayerController;
 import wallet_service.in.controller.TransactionController;
 import wallet_service.in.model.Action;
@@ -9,18 +12,22 @@ import wallet_service.in.repository.TransactionRepository;
 import wallet_service.in.service.PlayerService;
 import wallet_service.in.service.PlayerServiceImpl;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
+
 /**
- * Класс WalletServiceApplication представляет собой командно-строковый интерфейс банковского сервиса,
- * осуществляющего управление счетами игроков. Пользователи могут регистрироваться, аутентифицироваться,
- * проводить транзакции и просматривать историю транзакций и действий.
- * Это главный класс приложения, он использует PlayerService для бизнес-логики и PlayerRepository для хранения данных.
+ * WalletServiceApplication является основным классом приложения, запускающим сервер и обеспечивающим взаимодействие с пользователями.
+ *
+ * WalletServiceApplication управляет всеми операциями, включая регистрацию и аутентификацию игроков, проведение дебетовых и кредитных операций,
+ * просмотр баланса, вывод истории транзакций и прочее.
  *
  * @author Олег Тодор
+ * @since 1.0.0
  */
 public class WalletServiceApplication {
+
     private static final String MENU_ITEM_1 = "1. Регистрировать игрока";
     private static final String MENU_ITEM_2 = "2. Аутентифицировать игрока";
     private static final String MENU_ITEM_3 = "3. Баланс";
@@ -34,23 +41,41 @@ public class WalletServiceApplication {
     private static Scanner scanner;
     private static TransactionController transactionController;
     private static PlayerController playerController;
-
+    private static PlayerRepository playerRepository;
+    private static TransactionRepository transactionRepository;
+    /**
+     * Основной метод приложения, который инициализирует базу данных и запускает основной цикл обработки команд пользователя.
+     */
     public static void main(String[] args) throws Exception {
-        PlayerRepository playerRepository = new PlayerRepository();
-        TransactionRepository transactionRepository = new TransactionRepository();
+        LiquibaseConfiguration.startLiquibase();
+        playerRepository = PlayerRepository.getInstance();
+        transactionRepository = TransactionRepository.getInstance(playerRepository);
         PlayerService playerService = new PlayerServiceImpl(playerRepository, transactionRepository);
-
-        WalletServiceApplication application = new WalletServiceApplication(playerService);
+        WalletServiceApplication application = new WalletServiceApplication(playerService, playerRepository, transactionRepository);
         application.run();
+
     }
 
-    public WalletServiceApplication(PlayerService playerService) {
+    /**
+     * Конструктор класса WalletServiceApplication, который инициализирует объекты контроллера и сканера.
+     *
+     * @param playerService        объект сервиса игроков.
+     * @param playerRepository     объект репозитория игроков.
+     * @param transactionRepository объект репозитория транзакций.
+     * @throws SQLException в случае возникновения ошибки при взаимодействии с базой данных.
+     */
+    public WalletServiceApplication(PlayerService playerService, PlayerRepository playerRepository, TransactionRepository transactionRepository) throws SQLException {
         scanner = new Scanner(System.in);
-
-        playerController = new PlayerController(playerService);
-        transactionController = new TransactionController(playerService);
+        playerController = new PlayerController(playerService, playerRepository);
+        transactionController = new TransactionController(playerService, playerRepository, transactionRepository);
     }
 
+    /**
+     * Запускает основной цикл приложения, включающий меню выбора для пользователя.
+     * Пользователи могут выбирать из меню опции для регистрации, авторизации, совершения операций и т. д.
+     *
+     * @throws Exception в случае необработанных ошибок.
+     */
 
     public void run() throws Exception {
         boolean running = true;
@@ -80,13 +105,17 @@ public class WalletServiceApplication {
                     break;
                 case 4:
                     String username4 = readLineFromUser("Введите имя пользователя: ");
-                    String transactionId4 = readLineFromUser("Введите ID транзакции: ");
+                    System.out.print("Введите ID транзакции: ");  // Добавьте запрос на ввод ID транзакции
+                    int transactionId4 = scanner.nextInt(); // Считайте ID транзакции как целое число
+                    scanner.nextLine();
                     double amount4 = readDoubleFromUser("Введите сумму: ");
                     transactionController.debitTransaction(username4, transactionId4, amount4);
                     break;
                 case 5:
                     String username5 = readLineFromUser("Введите имя пользователя: ");
-                    String transactionId5 = readLineFromUser("Введите ID транзакции: ");
+                    System.out.print("Введите ID транзакции: ");
+                    int transactionId5 = scanner.nextInt();
+                    scanner.nextLine();
                     double amount5 = readDoubleFromUser("Введите сумму: ");
                     transactionController.creditTransaction(username5, transactionId5, amount5);
                     break;
@@ -109,21 +138,30 @@ public class WalletServiceApplication {
         }
     }
 
-
-    private void displayTransactionHistory() {
+    /**
+     * Выводит на экран историю транзакций пользователя.
+     *
+     * @throws SQLException в случае возникновения ошибки при взаимодействии с базой данных.
+     */
+    private void displayTransactionHistory() throws SQLException {
         String username = readLineFromUser("Введите имя пользователя: ");
-        List<Transaction> transactions = (List<Transaction>) transactionController.getTransactionHistory(username);
+        List<Transaction> transactions = transactionController.getTransactionHistory(username); // Здесь вызывается getTransactionHistory
         for (Transaction transaction : transactions) {
             System.out.println(transaction.getType() + " " + transaction.getAmount() + " " + transaction.getId());
         }
     }
-
+    /**
+     * Завершает сессию пользователя.
+     */
     private void logoutPlayer() {
         String username = readLineFromUser("Введите имя пользователя: ");
         playerController.logoutPlayer(username);
         System.out.println("Игрок" + " " + username + " успешно вышел из системы");
     }
 
+    /**
+     * Выводит историю действий пользователя.
+     */
     private void displayActionHistory() {
         String username = readLineFromUser("Введите имя пользователя: ");
         List<Action> actions = playerController.getPlayerActions(username);
@@ -131,23 +169,43 @@ public class WalletServiceApplication {
             System.out.println(action.getAction() + " " + action.getDetail());
         }
     }
-
+    /**
+     * Вспомогательный метод для чтения строки от пользователя.
+     *
+     * @param prompt текст подсказки перед вводом данных пользователем.
+     * @return Строка, считанная от пользователя.
+     */
     private String readLineFromUser(String prompt) {
         System.out.print(prompt);
         return scanner.nextLine();
     }
 
-
+    /**
+     * Вспомогательный метод для чтения числа типа double от пользователя.
+     *
+     * @param prompt текст подсказки перед вводом данных пользователем.
+     * @return Значение double, введенное пользователем.
+     */
     private double readDoubleFromUser(String prompt) {
         System.out.print(prompt);
         double value = scanner.nextDouble();
         scanner.nextLine();
         return value;
     }
-
+    /**
+     * Завершает работу приложения, закрывает подключение к базе данных и выводит сообщение.
+     */
     private void shutdown() {
-        System.out.println("Завершение работы...");
+        System.out.println("Closing connection...");
+        try {
+            DBConnection.getInstance().getConnection().close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Приложение завершено успешно!");
+        System.exit(0);
     }
+
 
 }
 

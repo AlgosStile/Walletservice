@@ -2,53 +2,52 @@ package wallet_service.in.model;
 
 import wallet_service.in.controller.TransactionType;
 
+
 /**
- * Класс, представляющий транзакцию.
- *
+ * Класс Transaction представляет транзакцию с ее данными.
  * @author Олег Тодор
+ * @since 1.0.0
  */
 public class Transaction {
-    private String id; // Идентификатор транзакции
-    private double amount; // Сумма транзакции
-    private TransactionType type; // Тип транзакции
+    private int id;
+    private double amount;
+    private TransactionType type;
 
     /**
-     * Конструктор класса Transaction.
+     * Конструктор класса Transaction с указанным идентификатором, суммой и типом транзакции.
      *
-     * @param id     Идентификатор транзакции
-     * @param amount Сумма транзакции
-     * @param type   Тип транзакции
+     * @param id     идентификатор транзакции
+     * @param amount сумма транзакции
+     * @param type   тип транзакции
      */
-    public Transaction(String id, double amount, TransactionType type) {
+    public Transaction(int id, double amount, TransactionType type) {
         this.id = id;
         this.amount = amount;
         this.type = type;
-
     }
 
-
     /**
-     * Получить идентификатор транзакции.
+     * Возвращает идентификатор транзакции.
      *
-     * @return Идентификатор транзакции
+     * @return идентификатор транзакции
      */
-    public String getId() {
+    public int getId() {
         return id;
     }
 
     /**
-     * Получить сумму транзакции.
+     * Возвращает сумму транзакции.
      *
-     * @return Сумма транзакции
+     * @return сумма транзакции
      */
     public double getAmount() {
         return amount;
     }
 
     /**
-     * Получить тип транзакции.
+     * Возвращает тип транзакции.
      *
-     * @return Тип транзакции
+     * @return тип транзакции
      */
     public TransactionType getType() {
         return type;

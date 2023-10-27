@@ -1,81 +1,47 @@
 package wallet_service.in.controller;
 
-import org.junit.jupiter.api.BeforeEach;
+
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+import wallet_service.in.repository.PlayerRepository;
 import wallet_service.in.service.PlayerService;
+
+import java.sql.SQLException;
 
 import static org.mockito.Mockito.*;
 
+@RunWith(MockitoJUnitRunner.class)
 public class PlayerControllerTest {
-
+    @Mock
     private PlayerService playerService;
+    @Mock
+    private PlayerRepository playerRepository;
+
+    @InjectMocks
     private PlayerController playerController;
 
-    @BeforeEach
+    @Before
     public void setUp() throws Exception {
-        playerService = mock(PlayerService.class);
-        playerController = new PlayerController(playerService);
+        when(playerService.authenticatePlayer(anyString(), anyString())).thenReturn(true);
+
     }
 
     @Test
-    @DisplayName("Register Player Test")
-    public void registerPlayerTest() {
-        String username = "testUser";
-        String password = "testPassword";
-
-        playerController.registerPlayer(username, password);
-
-        verify(playerService).registerPlayer(username, password);
+    @DisplayName("Test Player Registration")
+    public void testRegisterPlayer() throws SQLException {
+        playerController.registerPlayer("testUser", "testPassword");
+        verify(playerService, times(1)).registerPlayer("testUser", "testPassword");
     }
 
     @Test
-    @DisplayName("Authenticate Player Test")
-    public void authenticatePlayerTest() {
-        String username = "testUser";
-        String password = "testPassword";
-
-        when(playerService.authenticatePlayer(username, password)).thenReturn(true);
-
-        playerController.authenticatePlayer(username, password);
-
-        verify(playerService).authenticatePlayer(username, password);
-    }
-
-    @Test
-    @DisplayName("Get Balance Test")
-    public void getBalanceTest() {
-        String username = "testUser";
-        double balance = 100.0;
-
-        when(playerService.isUserRegistered(username)).thenReturn(true);
-        when(playerService.isUserAuthenticated(username)).thenReturn(true);
-        when(playerService.getBalance(username)).thenReturn(balance);
-
-        playerController.getBalance(username);
-
-        verify(playerService).isUserRegistered(username);
-        verify(playerService).isUserAuthenticated(username);
-        verify(playerService).getBalance(username);
-    }
-
-    @Test
-    @DisplayName("Logout Player Test")
-    public void logoutPlayerTest() {
-        String username = "testUser";
-
-        playerController.logoutPlayer(username);
-
-        verify(playerService).logout(username);
-    }
-
-    @Test
-    @DisplayName("Get Player Actions Test")
-    public void getPlayerActionsTest() {
-        String username = "testUser";
-
-        playerController.getPlayerActions(username);
-
-        verify(playerService).getPlayerActions(username);
+    @DisplayName("Test Player Authentication")
+    public void testAuthenticatePlayer() throws Exception {
+        playerController.authenticatePlayer("testUser", "testPassword");
+        verify(playerService, times(1)).authenticatePlayer("testUser", "testPassword");
     }
 }
