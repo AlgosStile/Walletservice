@@ -5,23 +5,26 @@ import wallet_service.in.controller.TransactionType;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
- * Класс, представляющий игрока.
+ * Представляет игрока в системе кошелька.
+ *
+ * Этот класс представляет игрока в системе кошелька и содержит информацию о его имени пользователя,
+ * пароле, балансе и списке транзакций.
  *
  * @author Олег Тодор
  */
 public class Player {
-    private String username; // Имя пользователя
-    private String password; // Пароль
-    private double balance; // Баланс
-    private List<Transaction> transactions; // Список транзакций
+
+    private String username;
+    private String password;
+    private double balance;
+    private List<Transaction> transactions;
 
     /**
-     * Конструктор класса Player.
+     * Создает экземпляр класса Player с указанным именем пользователя и паролем.
      *
-     * @param username Имя пользователя
-     * @param password Пароль
+     * @param username Имя пользователя игрока.
+     * @param password Пароль игрока.
      */
     public Player(String username, String password) {
         this.username = username;
@@ -31,56 +34,56 @@ public class Player {
     }
 
     /**
-     * Получить имя пользователя.
+     * Возвращает имя пользователя игрока.
      *
-     * @return Имя пользователя
+     * @return Имя пользователя игрока.
      */
     public String getUsername() {
         return username;
     }
 
     /**
-     * Получить пароль.
+     * Возвращает пароль игрока.
      *
-     * @return Пароль
+     * @return Пароль игрока.
      */
     public String getPassword() {
         return password;
     }
 
     /**
-     * Получить баланс игрока.
+     * Возвращает текущий баланс игрока.
      *
-     * @return Баланс игрока
+     * @return Текущий баланс игрока.
      */
     public double getBalance() {
         return balance;
     }
 
     /**
-     * Получить список транзакций игрока.
+     * Возвращает список транзакций игрока.
      *
-     * @return Список транзакций игрока
+     * @return Список транзакций игрока.
      */
     public List<Transaction> getTransactions() {
         return transactions;
     }
 
     /**
-     * Добавить транзакцию в список транзакций игрока.
+     * Добавляет новую транзакцию в список транзакций игрока.
      *
-     * @param transaction Транзакция для добавления
+     * @param transaction Новая транзакция.
      */
     public synchronized void addTransaction(Transaction transaction) {
         transactions.add(transaction);
     }
 
     /**
-     * Выполнить дебетовую транзакцию.
+     * Списывает указанную сумму с баланса игрока.
      *
-     * @param id     Идентификатор транзакции
-     * @param amount Сумма транзакции
-     * @throws Exception Если сумма отрицательная или недостаточно средств
+     * @param id     Идентификатор транзакции.
+     * @param amount Сумма, которую необходимо списать.
+     * @throws Exception Если сумма отрицательна или недостаточно средств на балансе игрока.
      */
     public void debit(String id, double amount) throws Exception {
         if (amount < 0) {
@@ -96,11 +99,11 @@ public class Player {
     }
 
     /**
-     * Выполнить кредитовую транзакцию.
+     * Зачисляет указанную сумму на баланс игрока.
      *
-     * @param id     Идентификатор транзакции
-     * @param amount Сумма транзакции
-     * @throws Exception Если сумма отрицательная
+     * @param id     Идентификатор транзакции.
+     * @param amount Сумма, которую необходимо зачислить.
+     * @throws Exception Если сумма отрицательна.
      */
     public void credit(String id, double amount) throws Exception {
         if (amount < 0) {
