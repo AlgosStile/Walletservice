@@ -5,7 +5,6 @@ import wallet_service.in.model.Transaction;
 import wallet_service.out.dto.TransactionDto;
 import wallet_service.out.mapper.TransactionMapper;
 import wallet_service.out.service.PlayerService;
-import wallet_service.out.service.PlayerServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -30,20 +29,21 @@ public class TransactionHistoryController extends HttpServlet {
      */
     private PlayerService playerService;
 
+    public TransactionHistoryController(PlayerService playerService) {
+        this.playerService = playerService;
+    }
+
     /**
      * Создает новый экземпляр TransactionHistoryController.
      *
      * @param playerService сервис для работы с данными игроков
      * @see PlayerService
      */
-    public TransactionHistoryController(PlayerService playerService) {
-        this.playerService = new PlayerServiceImpl();
-    }
 
     /**
      * Обрабатывает GET запрос на URL "/transaction/history". Получает список транзакций указанного пользователя.
      * Преобразует эти транзакции в DTO и конвертирует их в формат JSON, который затем возвращается в ответе.
-     *
+     * <p>
      * Параметр HTTP запроса "username" указывает имя пользователя, для которого необходимо показать историю транзакций.
      *
      * @param req  HTTP запрос от клиента

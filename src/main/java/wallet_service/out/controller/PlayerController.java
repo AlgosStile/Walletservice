@@ -138,25 +138,37 @@ public class PlayerController extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String action = req.getParameter("action");
         PlayerDto playerDto = objectMapper.readValue(req.getReader(), PlayerDto.class);
 
         try {
-            switch (action) {
-                case "register":
-                    playerService.registerPlayer(playerDto.getUsername(), playerDto.getPassword());
+            if (req.getServletPath().equals("/player/register")) {
+                playerService.registerPlayer(playerDto.getUsername(), playerDto.getPassword());
+                try {
                     returnTokenAndStatus(resp, HttpServletResponse.SC_CREATED, playerDto); // 201 Created
-                    break;
-                case "login":
-                    boolean authStatus = playerService.authenticatePlayer(playerDto.getUsername(), playerDto.getPassword());
-                    if (authStatus)
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            } else if (req.getServletPath().equals("/player/login")) {
+                boolean authStatus = playerService.authenticatePlayer(playerDto.getUsername(), playerDto.getPassword());
+                if (authStatus) {
+                    try {
                         returnTokenAndStatus(resp, HttpServletResponse.SC_OK, playerDto); // 200 OK
-                    else
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                } else {
+                    try {
                         returnErrorAndStatus(resp, HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized"); // 401 Unauthorized
-                    break;
-                default:
-                    returnErrorAndStatus(resp, HttpServletResponse.SC_BAD_REQUEST, "Invalid Action"); // 400 Bad Request
-                    break;
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            } else {
+                try {
+                    returnErrorAndStatus(resp, HttpServletResponse.SC_BAD_REQUEST, "Invalid URL"); // 400 Bad Request
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         } catch (RuntimeException e) {
             returnErrorAndStatus(resp, HttpServletResponse.SC_BAD_REQUEST, "An error occurred: " + e.getMessage()); // 400 Bad Request

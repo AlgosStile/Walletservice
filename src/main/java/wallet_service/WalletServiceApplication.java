@@ -1,202 +1,41 @@
 package wallet_service;
 
-import wallet_service.in.model.Action;
-import wallet_service.in.model.Transaction;
+import jakarta.servlet.Servlet;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
+import wallet_service.out.controller.HistoryController;
 import wallet_service.out.controller.PlayerController;
 import wallet_service.out.controller.TransactionController;
-import wallet_service.in.repository.PlayerRepository;
-import wallet_service.in.repository.TransactionRepository;
+import wallet_service.out.controller.TransactionHistoryController;
 import wallet_service.out.service.PlayerService;
 import wallet_service.out.service.PlayerServiceImpl;
 
-import java.util.List;
-import java.util.Scanner;
-
-/**
- * Класс WalletServiceApplication представляет собой главную логику сервера
- * обслуживания электронных кошельков игроков.
- * Позволяет зарегистрировать нового игрока, аутентифицировать игрока,
- * проверить баланс игрока, выполнить дебетовую и кредитную операции по счету,
- * просмотреть историю транзакций и действий, завершить работу игрока и выйти
- * из системы.
- *
- * @author Олег Тодор
- */
 public class WalletServiceApplication {
-    private static final String MENU_ITEM_1 = "1. Регистрировать игрока";
-    private static final String MENU_ITEM_2 = "2. Аутентифицировать игрока";
-    private static final String MENU_ITEM_3 = "3. Баланс";
-    private static final String MENU_ITEM_4 = "4. Дебетовая операция по счету";
-    private static final String MENU_ITEM_5 = "5. Кредитная операция по счету";
-    private static final String MENU_ITEM_6 = "6. История транзакций";
-    private static final String MENU_ITEM_7 = "7. Завершение работы игрока";
-    private static final String MENU_ITEM_8 = "8. История действий";
-    private static final String MENU_ITEM_9 = "9. Выход";
 
-    private static Scanner scanner;
-    private static TransactionController transactionController;
-    private static PlayerController playerController;
-
-    /**
-     * Стартовый метод приложения.
-     *
-     * @param args аргументы командной строки
-     * @throws Exception в случае любых исключений
-     */
     public static void main(String[] args) throws Exception {
-        PlayerRepository playerRepository = new PlayerRepository();
-        TransactionRepository transactionRepository = new TransactionRepository();
-        PlayerService playerService = new PlayerServiceImpl(playerRepository, transactionRepository);
 
-        WalletServiceApplication application = new WalletServiceApplication(playerService);
-        application.run();
-    }
+        // Запускаем встроенный сервер
+        try {
+            Server server = new Server(8080);
+            ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+            context.setContextPath("/");
+            server.setHandler(context);
 
-    /**
-     * Конструктор класса WalletServiceApplication.
-     *
-     * @param playerService сервис для работы с пользователями
-     */
-    public WalletServiceApplication(PlayerService playerService) {
-        scanner = new Scanner(System.in);
+            // Создание сервиса и передача его контроллерам
+            PlayerService playerService = new PlayerServiceImpl();
 
-        playerController = new PlayerController(playerService);
-        transactionController = new TransactionController(playerService);
-    }
+            context.addServlet(new ServletHolder((Servlet) new PlayerController(playerService)), "/player/*");
+            context.addServlet(new ServletHolder((Servlet) new HistoryController(playerService)), "/player/history");
+            context.addServlet(new ServletHolder((Servlet) new TransactionController(playerService)), "/transaction");
+            context.addServlet(new ServletHolder((Servlet) new TransactionHistoryController(playerService)), "/transaction/history");
 
-
-    /**
-     * Запускает основной цикл приложения, предоставляя пользователю меню
-     * для выбора действий.
-     *
-     * @throws Exception в случае любых исключений
-     */
-    public void run() throws Exception {
-        boolean running = true;
-        while (running) {
-            String menu = String.join("\n", MENU_ITEM_1, MENU_ITEM_2, MENU_ITEM_3, MENU_ITEM_4, MENU_ITEM_5, MENU_ITEM_6, MENU_ITEM_7, MENU_ITEM_8, MENU_ITEM_9);
-
-            System.out.println(menu);
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-
-            switch (choice) {
-                case 1:
-                    System.out.print("Введите имя пользователя: ");
-                    String username1 = scanner.nextLine();
-                    System.out.print("Введите пароль: ");
-                    String password1 = scanner.nextLine();
-                    playerController.registerPlayer(username1, password1);
-                    break;
-                case 2:
-                    String username = readLineFromUser("Введите имя пользователя: ");
-                    String password = readLineFromUser("Введите пароль: ");
-
-                    playerController.authenticatePlayer(username, password);
-                    break;
-                case 3:
-                    String username3 = readLineFromUser("Введите имя пользователя: ");
-                    playerController.getBalance(username3);
-                    break;
-                case 4:
-                    String username4 = readLineFromUser("Введите имя пользователя: ");
-                    String transactionId4 = readLineFromUser("Введите ID транзакции: ");
-                    double amount4 = readDoubleFromUser("Введите сумму: ");
-                    transactionController.debitTransaction(username4, transactionId4, amount4);
-                    break;
-                case 5:
-                    String username5 = readLineFromUser("Введите имя пользователя: ");
-                    String transactionId5 = readLineFromUser("Введите ID транзакции: ");
-                    double amount5 = readDoubleFromUser("Введите сумму: ");
-                    transactionController.creditTransaction(username5, transactionId5, amount5);
-                    break;
-                case 6:
-                    displayTransactionHistory();
-                    break;
-                case 7:
-                    logoutPlayer();
-                    break;
-                case 8:
-                    displayActionHistory();
-                    break;
-                case 9:
-                    shutdown();
-                    running = false;
-                    break;
-                default:
-                    System.out.println("Неверный выбор");
-            }
+            server.start();
+            server.join();
+        } catch (Exception exception) {
+            System.err.println("При запуске сервера произошла ошибка: " + exception.getMessage());
+            exception.printStackTrace();
         }
+
     }
-
-    /**
-     * Отображает историю транзакций указанного пользователя.
-     */
-    private void displayTransactionHistory() {
-        String username = readLineFromUser("Введите имя пользователя: ");
-        List<Transaction> transactions = (List<Transaction>) transactionController.getTransactionHistory(username);
-        for (Transaction transaction : transactions) {
-            System.out.println(transaction.getType() + " " + transaction.getAmount() + " " + transaction.getId());
-        }
-    }
-
-
-    /**
-     * Разлогинивает указанного игрока.
-     */
-    private void logoutPlayer() {
-        String username = readLineFromUser("Введите имя пользователя: ");
-        playerController.logoutPlayer(username);
-        System.out.println("Игрок" + " " + username + " успешно вышел из системы");
-    }
-
-
-
-    /**
-     * Отображает историю действий указанного пользователя.
-     */
-    private void displayActionHistory() {
-        String username = readLineFromUser("Введите имя пользователя: ");
-        List<Action> actions = playerController.getPlayerActions(username);
-        for (Action action : actions) {
-            System.out.println(action.getAction() + " " + action.getDetail());
-        }
-    }
-
-
-    /**
-     * Считывает строку данных от пользователя.
-     *
-     * @param prompt сообщение для пользователя
-     * @return строка данных, введенных пользователем
-     */
-    private String readLineFromUser(String prompt) {
-        System.out.print(prompt);
-        return scanner.nextLine();
-    }
-
-
-
-    /**
-     * Считывает число с плавающей запятой от пользователя.
-     *
-     * @param prompt сообщение для пользователя
-     * @return число, введенное пользователем
-     */
-    private double readDoubleFromUser(String prompt) {
-        System.out.print(prompt);
-        double value = scanner.nextDouble();
-        scanner.nextLine();
-        return value;
-    }
-
-
-    /**
-     * Выполняет завершение работы приложения.
-     */
-    private void shutdown() {
-        System.out.println("Завершение работы...");
-    }
-
 }
-
