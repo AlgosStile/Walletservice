@@ -1,6 +1,6 @@
-package wallet_service.in.repository;
+package wallet_service.out.repository;
 
-import wallet_service.in.model.Transaction;
+import wallet_service.out.model.Transaction;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.Collection;
 import java.util.Map;

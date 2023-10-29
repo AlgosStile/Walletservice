@@ -1,4 +1,4 @@
-package wallet_service.in.model;
+package wallet_service.out.model;
 
 
 /**

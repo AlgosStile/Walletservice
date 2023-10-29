@@ -1,6 +1,6 @@
-package wallet_service.in.model;
+package wallet_service.out.model;
 
-import wallet_service.in.controller.TransactionType;
+import wallet_service.out.controller.TransactionType;
 
 /**
  * Представляет транзакцию в системе кошелька.

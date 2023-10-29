@@ -1,35 +1,18 @@
 package wallet_service.out.aspect;
 
-import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 
-/**
- * Аспект аудита.
- * Этот класс представляет аспект аудита, который отслеживает выполнение методов в определенном пакете контроллеров.
- * После выполнения каждого метода выводит информацию о выполненном изменении.
- *
- * @author Олег Тодор
- */
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.springframework.stereotype.Component;
+
 @Aspect
+@Component
 public class AuditAspect {
 
-    /**
-     * Точка среза для выбора всех методов в пакете контроллеров.
-     */
-    @Pointcut("execution(* wallet_service.out.controller.*.*(..))")
-    private void selectAll() {
-
-    }
-
-    /**
-     * После-совет выполняется после выполнения всех методов, выбранных точкой среза selectAll().
-     *
-     * @param jp Объект JoinPoint, представляющий выполненный метод.
-     */
-    @After("selectAll()")
-    public void afterAdvice(JoinPoint jp) {
+    @Around("execution(* wallet_service.out.controller.*.*(..))")
+    public Object auditAdvice(ProceedingJoinPoint jp) throws Throwable {
         System.out.println("Аудит выполнен. Изменение в: " + jp.getSignature());
+        return jp.proceed();
     }
 }
