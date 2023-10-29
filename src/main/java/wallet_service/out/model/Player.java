@@ -1,7 +1,5 @@
 package wallet_service.out.model;
 
-import wallet_service.out.controller.TransactionType;
-
 import java.util.ArrayList;
 import java.util.List;
 

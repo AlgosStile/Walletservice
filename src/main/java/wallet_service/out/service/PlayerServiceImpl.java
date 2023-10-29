@@ -1,6 +1,5 @@
 package wallet_service.out.service;
 
-import wallet_service.out.controller.TransactionType;
 import wallet_service.out.model.Action;
 import wallet_service.out.model.Player;
 import wallet_service.out.model.Transaction;

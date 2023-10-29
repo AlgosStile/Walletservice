@@ -1,7 +1,5 @@
 package wallet_service.out.model;
 
-import wallet_service.out.controller.TransactionType;
-
 /**
  * Представляет транзакцию в системе кошелька.
  *
