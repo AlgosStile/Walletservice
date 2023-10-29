@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    db.url: jdbc:postgresql://localhost:5432/wallet_db
+    db.username: postgres
+    db.password: wallet
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    db.url: jdbc:postgresql://localhost:5432/wallet_db?currentSchema=wallet
+    db.username: postgres
+    db.password: wallet
+  db:
+    db.url: jdbc:postgresql://localhost:5432/wallet_db?currentSchema=wallet
+    db.username: postgres
+    db.password: wallet
