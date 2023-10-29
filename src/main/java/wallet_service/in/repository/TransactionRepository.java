@@ -6,47 +6,48 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * Класс, представляющий репозиторий транзакций.
+ * Репозиторий транзакций.
+ *
+ * Этот класс представляет репозиторий транзакций, который хранит информацию о транзакциях в системе.
+ * Позволяет добавлять и получать данные о транзакциях.
  *
  * @author Олег Тодор
  */
 public class TransactionRepository {
-    private Map<String, Transaction> transactions; // Коллекция транзакций
+    private Map<String, Transaction> transactions;
 
     /**
-     * Конструктор класса TransactionRepository.
+     * Создает экземпляр класса TransactionRepository и инициализирует коллекцию транзакций.
      */
     public TransactionRepository() {
         this.transactions = new ConcurrentHashMap<>();
     }
 
     /**
-     * Добавить транзакцию в репозиторий.
+     * Добавляет транзакцию в репозиторий.
      *
-     * @param transaction Транзакция для добавления
+     * @param transaction Транзакция для добавления.
      */
     public void addTransaction(Transaction transaction) {
         transactions.put(transaction.getId(), transaction);
     }
 
     /**
-     * Получить транзакцию по идентификатору.
+     * Возвращает транзакцию по указанному идентификатору.
      *
-     * @param id Идентификатор транзакции
-     * @return Транзакция с указанным идентификатором или null, если транзакция не найдена
+     * @param id Идентификатор транзакции.
+     * @return Транзакция, соответствующая указанному идентификатору, или null, если не найдена.
      */
     public Transaction getTransaction(String id) {
         return transactions.get(id);
     }
 
     /**
-     * Получить все транзакции.
+     * Возвращает коллекцию всех транзакций в репозитории.
      *
-     * @return Коллекция всех транзакций
+     * @return Коллекция транзакций.
      */
     public Collection<Transaction> getAllTransactions() {
         return transactions.values();
     }
-
-
 }
