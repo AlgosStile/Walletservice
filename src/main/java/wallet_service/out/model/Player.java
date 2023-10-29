@@ -1,114 +1,65 @@
 package wallet_service.out.model;
 
-import java.util.ArrayList;
-import java.util.List;
 
-/**
- * Представляет игрока в системе кошелька.
- *
- * Этот класс представляет игрока в системе кошелька и содержит информацию о его имени пользователя,
- * пароле, балансе и списке транзакций.
- *
- * @author Олег Тодор
- */
+import lombok.Getter;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Column;
+
+@Getter
+@Entity
+@Table(name = "players")
 public class Player {
 
-    private String username;
-    private String password;
-    private double balance;
-    private List<Transaction> transactions;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-    /**
-     * Создает экземпляр класса Player с указанным именем пользователя и паролем.
-     *
-     * @param username Имя пользователя игрока.
-     * @param password Пароль игрока.
-     */
+    @Column(name = "username")
+    private String username;
+
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "balance")
+    private int balance;
+
+    public Player() {
+    }
+
+    public Player(String username, String password, int balance) {
+        this.username = username;
+        this.password = password;
+        this.balance = balance;
+    }
+
     public Player(String username, String password) {
         this.username = username;
         this.password = password;
-        this.balance = 0;
-        this.transactions = new ArrayList<>();
     }
 
-    /**
-     * Возвращает имя пользователя игрока.
-     *
-     * @return Имя пользователя игрока.
-     */
-    public String getUsername() {
-        return username;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    /**
-     * Возвращает пароль игрока.
-     *
-     * @return Пароль игрока.
-     */
-    public String getPassword() {
-        return password;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    /**
-     * Возвращает текущий баланс игрока.
-     *
-     * @return Текущий баланс игрока.
-     */
-    public double getBalance() {
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
+    }
+    public int getBalance() {
         return balance;
     }
 
-    /**
-     * Возвращает список транзакций игрока.
-     *
-     * @return Список транзакций игрока.
-     */
-    public List<Transaction> getTransactions() {
-        return transactions;
-    }
-
-    /**
-     * Добавляет новую транзакцию в список транзакций игрока.
-     *
-     * @param transaction Новая транзакция.
-     */
-    public synchronized void addTransaction(Transaction transaction) {
-        transactions.add(transaction);
-    }
-
-    /**
-     * Списывает указанную сумму с баланса игрока.
-     *
-     * @param id     Идентификатор транзакции.
-     * @param amount Сумма, которую необходимо списать.
-     * @throws Exception Если сумма отрицательна или недостаточно средств на балансе игрока.
-     */
-    public void debit(String id, double amount) throws Exception {
-        if (amount < 0) {
-            throw new Exception("Сумма не может быть отрицательной");
-        }
-        if (amount > this.balance) {
-            throw new Exception("Недостаточно средств");
-        }
-
-        this.balance -= amount;
-        Transaction transaction = new Transaction(id, amount, TransactionType.DEBIT);
-        transactions.add(transaction);
-    }
-
-    /**
-     * Зачисляет указанную сумму на баланс игрока.
-     *
-     * @param id     Идентификатор транзакции.
-     * @param amount Сумма, которую необходимо зачислить.
-     * @throws Exception Если сумма отрицательна.
-     */
-    public void credit(String id, double amount) throws Exception {
-        if (amount < 0) {
-            throw new Exception("Некорректная сумма");
-        }
-        this.balance += amount;
-        Transaction transaction = new Transaction(id, amount, TransactionType.CREDIT);
-        transactions.add(transaction);
-    }
 }

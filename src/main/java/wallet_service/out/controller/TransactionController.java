@@ -1,71 +1,54 @@
 package wallet_service.out.controller;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import wallet_service.out.model.Transaction;
-import wallet_service.out.service.PlayerService;
+import wallet_service.out.repository.PlayerRepository;
+import wallet_service.out.repository.TransactionRepository;
+import wallet_service.out.service.PlayerServiceImpl;
 
 import java.util.List;
 
-/**
- * Класс TransactionController является контроллером для обработки транзакций игрока.
- * Он использует сервис PlayerService для выполнения операций с транзакциями.
- */
+
+@RestController
 public class TransactionController {
+    private final PlayerServiceImpl playerServiceImpl;
+    private final PlayerRepository playerRepository;
+    private final TransactionRepository transactionRepository;
 
-    private final PlayerService playerService;
-
-    /**
-     * Конструктор класса TransactionController, который принимает в качестве параметра объект PlayerService.
-     *
-     * @param playerService объект сервиса для выполнения операций с транзакциями
-     */
-    public TransactionController(PlayerService playerService) {
-        this.playerService = playerService;
+    public TransactionController(PlayerServiceImpl playerServiceImpl, PlayerRepository playerRepository, TransactionRepository transactionRepository) {
+        this.playerServiceImpl = playerServiceImpl;
+        this.playerRepository = playerRepository;
+        this.transactionRepository = transactionRepository;
     }
 
-    /**
-     * Метод debitTransaction используется для выполнения дебетовой транзакции.
-     * В случае успешного выполнения выводится сообщение о успешной транзакции, в противном случае выводится сообщение об ошибке.
-     *
-     * @param username      имя пользователя, для которого будет выполнена транзакция
-     * @param transactionId идентификатор транзакции
-     * @param amount        сумма транзакции
-     * @throws Exception если транзакция не может быть выполнена
-     */
-    public void debitTransaction(String username, String transactionId, double amount) throws Exception {
+    @PostMapping("/debit")
+    public ResponseEntity<String> debitTransaction(@RequestParam String username, @RequestParam int id, @RequestParam double amount) {
         try {
-            playerService.debit(username, transactionId, amount);
-            System.out.println("Дебетовая транзакция прошла успешно");
+            playerServiceImpl.debit(username, id, amount);
+            return ResponseEntity.ok("Дебетовая транзакция успешно выполнена!");
         } catch (Exception e) {
-            System.out.println("Дебетовая транзакция не удалась: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Ошибка при выполнении дебетовой транзакции: " + e.getMessage());
         }
     }
 
-    /**
-     * Метод creditTransaction используется для выполнения кредитной транзакции.
-     * В случае успешного выполнения выводится сообщение о успешной транзакции, в противном случае выводится сообщение об ошибке.
-     *
-     * @param username      имя пользователя, для которого будет выполнена транзакция
-     * @param transactionId идентификатор транзакции
-     * @param amount        сумма транзакции
-     * @throws Exception если транзакция не может быть выполнена
-     */
-    public void creditTransaction(String username, String transactionId, double amount) throws Exception {
+    @PostMapping("/credit")
+    public ResponseEntity<String> creditTransaction(@RequestParam String username, @RequestParam int id, @RequestParam double amount) {
         try {
-            playerService.credit(username, transactionId, amount);
-            System.out.println("Кредитная транзакция прошла успешно --> $");
+            playerServiceImpl.credit(username, id, amount);
+            return ResponseEntity.ok("Кредитная транзакция успешно выполнена!");
         } catch (Exception e) {
-            System.out.println("Кредитная транзакция не удалась ¯\\_(ツ)_/¯ : " + e.getMessage());
+            return ResponseEntity.badRequest().body("Ошибка при выполнении кредитной транзакции: " + e.getMessage());
         }
     }
 
-    /**
-     * Метод getTransactionHistory используется для получения истории транзакций пользователя.
-     *
-     * @param username имя пользователя, для которого нужно получить историю транзакций
-     * @return список объектов Transaction, содержащих информацию о транзакциях пользователя
-     */
-    public List<Transaction> getTransactionHistory(String username) {
-        return playerService.getTransactionHistory(username);
+    @GetMapping("/transactions/{username}")
+    public ResponseEntity<List<Transaction>> getTransactionHistory(@PathVariable String username) {
+        try {
+            List<Transaction> transactions = playerServiceImpl.getTransactionHistory(username);
+            return ResponseEntity.ok(transactions);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
-
 }

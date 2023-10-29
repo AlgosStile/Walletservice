@@ -1,54 +1,14 @@
 package wallet_service.out.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import wallet_service.out.model.Player;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.math.BigDecimal;
 
-/**
- * Класс, представляющий репозиторий игроков.
- *
- * @author Олег Тодор
- */
-public class PlayerRepository {
-    private Map<String, Player> players; // Коллекция игроков
+@Repository
+public interface PlayerRepository extends JpaRepository<Player, Long> {
+    Player findByUsername(String username);
 
-    /**
-     * Конструктор класса PlayerRepository.
-     */
-    public PlayerRepository() {
-        this.players = new ConcurrentHashMap<>();
-    }
-
-    /**
-     * Добавить игрока в репозиторий.
-     *
-     * @param player Игрок для добавления
-     */
-    public void addPlayer(Player player) {
-        players.put(player.getUsername(), player);
-    }
-
-    /**
-     * Получить игрока по имени пользователя.
-     *
-     * @param username Имя пользователя
-     * @return Игрок с указанным именем пользователя или null, если игрок не найден
-     */
-    public Player getPlayer(String username) {
-        return players.get(username);
-    }
-
-    /**
-     * Получить всех игроков.
-     *
-     * @return Коллекция всех игроков
-     */
-    public Collection<Player> getAllPlayers() {
-        return players.values();
-    }
-    public void removePlayer(String username) {
-        players.remove(username);
-    }
+    void updateBalanceByUsername(String username, BigDecimal balance);
 }
