@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Column;
 
+
 @Getter
 @Entity
 @Table(name = "players")
@@ -26,7 +27,6 @@ public class Player {
     @Column(name = "password")
     private String password;
 
-    @Getter
     @Column(name = "balance")
     private int balance;
 
@@ -39,10 +39,6 @@ public class Player {
         this.balance = balance;
     }
 
-    public Player(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
 
     public void setId(Long id) {
         this.id = id;
@@ -60,15 +56,4 @@ public class Player {
         this.balance = balance;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
 }
