@@ -14,3 +14,9 @@ spring:
     db.username: postgres
     db.password: wallet
     driver: org.postgresql.Driver
+  springfox:
+    documentation:
+      swagger-ui:
+        config-file: src\main\resources\application.yml
+    api-docs:
+      enabled: true
