@@ -27,6 +27,7 @@ public class Player {
     @Column(name = "password")
     private String password;
 
+    @Getter
     @Column(name = "balance")
     private int balance;
 
@@ -38,7 +39,6 @@ public class Player {
         this.password = password;
         this.balance = balance;
     }
-
 
     public void setId(Long id) {
         this.id = id;
@@ -56,4 +56,7 @@ public class Player {
         this.balance = balance;
     }
 
+    public int getBalance() {
+        return balance;
+    }
 }
