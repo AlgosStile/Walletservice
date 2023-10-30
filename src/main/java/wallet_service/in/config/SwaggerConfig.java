@@ -25,7 +25,13 @@ public class SwaggerConfig {
 
     @Bean
     public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2).select().apis((Predicate<RequestHandler>) RequestHandlerSelectors.basePackage("wallet_service.out.controller")).paths((Predicate<String>) PathSelectors.any()).build().apiInfo(apiInfo()).enableUrlTemplating(false).enable(configFile != null && !configFile.isEmpty());
+        return new Docket(DocumentationType.SWAGGER_2)
+                .select()
+                .apis((com.google.common.base.Predicate<RequestHandler>) RequestHandlerSelectors.basePackage("wallet_service.out.controller"))
+                .paths((Predicate<String>) PathSelectors.any())
+                .build().apiInfo(apiInfo())
+                .enableUrlTemplating(false)
+                .enable(configFile != null && !configFile.isEmpty());
     }
 
 

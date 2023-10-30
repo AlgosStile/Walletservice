@@ -135,12 +135,10 @@
             <version>5.2.0</version>
             <scope>test</scope>
         </dependency>
-
-
         <dependency>
-            <groupId>com.ninja-squad</groupId>
-            <artifactId>springmockk</artifactId>
-            <version>4.0.2</version>
+            <groupId>org.springframework.restdocs</groupId>
+            <artifactId>spring-restdocs-mockmvc</artifactId>
+            <version>3.0.0</version>
         </dependency>
 
 
