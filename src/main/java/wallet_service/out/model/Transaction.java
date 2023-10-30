@@ -51,4 +51,24 @@ public class Transaction {
     public void setType(String type) {
         this.type = type;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public int getBalance() {
+        return balance;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
+    }
 }

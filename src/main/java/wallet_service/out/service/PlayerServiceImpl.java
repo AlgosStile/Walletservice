@@ -15,14 +15,14 @@ import java.util.List;
 public class PlayerServiceImpl {
     private final PlayerRepository playerRepository;
     private final ActionRepository actionRepository;
-
     private final TransactionRepository transactionRepository;
 
-    public PlayerServiceImpl(PlayerRepository playerRepository, ActionRepository actionRepository, TransactionRepository transactionRepository ) {
+    public PlayerServiceImpl(PlayerRepository playerRepository, ActionRepository actionRepository, TransactionRepository transactionRepository) {
         this.playerRepository = playerRepository;
         this.actionRepository = actionRepository;
         this.transactionRepository = transactionRepository;
     }
+
 
     public Player getPlayer(String username) {
         return playerRepository.findByUsername(username);

@@ -26,6 +26,7 @@ public class Player {
     @Column(name = "password")
     private String password;
 
+    @Getter
     @Column(name = "balance")
     private int balance;
 
@@ -58,8 +59,16 @@ public class Player {
     public void setBalance(int balance) {
         this.balance = balance;
     }
-    public int getBalance() {
-        return balance;
+
+    public Long getId() {
+        return id;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
 }

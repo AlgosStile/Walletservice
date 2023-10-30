@@ -3,12 +3,24 @@ package wallet_service.in.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import wallet_service.out.aspect.AuditAspect;
+import wallet_service.out.aspect.ExecutionTimeAspect;
 
 import javax.sql.DataSource;
 
 @Configuration
+@EnableWebMvc
+@EnableAspectJAutoProxy
+@EnableTransactionManagement
+@EnableJpaRepositories(basePackages = "wallet_service.out.repository")
+@ComponentScan({"wallet_service.in.*", "wallet_service.out.*"})
 public class Config {
     private final String dbUrl;
     private final String dbUsername;
@@ -30,4 +42,18 @@ public class Config {
         dataSource.setPassword(dbPassword);
         return dataSource;
     }
+
+    @Bean
+    public AuditAspect auditAspect() {
+        return new AuditAspect();
+    }
+
+    @Bean
+    public ExecutionTimeAspect executionTimeAspect() {
+        return new ExecutionTimeAspect();
+    }
+
 }
+
+
+
