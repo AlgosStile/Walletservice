@@ -33,6 +33,7 @@ public class Config {
         this.dbUsername = dbUsername;
         this.dbPassword = dbPassword;
     }
+
     /**
      * Метод для создания и настройки DataSource для подключения к базе данных PostgreSQL.
      *
@@ -48,6 +49,7 @@ public class Config {
     }
 
 
+}
 
 
 
