@@ -23,7 +23,7 @@ public class Action {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     @Column(name = "id")
-    private Long id;
+    private int id;
     @Column(name = "username")
     private String username;
     @Column(name = "action")
@@ -39,7 +39,7 @@ public class Action {
      * @param action   описание действия
      * @param detail   детали действия
      */
-    public Action(Long id, String username, String action, String detail) {
+    public Action(int id, String username, String action, String detail) {
         this.id = id;
         this.username = username;
         this.action = action;
@@ -47,7 +47,4 @@ public class Action {
     }
 
 
-    public Action(String debit, BigDecimal bigDecimal) {
-
-    }
 }

@@ -23,7 +23,7 @@ public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private int id;
 
     @Column(name = "username")
     private String username;
@@ -50,10 +50,8 @@ public class Player {
         this.balance = balance;
     }
 
-    public Player(String username, String johnDoe, BigDecimal bigDecimal) {
-    }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

@@ -14,24 +14,47 @@ import javax.persistence.Column;
  * Класс представляет сущность "Транзакция".
  * Содержит информацию о транзакции, такую как сумма, тип и баланс.
  */
+@Getter
 @Entity
 @Table(name = "transactions")
 public class Transaction {
 
+    /**
+     * -- GETTER --
+     *  Возвращает уникальный идентификатор транзакции.
+     *
+     * @return уникальный идентификатор транзакции
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     @Column(name = "id")
-    private Long id;
+    private int id;
 
-    @Getter
+    /**
+     * -- GETTER --
+     *  Возвращает сумму транзакции.
+     *
+     * @return сумма транзакции
+     */
     @Column(name = "amount")
     private double amount;
 
-    @Getter
+    /**
+     * -- GETTER --
+     *  Возвращает тип транзакции.
+     *
+     * @return тип транзакции
+     */
     @Column(name = "type")
     private String type;
 
+    /**
+     * -- GETTER --
+     *  Возвращает баланс после транзакции.
+     *
+     * @return баланс после транзакции
+     */
     @Column(name = "balance")
     private int balance;
 
@@ -55,7 +78,7 @@ public class Transaction {
      *
      * @param id уникальный идентификатор транзакции
      */
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -77,46 +100,6 @@ public class Transaction {
      */
     public void setType(String type) {
         this.type = type;
-    }
-
-
-    /**
-     * Возвращает уникальный идентификатор транзакции.
-     *
-     * @return уникальный идентификатор транзакции
-     */
-    public Long getId() {
-        return id;
-    }
-
-
-    /**
-     * Возвращает сумму транзакции.
-     *
-     * @return сумма транзакции
-     */
-    public double getAmount() {
-        return amount;
-    }
-
-    /**
-     * Возвращает тип транзакции.
-     *
-     * @return тип транзакции
-     */
-    public String getType() {
-        return type;
-    }
-
-
-
-    /**
-     * Возвращает баланс после транзакции.
-     *
-     * @return баланс после транзакции
-     */
-    public int getBalance() {
-        return balance;
     }
 
 

@@ -9,7 +9,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import wallet_service.out.model.Action;
 import wallet_service.out.model.Player;
@@ -71,13 +70,14 @@ public class PlayerControllerTest {
 
         verify(playerService).creditTransaction(username, amount);
     }
+
     @Test
     @DisplayName("testGetPlayerActions")
     public void testGetPlayerActions() throws Exception {
         String username = "john";
         List<Action> actions = new ArrayList<>();
-        actions.add(new Action("debit", new BigDecimal("50.00")));
-        actions.add(new Action("credit", new BigDecimal("100.00")));
+        actions.add(new Action(122222, "username", "", "some_value"));
+        actions.add(new Action(6225622, "username", "", "some_value"));
 
         when(playerService.getPlayerActions(username)).thenReturn(actions);
 

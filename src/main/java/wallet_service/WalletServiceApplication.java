@@ -22,7 +22,6 @@ public class WalletServiceApplication {
         context.register(Config.class, SwaggerConfig.class);
         context.refresh();
 
-//        <---  $$$  --->
         context.close();
     }
 
