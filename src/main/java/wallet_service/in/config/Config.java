@@ -17,7 +17,6 @@ import javax.sql.DataSource;
  * Он используется для создания и настройки необходимых компонентов и бинов, а также для указания различных аннотаций и настроек для работы приложения.
  */
 @Configuration
-@EnableWebMvc
 @EnableAspectJAutoProxy
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "wallet_service.out.repository")

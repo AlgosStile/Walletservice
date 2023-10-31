@@ -3,10 +3,12 @@ spring:
     db.url: jdbc:postgresql://localhost:5432/wallet_db
     db.username: postgres
     db.password: wallet
+
   db:
     db.url: jdbc:postgresql://localhost:5432/wallet_db
     db.username: postgres
     db.password: wallet
+
   liquibase:
     enabled: true
     change-log: classpath:db/changelog/db.changelog-master.xml
@@ -14,9 +16,25 @@ spring:
     db.username: postgres
     db.password: wallet
     driver: org.postgresql.Driver
+
   springfox:
     documentation:
       swagger-ui:
         config-file: src\main\resources\application.yml
     api-docs:
       enabled: true
+
+  server:
+    port: 8080 # Порт, на котором будет запущен Tomcat
+    servlet:
+      context-path: /src/main/java/wallet_service
+  tomcat:
+    accessors:
+      enabled: true
+    max-threads: 200
+    min-spare-threads: 20
+    compression:
+      enabled: true
+      mime-types: application/json,application/xml,yml,text/html
+    static:
+      resource-cache-timeout: 3600
