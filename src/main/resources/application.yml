@@ -25,7 +25,7 @@ spring:
       enabled: true
 
   server:
-    port: 8080 # Порт, на котором будет запущен Tomcat
+    port: 8080
     servlet:
       context-path: /src/main/java/wallet_service
   tomcat:
