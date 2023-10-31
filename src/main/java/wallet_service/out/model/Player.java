@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Column;
+import java.math.BigDecimal;
 
 /**
  * Класс представляет сущность "Игрок".
@@ -47,6 +48,9 @@ public class Player {
         this.username = username;
         this.password = password;
         this.balance = balance;
+    }
+
+    public Player(String username, String johnDoe, BigDecimal bigDecimal) {
     }
 
     public void setId(Long id) {

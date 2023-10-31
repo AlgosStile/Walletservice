@@ -1,5 +1,6 @@
 package wallet_service.out.controller;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import wallet_service.out.model.Transaction;
@@ -40,7 +41,7 @@ public class TransactionController {
     public ResponseEntity<String> debitTransaction(@RequestParam String username, @RequestParam int id, @RequestParam double amount) {
         try {
             playerServiceImpl.debit(username, id, amount);
-            return ResponseEntity.ok("Дебетовая транзакция успешно выполнена!");
+            return ResponseEntity.ok().contentType(MediaType.TEXT_PLAIN).body("Дебетовая транзакция успешно выполнена!");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Ошибка при выполнении дебетовой транзакции: " + e.getMessage());
         }
@@ -59,7 +60,7 @@ public class TransactionController {
     public ResponseEntity<String> creditTransaction(@RequestParam String username, @RequestParam int id, @RequestParam double amount) {
         try {
             playerServiceImpl.credit(username, id, amount);
-            return ResponseEntity.ok("Кредитная транзакция успешно выполнена!");
+            return ResponseEntity.ok().contentType(MediaType.TEXT_PLAIN).body("Кредитная транзакция успешно выполнена!");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Ошибка при выполнении кредитной транзакции: " + e.getMessage());
         }

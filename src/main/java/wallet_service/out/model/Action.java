@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Column;
+import java.math.BigDecimal;
 
 /**
  * Класс представляет сущность "Действие".
@@ -46,4 +47,7 @@ public class Action {
     }
 
 
+    public Action(String debit, BigDecimal bigDecimal) {
+
+    }
 }

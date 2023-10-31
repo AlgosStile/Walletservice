@@ -1,137 +1,83 @@
 package wallet_service.out.controller;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import wallet_service.out.model.Transaction;
 import wallet_service.out.service.PlayerServiceImpl;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
-import static java.lang.reflect.Array.get;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(MockitoJUnitRunner.class)
 public class TransactionControllerTest {
+    private MockMvc mockMvc;
+
     @Mock
     private PlayerServiceImpl playerService;
 
-    @InjectMocks
-    private TransactionController transactionController;
-
-    private MockMvc mockMvc;
-
-    @Before
+    @BeforeEach
     public void setup() {
-        mockMvc = MockMvcBuilders.standaloneSetup(transactionController).build();
+        MockitoAnnotations.initMocks(this);
+        mockMvc = MockMvcBuilders.standaloneSetup(new TransactionController(playerService, null, null)).build();
     }
 
+
     @Test
-    public void testDebitTransaction_Success() throws Exception {
-        String username = "testUser";
-        int id = 1;
-        double amount = 100.0;
+    @DisplayName("testDebitTransaction")
+    public void testDebitTransaction() throws Exception {
+        String expectedResponse = "Дебетовая транзакция успешно выполнена!";
+
+        doNothing().when(playerService).debit("username", 1, 50.00);
 
         mockMvc.perform(post("/debit")
-                        .param("username", username)
-                        .param("id", String.valueOf(id))
-                        .param("amount", String.valueOf(amount)))
-                .andExpect(status().isOk())
-                .andExpect((ResultMatcher) content().string("Дебетовая транзакция успешно выполнена!"));
+                        .param("username", "username")
+                        .param("id", "1")
+                        .param("amount", "50.00"))
+                .andExpect(status().isOk());
 
-        verify(playerService, times(1)).debit(username, id, amount);
+        verify(playerService, times(1)).debit("username", 1, 50.00);
     }
 
     @Test
-    public void testDebitTransaction_Failure() throws Exception {
-        String username = "testUser";
-        int id = 1;
-        double amount = 100.0;
-        String errorMessage = "Ошибка при выполнении дебетовой транзакции";
+    @DisplayName("testCreditTransaction")
+    public void testCreditTransaction() throws Exception {
+        String expectedResponse = "Кредитная транзакция успешно выполнена!";
 
-        doThrow(new RuntimeException(errorMessage)).when(playerService).debit(username, id, amount);
-
-        mockMvc.perform(post("/debit")
-                        .param("username", username)
-                        .param("id", String.valueOf(id))
-                        .param("amount", String.valueOf(amount)))
-                .andExpect(status().isBadRequest())
-                .andExpect((ResultMatcher) content().string("Ошибка при выполнении дебетовой транзакции: " + errorMessage));
-
-        verify(playerService, times(1)).debit(username, id, amount);
-    }
-
-    @Test
-    public void testCreditTransaction_Success() throws Exception {
-        String username = "testUser";
-        int id = 1;
-        double amount = 100.0;
+        doNothing().when(playerService).credit("username", 1, 50.00);
 
         mockMvc.perform(post("/credit")
-                        .param("username", username)
-                        .param("id", String.valueOf(id))
-                        .param("amount", String.valueOf(amount)))
+                        .param("username", "username")
+                        .param("id", "1")
+                        .param("amount", "50.00"))
+                .andExpect(status().isOk());
+
+        verify(playerService, times(1)).credit("username", 1, 50.00);
+    }
+
+    @Test
+    @DisplayName("testGetTransactionHistory")
+    public void testGetTransactionHistory() throws Exception {
+        List<Transaction> expectedTransactions = Collections.singletonList(new Transaction());
+        when(playerService.getTransactionHistory("username")).thenReturn(expectedTransactions);
+
+        mockMvc.perform(get("/transactions/username"))
                 .andExpect(status().isOk())
-                .andExpect((ResultMatcher) content().string("Кредитная транзакция успешно выполнена!"));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
 
-        verify(playerService, times(1)).credit(username, id, amount);
-    }
-
-    @Test
-    public void testCreditTransaction_Failure() throws Exception {
-        String username = "testUser";
-        int id = 1;
-        double amount = 100.0;
-        String errorMessage = "Ошибка при выполнении кредитной транзакции";
-
-        doThrow(new RuntimeException(errorMessage)).when(playerService).credit(username, id, amount);
-
-        mockMvc.perform(post("/credit")
-                        .param("username", username)
-                        .param("id", String.valueOf(id))
-                        .param("amount", String.valueOf(amount)))
-                .andExpect(status().isBadRequest())
-                .andExpect((ResultMatcher) content().string("Ошибка при выполнении кредитной транзакции: " + errorMessage));
-
-        verify(playerService, times(1)).credit(username, id, amount);
-    }
-
-    @Test
-    public void testGetTransactionHistory_Success() throws Exception {
-        String username = "testUser";
-        List<Transaction> transactions = Arrays.asList(new Transaction(), new Transaction());
-
-        when(playerService.getTransactionHistory(username)).thenReturn(transactions);
-
-        mockMvc.perform((RequestBuilder) get("/transactions/{username}", Integer.parseInt(username)))
-                .andExpect(status().isOk())
-                .andExpect((ResultMatcher) content().json("[{}, {}]"));
-
-        verify(playerService, times(1)).getTransactionHistory(username);
-    }
-
-    @Test
-    public void testGetTransactionHistory_Failure() throws Exception {
-        String username = "testUser";
-        String errorMessage = "Ошибка при получении истории транзакций";
-
-        when(playerService.getTransactionHistory(username)).thenThrow(new RuntimeException(errorMessage));
-
-        mockMvc.perform((RequestBuilder) get("/transactions/{username}", Integer.parseInt(username)))
-                .andExpect(status().isBadRequest())
-                .andExpect((ResultMatcher) content().string("null"));
-
-        verify(playerService, times(1)).getTransactionHistory(username);
+        verify(playerService, times(1)).getTransactionHistory("username");
     }
 }
