@@ -1,41 +1,24 @@
 package wallet_service;
 
-import jakarta.servlet.Servlet;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
-import wallet_service.out.controller.HistoryController;
-import wallet_service.out.controller.PlayerController;
-import wallet_service.out.controller.TransactionController;
-import wallet_service.out.controller.TransactionHistoryController;
-import wallet_service.out.service.PlayerService;
-import wallet_service.out.service.PlayerServiceImpl;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import wallet_service.in.config.Config;
+import wallet_service.in.config.SwaggerConfig;
 
+/**
+ * Класс, представляющий приложение для управления кошельками.
+ */
 public class WalletServiceApplication {
 
-    public static void main(String[] args) throws Exception {
-
-        // Запускаем встроенный сервер
-        try {
-            Server server = new Server(8080);
-            ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-            context.setContextPath("/");
-            server.setHandler(context);
-
-            // Создание сервиса и передача его контроллерам
-            PlayerService playerService = new PlayerServiceImpl();
-
-            context.addServlet(new ServletHolder((Servlet) new PlayerController(playerService)), "/player/*");
-            context.addServlet(new ServletHolder((Servlet) new HistoryController(playerService)), "/player/history");
-            context.addServlet(new ServletHolder((Servlet) new TransactionController(playerService)), "/transaction");
-            context.addServlet(new ServletHolder((Servlet) new TransactionHistoryController(playerService)), "/transaction/history");
-
-            server.start();
-            server.join();
-        } catch (Exception exception) {
-            System.err.println("При запуске сервера произошла ошибка: " + exception.getMessage());
-            exception.printStackTrace();
-        }
-
+    /**
+     * Метод, запускающий приложение и инициализирующий контекст приложения.
+     *
+     * @param args аргументы командной строки
+     */
+    public static void main(String[] args) {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+        context.scan("wallet_service.in.config", "wallet_service.out.service", "wallet_service.out.repository", "wallet_service.out.aspect", "wallet_service.out.controller", "wallet_service.out.model");
+        context.register(Config.class, SwaggerConfig.class);
+        context.refresh();
+        context.close();
     }
 }

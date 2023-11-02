@@ -3,29 +3,27 @@ package wallet_service.out.aspect;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-
+import org.springframework.stereotype.Component;
 /**
- * Аспект, отвечающий за измерение времени выполнения методов контроллеров в пакете `wallet_service.out.controller`.
- *
- * @author Олег Тодор
+ * Класс ExecutionTimeAspect является аспектом, который предоставляет функциональность измерения времени выполнения методов контроллеров приложения Wallet Service.
+ * Он используется для перехвата и логирования времени выполнения методов контроллеров.
  */
 @Aspect
+@Component
 public class ExecutionTimeAspect {
-
     /**
-     * Аннотация `@Around` указывает, что данный метод будет выполняться вокруг вызовов методов, указанных в выражении pointcut.
-     * В данном случае, метод `executionTimeAdvice` будет применяться к методам в пакете `wallet_service.out.controller`.
+     * Метод executionTimeAdvice является советом, который выполняет измерение времени выполнения методов контроллеров.
      *
-     * @param jp Объект `ProceedingJoinPoint`, представляющий собой точку соединения (join point) во время выполнения программы.
-     * @return Объект, возвращаемый методом, к которому применяется аспект.
-     * @throws Throwable Если при выполнении метода возникает исключение, оно будет проброшено.
+     * @param jp объект ProceedingJoinPoint, представляющий точку сопряжения выполнения метода контроллера.
+     * @return результат выполнения метода контроллера.
+     * @throws Throwable если возникает исключение при выполнении метода контроллера.
      */
     @Around("execution(* wallet_service.out.controller.*.*(..))")
     public Object executionTimeAdvice(ProceedingJoinPoint jp) throws Throwable {
-        long start = System.currentTimeMillis(); // Запоминаем текущее время до выполнения метода
-        Object proceed = jp.proceed(); // Выполняем целевой метод
-        long executionTime = System.currentTimeMillis() - start; // Вычисляем время выполнения метода
-        System.out.println(jp.getSignature() + " выполнен за " + executionTime + "мс"); // Выводим информацию о времени выполнения
-        return proceed; // Возвращаем результат выполнения метода
+        long start = System.currentTimeMillis();
+        Object proceed = jp.proceed();
+        long executionTime = System.currentTimeMillis() - start;
+        System.out.println(jp.getSignature() + " выполнен за " + executionTime + "мс");
+        return proceed;
     }
 }

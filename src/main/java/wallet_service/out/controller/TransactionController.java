@@ -1,207 +1,86 @@
 package wallet_service.out.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import wallet_service.in.model.Transaction;
-import wallet_service.out.service.PlayerService;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import wallet_service.out.model.Transaction;
+import wallet_service.out.repository.PlayerRepository;
+import wallet_service.out.repository.TransactionRepository;
+import wallet_service.out.service.PlayerServiceImpl;
 
 import java.util.List;
 
-import wallet_service.out.dto.TransactionDto;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 /**
- * Класс {@code TransactionController}, контроллер транзакций.
- * Отвечает за обработку HTTP-запросов к сервлету "/transaction".
- * Обеспечивает выполнение базовых операций транзакций.
- *
- * @author Олег Тодор
- * @see HttpServlet
+ * Класс TransactionController является Spring MVC контроллером, который обрабатывает HTTP-запросы, связанные с транзакциями.
  */
-@WebServlet({"/transaction"})
-public class TransactionController extends HttpServlet {
-
-    private PlayerService playerService;
-    private ObjectMapper objectMapper;
+@RestController
+public class TransactionController {
+    private final PlayerServiceImpl playerServiceImpl;
+    private final TransactionRepository transactionRepository;
 
     /**
-     * Конструктор без параметров.
-     * Обычно используется в файле web.xml.
+     * Конструктор для создания нового экземпляра TransactionController с указанными зависимостями.
+     *
+     * @param playerServiceImpl     Зависимость PlayerServiceImpl.
+     * @param transactionRepository Зависимость TransactionRepository.
      */
-    public TransactionController() {
-        // Конструктор без параметров для web.xml
+    public TransactionController(PlayerServiceImpl playerServiceImpl, PlayerRepository playerRepository, TransactionRepository transactionRepository) {
+        this.playerServiceImpl = playerServiceImpl;
+        this.transactionRepository = transactionRepository;
     }
 
     /**
-     * Конструктор для создания экземпляра {@code TransactionController} с определенным сервисом {@code PlayerService}.
+     * Обрабатывает POST-запрос для выполнения дебетовой транзакции.
      *
-     * @param playerService сервис для работы с сущностями "Player".
+     * @param username Имя пользователя.
+     * @param id       Идентификатор транзакции.
+     * @param amount   Сумма транзакции.
+     * @return ResponseEntity<String>   Если дебетовая транзакция успешно выполнена, возвращает ResponseEntity с HTTP-статусом 200 (OK) и сообщением об успешном выполнении.
+     * Если произошла ошибка, возвращает ResponseEntity с HTTP-статусом 400 (Bad Request) и сообщением об ошибке.
      */
-    public TransactionController(PlayerService playerService) {
-        this.playerService = playerService;
-        this.objectMapper = new ObjectMapper();
-    }
-
-    /**
-     * Обрабатывает POST-запросы.
-     * Дебетует счет игрока на указанную сумму и возвращает ответ с результатом операции.
-     *
-     * @param req  объект HTTP-запроса
-     * @param resp объект HTTP-ответа
-     * @throws ServletException если происходит ошибка сервлета
-     * @throws IOException      если происходит ошибка ввода или вывода
-     */
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String json = readJsonFromRequest(req);
-        ObjectMapper objectMapper = new ObjectMapper();
-        TransactionDto transactionDto = objectMapper.readValue(json, TransactionDto.class);
-
+    @PostMapping("/debit")
+    public ResponseEntity<String> debitTransaction(@RequestParam String username, @RequestParam int id, @RequestParam double amount) {
         try {
-            playerService.debit(transactionDto.getUsername(), transactionDto.getId(), transactionDto.getAmount());
-            resp.setStatus(HttpServletResponse.SC_CREATED);
-            Map<String, String> response = new HashMap<>();
-            response.put("success", "Debit operation successful");
-            String jsonResponse = objectMapper.writeValueAsString(response);
-            resp.getWriter().write(jsonResponse);
+            playerServiceImpl.debit(username, id, amount);
+            return ResponseEntity.ok().contentType(MediaType.TEXT_PLAIN).body("Дебетовая транзакция успешно выполнена!");
         } catch (Exception e) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            Map<String, String> response = new HashMap<>();
-            response.put("error", e.getMessage());
-            String jsonResponse = objectMapper.writeValueAsString(response);
-            resp.getWriter().write(jsonResponse);
+            return ResponseEntity.badRequest().body("Ошибка при выполнении дебетовой транзакции: " + e.getMessage());
         }
     }
 
     /**
-     * Читает JSON из запроса и возвращает его в виде строкового значения.
+     * Обрабатывает POST-запрос для выполнения кредитной транзакции.
      *
-     * @param req объект HTTP-запроса
-     * @return строковое представление JSON из запроса
-     * @throws IOException если происходит ошибка ввода или вывода
+     * @param username Имя пользователя.
+     * @param id       Идентификатор транзакции.
+     * @param amount   Сумма транзакции.
+     * @return ResponseEntity<String>   Если кредитная транзакция успешно выполнена, возвращает ResponseEntity с HTTP-статусом 200 (OK) и сообщением об успешном выполнении.
+     * Если произошла ошибка, возвращает ResponseEntity с HTTP-статусом 400 (Bad Request) и сообщением об ошибке.
      */
-    private String readJsonFromRequest(HttpServletRequest req) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        BufferedReader reader = req.getReader();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            sb.append(line);
-        }
-        return sb.toString();
-    }
-
-
-    /**
-     * Обрабатывает PUT-запросы.
-     * Зачисляет счет игрока на указанную сумму и возвращает ответ с результатом операции.
-     *
-     * @param req  объект HTTP-запроса
-     * @param resp объект HTTP-ответа
-     * @throws ServletException если происходит ошибка сервлета
-     * @throws IOException      если происходит ошибка ввода или вывода
-     */
-    @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String json = readJsonFromRequest(req);
-        ObjectMapper objectMapper = new ObjectMapper();
-        TransactionDto transactionDto = objectMapper.readValue(json, TransactionDto.class);
-
+    @PostMapping("/credit")
+    public ResponseEntity<String> creditTransaction(@RequestParam String username, @RequestParam int id, @RequestParam double amount) {
         try {
-            playerService.credit(transactionDto.getUsername(), transactionDto.getId(), transactionDto.getAmount());
-            resp.setStatus(HttpServletResponse.SC_OK);
-            Map<String, String> response = new HashMap<>();
-            response.put("success", "Credit operation successful");
-            String jsonResponse = objectMapper.writeValueAsString(response);
-            resp.getWriter().write(jsonResponse);
+            playerServiceImpl.credit(username, id, amount);
+            return ResponseEntity.ok().contentType(MediaType.TEXT_PLAIN).body("Кредитная транзакция успешно выполнена!");
         } catch (Exception e) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            Map<String, String> response = new HashMap<>();
-            response.put("error", e.getMessage());
-            String jsonResponse = objectMapper.writeValueAsString(response);
-            resp.getWriter().write(jsonResponse);
+            return ResponseEntity.badRequest().body("Ошибка при выполнении кредитной транзакции: " + e.getMessage());
         }
     }
 
-
     /**
-     * Обрабатывает GET-запросы.
-     * Получает историю транзакций игрока и возвращает в ответе список транзакций в формате JSON.
+     * Обрабатывает GET-запрос для получения истории транзакций для определенного игрока.
      *
-     * @param req  объект HTTP-запроса
-     * @param resp объект HTTP-ответа
-     * @throws ServletException если происходит ошибка сервлета
-     * @throws IOException      если происходит ошибка ввода или вывода
+     * @param username Имя пользователя.
+     * @return ResponseEntity<List < Transaction>>   Если получение истории транзакций успешно, возвращает ResponseEntity с HTTP-статусом 200 (OK) и списком транзакций.
+     * Если произошла ошибка, возвращает ResponseEntity с HTTP-статусом 400 (Bad Request) и пустым телом.
      */
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String username = req.getParameter("username");
-
+    @GetMapping("/transactions/{username}")
+    public ResponseEntity<List<Transaction>> getTransactionHistory(@PathVariable String username) {
         try {
-            List<Transaction> transactionList = playerService.getTransactionHistory(username);
-            String jsonResponse = objectMapper.writeValueAsString(transactionList);
-            resp.setContentType("application/json");
-            resp.getWriter().write(jsonResponse);
+            List<Transaction> transactions = playerServiceImpl.getTransactionHistory(username);
+            return ResponseEntity.ok(transactions);
         } catch (Exception e) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            Map<String, String> response = new HashMap<>();
-            response.put("error", e.getMessage());
-            String jsonResponse = objectMapper.writeValueAsString(response);
-            resp.getWriter().write(jsonResponse);
+            return ResponseEntity.badRequest().body(null);
         }
     }
-
-
-    /**
-     * Выполняет дебитовую операцию по указанному имени пользователя, ID транзакции и сумме.
-     *
-     * @param username      имя пользователя
-     * @param transactionId ID транзакции
-     * @param amount        сумма операции
-     * @throws Exception если происходит ошибка в ходе выполнения операции
-     */
-
-    public void debitTransaction(String username, String transactionId, double amount) throws Exception {
-        try {
-            playerService.debit(username, transactionId, amount);
-            System.out.println("Дебетовая транзакция прошла успешно");
-        } catch (Exception e) {
-            System.out.println("Дебетовая транзакция не удалась: " + e.getMessage());
-        }
-    }
-
-
-    /**
-     * Выполняет кредитовую операцию по указанному имени пользователя, ID транзакции и сумме.
-     *
-     * @param username      имя пользователя
-     * @param transactionId ID транзакции
-     * @param amount        сумма операции
-     * @throws Exception если происходит ошибка в ходе выполнения операции
-     */
-    public void creditTransaction(String username, String transactionId, double amount) throws Exception {
-        try {
-            playerService.credit(username, transactionId, amount);
-            System.out.println("Кредитная транзакция прошла успешно --> $");
-        } catch (Exception e) {
-            System.out.println("Кредитная транзакция не удалась ¯\\_(ツ)_/¯ : " + e.getMessage());
-        }
-    }
-
-    /**
-     * Возвращает список всех транзакций по указанному имени пользователя.
-     *
-     * @param username имя пользователя
-     * @return список транзакций пользователя
-     */
-    public List<Transaction> getTransactionHistory(String username) {
-        return playerService.getTransactionHistory(username);
-    }
-
 }

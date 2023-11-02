@@ -1,45 +1,81 @@
 package wallet_service.out.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import wallet_service.out.service.PlayerService;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import wallet_service.out.model.Transaction;
+import wallet_service.out.service.PlayerServiceImpl;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
-import java.io.PrintWriter;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.util.Collections;
+import java.util.List;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class TransactionControllerTest {
+    private MockMvc mockMvc;
+
+    @Mock
+    private PlayerServiceImpl playerService;
+
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+        mockMvc = MockMvcBuilders.standaloneSetup(new TransactionController(playerService, null, null)).build();
+    }
+
 
     @Test
-    @DisplayName("Always pass test for TransactionController")
-    public void doPostTest() throws Exception {
-        // Prepare test data and mock objects
-        String username = "test";
-        String transactionId = "123";
-        double amount = 100.0;
-        String json = "{\"username\":\"" + username + "\",\"id\":\"" + transactionId + "\",\"amount\":" + amount + "}";
-        BufferedReader reader = new BufferedReader(new StringReader(json));
-        StringWriter stringWriter = new StringWriter();
-        PrintWriter writer = new PrintWriter(stringWriter);
+    @DisplayName("testDebitTransaction")
+    public void testDebitTransaction() throws Exception {
+        String expectedResponse = "Дебетовая транзакция успешно выполнена!";
 
-        HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-        HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
-        PlayerService playerService = Mockito.mock(PlayerService.class);
-        ObjectMapper objectMapper = new ObjectMapper();
+        doNothing().when(playerService).debit("username", 1, 50.00);
 
-        when(request.getReader()).thenReturn(reader);
-        when(response.getWriter()).thenReturn(writer);
+        mockMvc.perform(post("/debit")
+                        .param("username", "username")
+                        .param("id", "1")
+                        .param("amount", "50.00"))
+                .andExpect(status().isOk());
 
-        TransactionController transactionController = new TransactionController(playerService);
-        transactionController.doPost(request, response);
+        verify(playerService, times(1)).debit("username", 1, 50.00);
+    }
 
-        // no exception was thrown.
+    @Test
+    @DisplayName("testCreditTransaction")
+    public void testCreditTransaction() throws Exception {
+        String expectedResponse = "Кредитная транзакция успешно выполнена!";
+
+        doNothing().when(playerService).credit("username", 1, 50.00);
+
+        mockMvc.perform(post("/credit")
+                        .param("username", "username")
+                        .param("id", "1")
+                        .param("amount", "50.00"))
+                .andExpect(status().isOk());
+
+        verify(playerService, times(1)).credit("username", 1, 50.00);
+    }
+
+    @Test
+    @DisplayName("testGetTransactionHistory")
+    public void testGetTransactionHistory() throws Exception {
+        List<Transaction> expectedTransactions = Collections.singletonList(new Transaction( 1, "username", 50));
+        when(playerService.getTransactionHistory("username")).thenReturn(expectedTransactions);
+
+        mockMvc.perform(get("/transactions/username"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+        verify(playerService, times(1)).getTransactionHistory("username");
     }
 }
