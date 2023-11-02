@@ -6,7 +6,6 @@ import wallet_service.out.model.Transaction;
 
 import java.util.List;
 
-
 /**
  * Репозиторий для работы с сущностью Transaction.
  */

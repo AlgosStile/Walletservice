@@ -17,6 +17,7 @@ import java.util.List;
 @RequestMapping("/player")
 public class PlayerController {
     private final PlayerServiceImpl playerServiceImpl;
+
     /**
      * Конструктор класса PlayerController.
      *
@@ -25,6 +26,7 @@ public class PlayerController {
     public PlayerController(PlayerServiceImpl playerServiceImpl) {
         this.playerServiceImpl = playerServiceImpl;
     }
+
     /**
      * Метод getPlayer выполняет обработку GET-запроса для получения информации о игроке по его имени пользователя.
      *
@@ -47,7 +49,6 @@ public class PlayerController {
         playerServiceImpl.savePlayer(player);
     }
 
-
     /**
      * Метод debitTransaction выполняет обработку POST-запроса для проведения дебетовой транзакции для игрока с заданным именем пользователя.
      *
@@ -59,7 +60,6 @@ public class PlayerController {
         playerServiceImpl.debitTransaction(username, amount);
     }
 
-
     /**
      * Метод creditTransaction выполняет обработку POST-запроса для проведения кредитовой транзакции для игрока с заданным именем пользователя.
      *
@@ -70,7 +70,6 @@ public class PlayerController {
     public void creditTransaction(@PathVariable String username, @RequestParam BigDecimal amount) {
         playerServiceImpl.creditTransaction(username, amount);
     }
-
 
     /**
      * Метод getPlayerActions выполняет обработку GET-запроса для получения списка действий игрока с заданным именем пользователя.

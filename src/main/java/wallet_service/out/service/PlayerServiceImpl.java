@@ -11,7 +11,6 @@ import wallet_service.out.repository.TransactionRepository;
 import java.math.BigDecimal;
 import java.util.List;
 
-
 /**
  * Сервис для работы с сущностью Player.
  */
@@ -34,7 +33,6 @@ public class PlayerServiceImpl {
         this.transactionRepository = transactionRepository;
     }
 
-
     /**
      * Возвращает игрока с указанным именем пользователя.
      *
@@ -45,7 +43,6 @@ public class PlayerServiceImpl {
         return playerRepository.findByUsername(username);
     }
 
-
     /**
      * Сохраняет игрока.
      *
@@ -54,7 +51,6 @@ public class PlayerServiceImpl {
     public void savePlayer(Player player) {
         playerRepository.save(player);
     }
-
 
     /**
      * Списывает средства с баланса игрока с указанным именем пользователя.
@@ -69,7 +65,6 @@ public class PlayerServiceImpl {
         playerRepository.save(player);
     }
 
-
     /**
      * Зачисляет средства на баланс игрока с указанным именем пользователя.
      *
@@ -83,7 +78,6 @@ public class PlayerServiceImpl {
         playerRepository.save(player);
     }
 
-
     /**
      * Возвращает список действий игрока с указанным именем пользователя.
      *
@@ -93,8 +87,6 @@ public class PlayerServiceImpl {
     public List<Action> getPlayerActions(String username) {
         return actionRepository.findByUsername(username);
     }
-
-
 
     public void debit(String username, int id, double amount) {
     }

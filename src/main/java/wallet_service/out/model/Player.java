@@ -1,15 +1,8 @@
 package wallet_service.out.model;
 
-
 import lombok.Getter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Column;
-import java.math.BigDecimal;
+import javax.persistence.*;
 
 /**
  * Класс представляет сущность "Игрок".
@@ -37,6 +30,7 @@ public class Player {
 
     public Player() {
     }
+
     /**
      * Конструктор класса Player с параметрами.
      *
@@ -49,7 +43,6 @@ public class Player {
         this.password = password;
         this.balance = balance;
     }
-
 
     public void setId(int id) {
         this.id = id;

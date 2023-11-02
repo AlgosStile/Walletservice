@@ -2,13 +2,7 @@ package wallet_service.out.model;
 
 import lombok.Getter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Column;
-
+import javax.persistence.*;
 
 /**
  * Класс представляет сущность "Транзакция".
@@ -21,7 +15,7 @@ public class Transaction {
 
     /**
      * -- GETTER --
-     *  Возвращает уникальный идентификатор транзакции.
+     * Возвращает уникальный идентификатор транзакции.
      *
      * @return уникальный идентификатор транзакции
      */
@@ -33,7 +27,7 @@ public class Transaction {
 
     /**
      * -- GETTER --
-     *  Возвращает сумму транзакции.
+     * Возвращает сумму транзакции.
      *
      * @return сумма транзакции
      */
@@ -42,7 +36,7 @@ public class Transaction {
 
     /**
      * -- GETTER --
-     *  Возвращает тип транзакции.
+     * Возвращает тип транзакции.
      *
      * @return тип транзакции
      */
@@ -51,7 +45,7 @@ public class Transaction {
 
     /**
      * -- GETTER --
-     *  Возвращает баланс после транзакции.
+     * Возвращает баланс после транзакции.
      *
      * @return баланс после транзакции
      */
@@ -60,6 +54,7 @@ public class Transaction {
 
     public Transaction() {
     }
+
     /**
      * Конструктор класса Transaction с параметрами.
      *
@@ -71,8 +66,8 @@ public class Transaction {
         this.amount = amount;
         this.type = type;
         this.balance = balance;
-
     }
+
     /**
      * Устанавливает уникальный идентификатор транзакции.
      *
@@ -81,7 +76,6 @@ public class Transaction {
     public void setId(int id) {
         this.id = id;
     }
-
 
     /**
      * Устанавливает сумму транзакции.
@@ -92,7 +86,6 @@ public class Transaction {
         this.amount = amount;
     }
 
-
     /**
      * Устанавливает тип транзакции.
      *
@@ -101,7 +94,6 @@ public class Transaction {
     public void setType(String type) {
         this.type = type;
     }
-
 
     /**
      * Устанавливает баланс после транзакции.

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import wallet_service.out.model.Action;
 
 import java.util.List;
+
 /**
  * Репозиторий для работы с сущностью Action.
  */

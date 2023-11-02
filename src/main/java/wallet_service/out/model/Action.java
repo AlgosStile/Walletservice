@@ -2,13 +2,7 @@ package wallet_service.out.model;
 
 import lombok.Getter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Column;
-import java.math.BigDecimal;
+import javax.persistence.*;
 
 /**
  * Класс представляет сущность "Действие".
@@ -18,7 +12,6 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "actions")
 public class Action {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
@@ -45,6 +38,4 @@ public class Action {
         this.action = action;
         this.detail = detail;
     }
-
-
 }

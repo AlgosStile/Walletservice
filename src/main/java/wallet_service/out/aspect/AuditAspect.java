@@ -1,11 +1,9 @@
 package wallet_service.out.aspect;
 
-
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
-
 
 /**
  * Класс AuditAspect является аспектом, который предоставляет функциональность аудита для контроллеров приложения Wallet Service.
@@ -14,7 +12,6 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Component
 public class AuditAspect {
-
     /**
      * Метод auditAdvice является советом, который выполняет аудит изменений в контроллерах.
      *

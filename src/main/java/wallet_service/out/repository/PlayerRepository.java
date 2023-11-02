@@ -26,6 +26,5 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
      * @param username имя пользователя
      * @param balance  новый баланс
      */
-
     void updateBalanceByUsername(String username, BigDecimal balance);
 }
