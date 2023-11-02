@@ -1,6 +1,7 @@
 package wallet_service.out.model;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -8,13 +9,13 @@ import javax.persistence.*;
  * Класс представляет сущность "Транзакция".
  * Содержит информацию о транзакции, такую как сумма, тип и баланс.
  */
+@Setter
 @Getter
 @Entity
 @Table(name = "transactions")
 public class Transaction {
 
     /**
-     * -- GETTER --
      * Возвращает уникальный идентификатор транзакции.
      *
      * @return уникальный идентификатор транзакции
@@ -52,9 +53,6 @@ public class Transaction {
     @Column(name = "balance")
     private int balance;
 
-    public Transaction() {
-    }
-
     /**
      * Конструктор класса Transaction с параметрами.
      *
@@ -65,42 +63,6 @@ public class Transaction {
     public Transaction(double amount, String type, int balance) {
         this.amount = amount;
         this.type = type;
-        this.balance = balance;
-    }
-
-    /**
-     * Устанавливает уникальный идентификатор транзакции.
-     *
-     * @param id уникальный идентификатор транзакции
-     */
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    /**
-     * Устанавливает сумму транзакции.
-     *
-     * @param amount сумма транзакции
-     */
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
-    /**
-     * Устанавливает тип транзакции.
-     *
-     * @param type тип транзакции
-     */
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    /**
-     * Устанавливает баланс после транзакции.
-     *
-     * @param balance баланс после транзакции
-     */
-    public void setBalance(int balance) {
         this.balance = balance;
     }
 }

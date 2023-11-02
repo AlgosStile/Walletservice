@@ -68,7 +68,7 @@ public class TransactionControllerTest {
     @Test
     @DisplayName("testGetTransactionHistory")
     public void testGetTransactionHistory() throws Exception {
-        List<Transaction> expectedTransactions = Collections.singletonList(new Transaction());
+        List<Transaction> expectedTransactions = Collections.singletonList(new Transaction( 1, "username", 50));
         when(playerService.getTransactionHistory("username")).thenReturn(expectedTransactions);
 
         mockMvc.perform(get("/transactions/username"))
