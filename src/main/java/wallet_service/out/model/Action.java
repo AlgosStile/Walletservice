@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Getter
 @Entity
 @Table(name = "actions")
-public class Action {
+public class Action  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
@@ -25,4 +25,5 @@ public class Action {
         this.action = action;
         this.detail = detail;
     }
+
 }

@@ -35,7 +35,7 @@ public class PlayerServiceImpl {
         Player player = playerRepository.findByUsername(username);
         BigDecimal newBalance = BigDecimal.valueOf(player.getBalance()).subtract(amount);
         player.setBalance(newBalance.intValue());
-        playerRepository.findByUsername(username);
+        playerRepository.savePlayer(player);
 
     }
 
@@ -50,13 +50,22 @@ public class PlayerServiceImpl {
         return actionRepository.findByUsername(username);
     }
 
+    public List<Transaction> getTransactionHistory(String username) {
+        return transactionRepository.findByPlayerUsername(username);
+    }
+
     public void debit(String username, int id, double amount) {
+        Player player = playerRepository.findByUsername(username);
+        BigDecimal newBalance = BigDecimal.valueOf(player.getBalance()).subtract(BigDecimal.valueOf(amount));
+        player.setBalance(newBalance.intValue());
+        playerRepository.savePlayer(player);
     }
 
     public void credit(String username, int id, double amount) {
-    }
+        Player player = playerRepository.findByUsername(username);
+        BigDecimal newBalance = BigDecimal.valueOf(player.getBalance()).add(BigDecimal.valueOf(amount));
+        player.setBalance(newBalance.intValue());
+        playerRepository.savePlayer(player);
 
-    public List<Transaction> getTransactionHistory(String username) {
-        return getTransactionHistory(username);
     }
 }

@@ -12,9 +12,11 @@ import java.util.List;
 @RequestMapping("/player")
 public class PlayerController {
     private final PlayerServiceImpl playerServiceImpl;
+
     public PlayerController(PlayerServiceImpl playerServiceImpl) {
         this.playerServiceImpl = playerServiceImpl;
     }
+
     @GetMapping("/{username}")
     public Player getPlayer(@PathVariable String username) {
         return playerServiceImpl.getPlayer(username);
@@ -24,6 +26,7 @@ public class PlayerController {
     public void savePlayer(@RequestBody Player player) {
         playerServiceImpl.savePlayer(player);
     }
+
     @PostMapping("/{username}/debit")
     public void debitTransaction(@PathVariable String username, @RequestParam BigDecimal amount) {
         playerServiceImpl.debitTransaction(username, amount);

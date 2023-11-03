@@ -1,12 +1,27 @@
 package wallet_service.out.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import wallet_service.out.model.Action;
 
 import java.util.List;
 
 @Repository
-public interface ActionRepository extends JpaRepository<Action, Long> {
-    List<Action> findByUsername(String username);
+public class ActionRepository {
+    private final JdbcTemplate jdbcTemplate;
+
+    public ActionRepository(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    public void saveAction(Action action) {
+        String sql = "INSERT INTO actions (username, action, detail) VALUES (?, ?, ?)";
+        jdbcTemplate.update(sql, action.getUsername(), action.getAction(), action.getDetail());
+    }
+
+    public List<Action> findByUsername(String username) {
+        String sql = "SELECT * FROM actions WHERE username = ?";
+        return jdbcTemplate.query(sql, new Object[]{username}, new BeanPropertyRowMapper<>(Action.class));
+    }
 }

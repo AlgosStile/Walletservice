@@ -1,9 +1,10 @@
 package wallet_service.out.model;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
-
+@Setter
 @Getter
 @Entity
 @Table(name = "players")
@@ -26,19 +27,5 @@ public class Player {
         this.password = password;
         this.balance = balance;
     }
-    public void setId(int id) {
-        this.id = id;
-    }
-    public void setUsername(String username) {
-        this.username = username;
-    }
-    public void setPassword(String password) {
-        this.password = password;
-    }
-    public void setBalance(int balance) {
-        this.balance = balance;
-    }
-    public int getBalance() {
-        return balance;
-    }
+
 }
