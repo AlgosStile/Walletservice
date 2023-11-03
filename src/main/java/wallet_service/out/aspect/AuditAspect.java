@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Component
 public class AuditAspect {
-
     @Around("execution(* wallet_service.out.controller.*.*(..))")
     public Object auditAdvice(ProceedingJoinPoint jp) throws Throwable {
         System.out.println("Аудит выполнен. Изменение в: " + jp.getSignature());

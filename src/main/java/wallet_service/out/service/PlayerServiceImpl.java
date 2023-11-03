@@ -23,16 +23,13 @@ public class PlayerServiceImpl {
         this.transactionRepository = transactionRepository;
     }
 
-
     public Player getPlayer(String username) {
         return playerRepository.findByUsername(username);
     }
 
-
     public void savePlayer(Player player) {
         playerRepository.save(player);
     }
-
 
     public void debitTransaction(String username, BigDecimal amount) {
         Player player = playerRepository.findByUsername(username);
@@ -41,14 +38,12 @@ public class PlayerServiceImpl {
         playerRepository.save(player);
     }
 
-
     public void creditTransaction(String username, BigDecimal amount) {
         Player player = playerRepository.findByUsername(username);
         BigDecimal newBalance = BigDecimal.valueOf(player.getBalance()).add(amount);
         player.setBalance(newBalance.intValue());
         playerRepository.save(player);
     }
-
 
     public List<Action> getPlayerActions(String username) {
         return actionRepository.findByUsername(username);

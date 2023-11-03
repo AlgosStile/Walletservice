@@ -23,7 +23,6 @@ public class Transaction {
     @Column(name = "type")
     private String type;
 
-
     @Column(name = "balance")
     private int balance;
 

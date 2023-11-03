@@ -8,10 +8,7 @@ import java.math.BigDecimal;
 
 @Repository
 public interface PlayerRepository extends JpaRepository<Player, Long> {
-
-
     Player findByUsername(String username);
-
 
     void updateBalanceByUsername(String username, BigDecimal balance);
 }

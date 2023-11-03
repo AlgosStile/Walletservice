@@ -14,12 +14,10 @@ import java.util.List;
 public class TransactionController {
     private final PlayerServiceImpl playerServiceImpl;
     private final TransactionRepository transactionRepository;
-
     public TransactionController(PlayerServiceImpl playerServiceImpl, PlayerRepository playerRepository, TransactionRepository transactionRepository) {
         this.playerServiceImpl = playerServiceImpl;
         this.transactionRepository = transactionRepository;
     }
-
 
     @PostMapping("/debit")
     public ResponseEntity<String> debitTransaction(@RequestParam String username, @RequestParam int id, @RequestParam double amount) {
@@ -31,7 +29,6 @@ public class TransactionController {
         }
     }
 
-
     @PostMapping("/credit")
     public ResponseEntity<String> creditTransaction(@RequestParam String username, @RequestParam int id, @RequestParam double amount) {
         try {
@@ -41,7 +38,6 @@ public class TransactionController {
             return ResponseEntity.badRequest().body("Ошибка при выполнении кредитной транзакции: " + e.getMessage());
         }
     }
-
 
     @GetMapping("/transactions/{username}")
     public ResponseEntity<List<Transaction>> getTransactionHistory(@PathVariable String username) {

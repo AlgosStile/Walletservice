@@ -19,7 +19,6 @@ public class Action {
     private String action;
     @Column(name = "detail")
     private String detail;
-
     public Action(int id, String username, String action, String detail) {
         this.id = id;
         this.username = username;
