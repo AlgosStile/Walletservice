@@ -11,10 +11,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 
-/**
- * Класс Config является конфигурационным классом для приложения Wallet Service.
- * Он используется для создания и настройки необходимых компонентов и бинов, а также для указания различных аннотаций и настроек для работы приложения.
- */
 @Configuration
 @EnableAspectJAutoProxy
 @EnableTransactionManagement
@@ -31,11 +27,6 @@ public class Config {
         this.dbPassword = dbPassword;
     }
 
-    /**
-     * Метод для создания и настройки DataSource для подключения к базе данных PostgreSQL.
-     *
-     * @return DataSource объект, представляющий подключение к базе данных.
-     */
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();

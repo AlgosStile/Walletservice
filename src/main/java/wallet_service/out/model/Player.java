@@ -4,10 +4,6 @@ import lombok.Getter;
 
 import javax.persistence.*;
 
-/**
- * Класс представляет сущность "Игрок".
- * Содержит информацию о игроке, такую как имя пользователя, пароль и баланс.
- */
 @Getter
 @Entity
 @Table(name = "players")
@@ -31,13 +27,6 @@ public class Player {
     public Player() {
     }
 
-    /**
-     * Конструктор класса Player с параметрами.
-     *
-     * @param username имя пользователя игрока
-     * @param password пароль игрока
-     * @param balance  баланс игрока
-     */
     public Player(String username, String password, int balance) {
         this.username = username;
         this.password = password;

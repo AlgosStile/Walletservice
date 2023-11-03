@@ -12,10 +12,6 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-/**
- * Класс SwaggerConfig является конфигурационным классом для настройки Swagger в приложении Wallet Service.
- * Он используется для создания и настройки объекта Docket, который предоставляет конфигурацию для Swagger.
- */
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig implements WebMvcConfigurer {
