@@ -35,7 +35,8 @@ public class PlayerServiceImpl {
         Player player = playerRepository.findByUsername(username);
         BigDecimal newBalance = BigDecimal.valueOf(player.getBalance()).subtract(amount);
         player.setBalance(newBalance.intValue());
-        playerRepository.savePlayer(player);
+        playerRepository.findByUsername(username);
+
     }
 
     public void creditTransaction(String username, BigDecimal amount) {
