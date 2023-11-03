@@ -28,21 +28,21 @@ public class PlayerServiceImpl {
     }
 
     public void savePlayer(Player player) {
-        playerRepository.save(player);
+        playerRepository.savePlayer(player);
     }
 
     public void debitTransaction(String username, BigDecimal amount) {
         Player player = playerRepository.findByUsername(username);
         BigDecimal newBalance = BigDecimal.valueOf(player.getBalance()).subtract(amount);
         player.setBalance(newBalance.intValue());
-        playerRepository.save(player);
+        playerRepository.savePlayer(player);
     }
 
     public void creditTransaction(String username, BigDecimal amount) {
         Player player = playerRepository.findByUsername(username);
         BigDecimal newBalance = BigDecimal.valueOf(player.getBalance()).add(amount);
         player.setBalance(newBalance.intValue());
-        playerRepository.save(player);
+        playerRepository.savePlayer(player);
     }
 
     public List<Action> getPlayerActions(String username) {
