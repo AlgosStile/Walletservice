@@ -1,5 +1,6 @@
 package wallet_service.out.repository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -10,7 +11,7 @@ import java.math.BigDecimal;
 @Repository
 public class PlayerRepository {
     private final JdbcTemplate jdbcTemplate;
-
+    @Autowired
     public PlayerRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }

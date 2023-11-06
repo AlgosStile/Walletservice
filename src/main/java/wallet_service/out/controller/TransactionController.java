@@ -14,14 +14,16 @@ import java.util.List;
 
 @RestController
 public class TransactionController {
-    private final PlayerServiceImpl playerServiceImpl;
+    private final PlayerRepository playerRepository;
     private final TransactionRepository transactionRepository;
+    private final PlayerServiceImpl playerServiceImpl;
+
 
     @Autowired
     public TransactionController(PlayerServiceImpl playerServiceImpl, PlayerRepository playerRepository, TransactionRepository transactionRepository) {
         this.playerServiceImpl = playerServiceImpl;
         this.transactionRepository = transactionRepository;
-    }
+        this.playerRepository = playerRepository;}
 
     @PostMapping("/debit")
     public ResponseEntity<String> debitTransaction(@RequestParam String username, @RequestParam int id, @RequestParam double amount) {

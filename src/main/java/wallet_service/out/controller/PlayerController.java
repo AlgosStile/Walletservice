@@ -1,8 +1,10 @@
 package wallet_service.out.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import wallet_service.out.model.Action;
 import wallet_service.out.model.Player;
+import wallet_service.out.repository.PlayerRepository;
 import wallet_service.out.service.PlayerServiceImpl;
 
 import java.math.BigDecimal;
@@ -10,20 +12,23 @@ import java.util.List;
 
 @RestController
 public class PlayerController {
-    private final PlayerServiceImpl playerServiceImpl;
 
-    public PlayerController(PlayerServiceImpl playerServiceImpl) {
+    private final PlayerRepository playerRepository;
+    private final PlayerServiceImpl playerServiceImpl;
+    @Autowired
+    public PlayerController(PlayerRepository playerRepository, PlayerServiceImpl playerServiceImpl) {
         this.playerServiceImpl = playerServiceImpl;
+        this.playerRepository = playerRepository;
     }
 
     @GetMapping("/{username}")
     public Player getPlayer(@PathVariable String username) {
-        return playerServiceImpl.getPlayer(username);
+        return playerRepository.findByUsername(username);
     }
 
     @PostMapping("/")
     public void savePlayer(@RequestBody Player player) {
-        playerServiceImpl.savePlayer(player);
+        playerRepository.savePlayer(player);
     }
 
     @PostMapping("/{username}/debit")

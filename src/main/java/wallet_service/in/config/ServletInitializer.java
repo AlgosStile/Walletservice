@@ -1,7 +1,8 @@
-package wallet_service;
+package wallet_service.in.config;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import wallet_service.WalletServiceApplication;
 
 public class ServletInitializer extends SpringBootServletInitializer {
 
@@ -9,5 +10,4 @@ public class ServletInitializer extends SpringBootServletInitializer {
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 		return application.sources(WalletServiceApplication.class);
 	}
-
 }

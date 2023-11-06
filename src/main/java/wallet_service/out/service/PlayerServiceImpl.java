@@ -14,9 +14,9 @@ import java.util.List;
 
 @Service
 public class PlayerServiceImpl {
-    private final PlayerRepository playerRepository;
     private final ActionRepository actionRepository;
     private final TransactionRepository transactionRepository;
+    private final PlayerRepository playerRepository;
 
     @Autowired
     public PlayerServiceImpl(PlayerRepository playerRepository, ActionRepository actionRepository, TransactionRepository transactionRepository) {
