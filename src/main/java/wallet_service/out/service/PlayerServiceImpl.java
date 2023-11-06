@@ -1,5 +1,6 @@
 package wallet_service.out.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import wallet_service.out.model.Action;
 import wallet_service.out.model.Player;
@@ -17,6 +18,7 @@ public class PlayerServiceImpl {
     private final ActionRepository actionRepository;
     private final TransactionRepository transactionRepository;
 
+    @Autowired
     public PlayerServiceImpl(PlayerRepository playerRepository, ActionRepository actionRepository, TransactionRepository transactionRepository) {
         this.playerRepository = playerRepository;
         this.actionRepository = actionRepository;

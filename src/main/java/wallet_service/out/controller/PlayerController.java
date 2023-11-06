@@ -1,5 +1,6 @@
 package wallet_service.out.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 import wallet_service.out.model.Action;
 import wallet_service.out.model.Player;
@@ -9,7 +10,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/player")
+@Tag(name = "Player")
 public class PlayerController {
     private final PlayerServiceImpl playerServiceImpl;
 

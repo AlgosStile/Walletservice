@@ -1,5 +1,7 @@
 package wallet_service.out.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,9 +13,12 @@ import wallet_service.out.service.PlayerServiceImpl;
 import java.util.List;
 
 @RestController
+@Tag(name = "Transaction")
 public class TransactionController {
     private final PlayerServiceImpl playerServiceImpl;
     private final TransactionRepository transactionRepository;
+
+    @Autowired
     public TransactionController(PlayerServiceImpl playerServiceImpl, PlayerRepository playerRepository, TransactionRepository transactionRepository) {
         this.playerServiceImpl = playerServiceImpl;
         this.transactionRepository = transactionRepository;
@@ -39,8 +44,8 @@ public class TransactionController {
         }
     }
 
-    @GetMapping("/transactions/{username}")
-    public ResponseEntity<List<Transaction>> getTransactionHistory(@PathVariable String username) {
+    @GetMapping("/transaction/history")
+    public ResponseEntity<List<Transaction>> getTransactionHistory(@RequestParam String username) {
         try {
             List<Transaction> transactions = playerServiceImpl.getTransactionHistory(username);
             return ResponseEntity.ok(transactions);

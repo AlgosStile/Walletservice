@@ -1,12 +1,14 @@
 package wallet_service.out.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Getter
 @Entity
 @Table(name = "actions")
+@NoArgsConstructor
 public class Action  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

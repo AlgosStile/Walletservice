@@ -21,7 +21,7 @@ public class TransactionRepository {
     }
 
     public List<Transaction> findByPlayerUsername(String username) {
-        String sql = "SELECT * FROM transactions WHERE player_username = ?";
+        String sql = "SELECT * FROM transactions WHERE username = ?";
         return jdbcTemplate.query(sql, new Object[]{username}, new BeanPropertyRowMapper<>(Transaction.class));
     }
 }
