@@ -1,6 +1,6 @@
 package wallet_service.out.controller;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +13,6 @@ import wallet_service.out.service.PlayerServiceImpl;
 import java.util.List;
 
 @RestController
-@Tag(name = "Transaction")
 public class TransactionController {
     private final PlayerServiceImpl playerServiceImpl;
     private final TransactionRepository transactionRepository;
