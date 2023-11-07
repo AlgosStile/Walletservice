@@ -12,35 +12,71 @@ import wallet_service.out.repository.TransactionRepository;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * Класс PlayerServiceImpl представляет сервис для управления данными игроков,
+ * включая действия, транзакции и профили.
+ *
+ * @Author Олег Тодор
+ */
 @Service
 public class PlayerServiceImpl {
     private final ActionRepository actionRepository;
     private final TransactionRepository transactionRepository;
     private final PlayerRepository playerRepository;
 
+    /**
+     * Конструктор класса PlayerServiceImpl.
+     *
+     * @param playerRepository      репозиторий для управления профилями игроков
+     * @param actionRepository      репозиторий для управления действиями игроков
+     * @param transactionRepository репозиторий для управления транзакциями игроков
+     */
     @Autowired
-    public PlayerServiceImpl(PlayerRepository playerRepository, ActionRepository actionRepository, TransactionRepository transactionRepository) {
+    public PlayerServiceImpl(PlayerRepository playerRepository, ActionRepository actionRepository,
+                             TransactionRepository transactionRepository) {
         this.playerRepository = playerRepository;
         this.actionRepository = actionRepository;
         this.transactionRepository = transactionRepository;
     }
 
+    /**
+     * Возвращает игрока по указанному имени пользователя.
+     *
+     * @param username имя пользователя
+     * @return объект игрока
+     */
     public Player getPlayer(String username) {
         return playerRepository.findByUsername(username);
     }
 
+    /**
+     * Сохраняет игрока в базе данных.
+     *
+     * @param player объект игрока, который нужно сохранить
+     */
     public void savePlayer(Player player) {
         playerRepository.savePlayer(player);
     }
 
+    /**
+     * Выполняет дебетовую транзакцию для указанного пользователя.
+     *
+     * @param username имя пользователя
+     * @param amount   сумма транзакции
+     */
     public void debitTransaction(String username, BigDecimal amount) {
         Player player = playerRepository.findByUsername(username);
         BigDecimal newBalance = BigDecimal.valueOf(player.getBalance()).subtract(amount);
         player.setBalance(newBalance.intValue());
         playerRepository.savePlayer(player);
-
     }
 
+    /**
+     * Выполняет кредитовую транзакцию для указанного пользователя.
+     *
+     * @param username имя пользователя
+     * @param amount   сумма транзакции
+     */
     public void creditTransaction(String username, BigDecimal amount) {
         Player player = playerRepository.findByUsername(username);
         BigDecimal newBalance = BigDecimal.valueOf(player.getBalance()).add(amount);
@@ -48,14 +84,33 @@ public class PlayerServiceImpl {
         playerRepository.savePlayer(player);
     }
 
+    /**
+     * Возвращает список действий игрока по указанному имени пользователя.
+     *
+     * @param username имя пользователя
+     * @return список действий игрока
+     */
     public List<Action> getPlayerActions(String username) {
         return actionRepository.findByUsername(username);
     }
 
+    /**
+     * Возвращает историю транзакций игрока по указанному имени пользователя.
+     *
+     * @param username имя пользователя
+     * @return список транзакций игрока
+     */
     public List<Transaction> getTransactionHistory(String username) {
         return transactionRepository.findByPlayerUsername(username);
     }
 
+    /**
+     * Выполняет дебетовую операцию для указанного пользователя с использованием идентификатора.
+     *
+     * @param username имя пользователя
+     * @param id       идентификатор операции
+     * @param amount   сумма операции
+     */
     public void debit(String username, int id, double amount) {
         Player player = playerRepository.findByUsername(username);
         BigDecimal newBalance = BigDecimal.valueOf(player.getBalance()).subtract(BigDecimal.valueOf(amount));
@@ -63,11 +118,17 @@ public class PlayerServiceImpl {
         playerRepository.savePlayer(player);
     }
 
+    /**
+     * Выполняет кредитовую операцию для указанного пользователя с использованием идентификатора.
+     *
+     * @param username имя пользователя
+     * @param id       идентификатор операции
+     * @param amount   сумма операции
+     */
     public void credit(String username, int id, double amount) {
         Player player = playerRepository.findByUsername(username);
         BigDecimal newBalance = BigDecimal.valueOf(player.getBalance()).add(BigDecimal.valueOf(amount));
         player.setBalance(newBalance.intValue());
         playerRepository.savePlayer(player);
-
     }
 }
