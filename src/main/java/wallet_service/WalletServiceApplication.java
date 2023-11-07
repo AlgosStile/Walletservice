@@ -4,7 +4,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
-
 /**
  * Класс WalletServiceApplication представляет главный класс приложения кошелька,
  * который использует фреймворк Spring Boot.
@@ -15,7 +14,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 @EnableAspectJAutoProxy
 public class WalletServiceApplication {
     /**
-     * Главный метод, запускающий приложение кошелька .
+     * Главный метод, запускающий приложение кошелька.
      *
      * @param args аргументы командной строки
      */
