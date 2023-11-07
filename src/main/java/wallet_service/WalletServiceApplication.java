@@ -15,7 +15,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 @EnableAspectJAutoProxy
 public class WalletServiceApplication {
     /**
-     * Главный метод, запускающий приложение кошелька.
+     * Главный метод, запускающий приложение кошелька .
      *
      * @param args аргументы командной строки
      */
