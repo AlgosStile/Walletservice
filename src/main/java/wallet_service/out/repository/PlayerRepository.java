@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 @Repository
 public class PlayerRepository {
     private final JdbcTemplate jdbcTemplate;
+
     @Autowired
     public PlayerRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;

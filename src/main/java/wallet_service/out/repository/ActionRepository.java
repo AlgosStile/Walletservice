@@ -1,13 +1,14 @@
 package wallet_service.out.repository;
 
+import lombok.Getter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import wallet_service.out.model.Action;
 
 import java.util.List;
-import java.util.zip.Checksum;
 
+@Getter
 @Repository
 public class ActionRepository {
     final JdbcTemplate jdbcTemplate;
@@ -26,13 +27,7 @@ public class ActionRepository {
         return jdbcTemplate.query(sql, new Object[]{username}, new BeanPropertyRowMapper<>(Action.class));
     }
 
-    public JdbcTemplate getJdbcTemplate() {
-        return jdbcTemplate;
-    }
-
     public void deleteAll() {
     }
 
-    public void save(Action action) {
-    }
 }
