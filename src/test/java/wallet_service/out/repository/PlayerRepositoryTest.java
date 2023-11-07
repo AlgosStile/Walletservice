@@ -1,6 +1,7 @@
 package wallet_service.out.repository;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -32,6 +33,7 @@ public class PlayerRepositoryTest {
     }
 
     @Test
+    @DisplayName("FindByUsername")
     public void testFindByUsername() {
         String username = "username";
         Player player = new Player(username, "password", BigDecimal.ZERO);
@@ -46,6 +48,7 @@ public class PlayerRepositoryTest {
     }
 
     @Test
+    @DisplayName("SavePlayer")
     public void testSavePlayer() {
         String username = "username";
         Player player = new Player(username, "password", 0); // изменено на 0
@@ -61,6 +64,7 @@ public class PlayerRepositoryTest {
     }
 
     @Test
+    @DisplayName("UpdateBalanceByUsername")
     public void testUpdateBalanceByUsername() {
         String username = "username";
         Player player = new Player(username, "password", BigDecimal.ZERO);

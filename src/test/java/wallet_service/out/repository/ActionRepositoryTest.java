@@ -1,6 +1,7 @@
 package wallet_service.out.repository;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -32,6 +33,7 @@ public class ActionRepositoryTest {
     }
 
     @Test
+    @DisplayName("Test save action")
     public void testSaveAction() {
         Action action = new Action(1, "username", "action", "detail");
         jdbcTemplate.update("INSERT INTO players (username, password, balance) VALUES (?, ?, ?)", "username", "password", 0);
@@ -46,6 +48,7 @@ public class ActionRepositoryTest {
     }
 
     @Test
+    @DisplayName("FindByUsername_WithNoMatchingActions")
     public void testFindByUsername_WithNoMatchingActions() {
         String username = "nonexistent";
 
@@ -55,6 +58,7 @@ public class ActionRepositoryTest {
     }
 
     @Test
+    @DisplayName("FindByUsername_WithMultipleMatchingActions")
     public void testFindByUsername_WithMultipleMatchingActions() {
         jdbcTemplate.update("INSERT INTO players (username, password, balance) VALUES (?, ?, ?)", "username", "password", 0);
 
