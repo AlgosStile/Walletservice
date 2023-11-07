@@ -1,31 +1,71 @@
 package wallet_service.out.repository;
 
-import org.junit.jupiter.api.DisplayName;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.ActiveProfiles;
 import wallet_service.out.model.Transaction;
-import wallet_service.out.repository.TransactionRepository;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@ActiveProfiles("test")
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Import(TransactionRepository.class)
 public class TransactionRepositoryTest {
 
     @Autowired
     private TransactionRepository transactionRepository;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @BeforeEach
+    public void setup() {
+        clearTransactions();
+    }
 
     @Test
-    @DisplayName("Test save transaction")
     public void testSaveTransaction() {
-        Transaction transaction = new Transaction(100.0, "type", 500);
+        String username = "username";
+
+        jdbcTemplate.update("INSERT INTO players (username, password, balance) VALUES (?, ?, ?)",
+                username, "password", 100);
+
+        Transaction transaction = new Transaction(username, 2.0, "DEBIT", 0);
+
         transactionRepository.saveTransaction(transaction);
-        List<Transaction> transactions = transactionRepository.findByPlayerUsername("username");
-        assertEquals(1, transactions.size());
-        assertEquals(100.0, transactions.get(0).getAmount());
-        assertEquals("type", transactions.get(0).getType());
-        assertEquals(500, transactions.get(0).getBalance());
+
+        Transaction savedTransaction = retrieveTransactionByUsername(username);
+
+        assertNotNull(savedTransaction);
+        assertEquals(username, savedTransaction.getUsername());
+        assertEquals(2.0, savedTransaction.getAmount());
+        assertEquals("DEBIT", savedTransaction.getType());
+        assertEquals(0, savedTransaction.getBalance());
+    }
+
+    private Transaction retrieveTransactionByUsername(String username) {
+        return jdbcTemplate.queryForObject(
+                "SELECT * FROM transactions WHERE username = ?",
+                new Object[]{username},
+                (resultSet, rowNum) -> new Transaction(
+                        resultSet.getString("username"),
+                        resultSet.getDouble("amount"),
+                        resultSet.getString("type"),
+                        resultSet.getInt("balance")
+                )
+        );
+    }
+
+    private void clearTransactions() {
+        jdbcTemplate.update("DELETE FROM transactions");
     }
 }

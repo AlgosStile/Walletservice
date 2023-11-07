@@ -45,7 +45,12 @@
 
         </createTable>
     </changeSet>
-    <changeSet id="007-add-status-to-player" author="YourName">
+    <changeSet id="007-add-status-to-player" author="Algosstile">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="players" columnName="status"/>
+            </not>
+        </preConditions>
         <sql>
             SET search_path TO wallet;
         </sql>
@@ -67,7 +72,7 @@
             <column name="username" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="amount" type="double">
+            <column name="amount" type="decimal">
                 <constraints nullable="false"/>
             </column>
             <column name="type" type="varchar(255)">
@@ -76,7 +81,6 @@
             <column name="balance" type="int">
                 <constraints nullable="false"/>
             </column>
-
         </createTable>
         <addForeignKeyConstraint constraintName="fk_transaction_player"
                                  baseTableName="transactions" baseColumnNames="username"
@@ -104,14 +108,14 @@
         </createTable>
     </changeSet>
 
-<!--    убрать эту часть кода>>>>>>>>>>>>>>>>>>>>>>-->
+
         <changeSet id="006-add-fk-action-player" author="Algosstile">
-            <!-- Ваш код для связи actions с таблицей players -->
+
             <addForeignKeyConstraint constraintName="fk_action_player"
                                      baseTableName="actions" baseColumnNames="username"
                                      referencedTableName="players"
                                      referencedColumnNames="username" />
-<!--    убрать эту часть кода^^^^^^^^^^^^^^^^^^^^^^^^^-->
+
 
     </changeSet>
 

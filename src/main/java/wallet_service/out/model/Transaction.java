@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Setter
 @Getter
@@ -17,6 +18,9 @@ public class Transaction {
     @Column(name = "id")
     private int id;
 
+    @Column(name = "username")
+    private String username;
+
     @Column(name = "amount")
     private double amount;
 
@@ -26,9 +30,14 @@ public class Transaction {
     @Column(name = "balance")
     private int balance;
 
-    public Transaction(double amount, String type, int balance) {
+    public Transaction(String username, double amount, String type, int balance) {
+        this.username = username;
         this.amount = amount;
         this.type = type;
         this.balance = balance;
+
+
     }
+
+
 }

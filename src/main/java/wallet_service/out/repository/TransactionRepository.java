@@ -16,12 +16,14 @@ public class TransactionRepository {
     }
 
     public void saveTransaction(Transaction transaction) {
-        String sql = "INSERT INTO transactions (amount, type, balance) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, transaction.getAmount(), transaction.getType(), transaction.getBalance());
+        String sql = "INSERT INTO transactions (username, amount, type, balance) VALUES (?, ?, ?, ?)";
+        jdbcTemplate.update(sql, transaction.getUsername(), transaction.getAmount(), transaction.getType(), transaction.getBalance());
     }
 
     public List<Transaction> findByPlayerUsername(String username) {
         String sql = "SELECT * FROM transactions WHERE username = ?";
         return jdbcTemplate.query(sql, new Object[]{username}, new BeanPropertyRowMapper<>(Transaction.class));
     }
+
+
 }
