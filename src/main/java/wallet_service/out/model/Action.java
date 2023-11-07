@@ -2,9 +2,11 @@ package wallet_service.out.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
+@Setter
 @Getter
 @Entity
 @Table(name = "actions")

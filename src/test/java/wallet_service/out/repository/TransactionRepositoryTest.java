@@ -1,5 +1,6 @@
 package wallet_service.out.repository;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -17,6 +18,7 @@ public class TransactionRepositoryTest {
     private TransactionRepository transactionRepository;
 
     @Test
+    @DisplayName("Test save transaction")
     public void testSaveTransaction() {
         Transaction transaction = new Transaction(100.0, "type", 500);
         transactionRepository.saveTransaction(transaction);

@@ -1,4 +1,5 @@
 package wallet_service.out.repository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -17,6 +18,7 @@ public class PlayerRepositoryTest {
     private PlayerRepository playerRepository;
 
     @Test
+    @DisplayName("Test save player")
     public void testFindByUsername() {
         Player player = new Player("username", "password", 100);
         playerRepository.savePlayer(player);

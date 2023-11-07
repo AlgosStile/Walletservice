@@ -1,5 +1,6 @@
 package wallet_service.out.service;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -34,6 +35,7 @@ public class PlayerServiceImplTest {
     private PlayerServiceImpl playerService;
 
     @Test
+    @DisplayName("Test get player")
     public void testGetPlayer() {
         Player player = new Player("username", "password", 100);
         when(playerRepository.findByUsername("username")).thenReturn(player);
@@ -45,6 +47,7 @@ public class PlayerServiceImplTest {
     }
 
     @Test
+    @DisplayName("Test save player")
     public void testSavePlayer() {
         Player player = new Player("username", "password", 100);
         playerService.savePlayer(player);
@@ -52,6 +55,7 @@ public class PlayerServiceImplTest {
     }
 
     @Test
+    @DisplayName("Test update balance")
     public void testDebitTransaction() {
         Player player = new Player("username", "password", 100);
         when(playerRepository.findByUsername("username")).thenReturn(player);
@@ -64,6 +68,7 @@ public class PlayerServiceImplTest {
     }
 
     @Test
+    @DisplayName("Test credit transaction")
     public void testCreditTransaction() {
         Player player = new Player("username", "password", 100);
         when(playerRepository.findByUsername("username")).thenReturn(player);
@@ -76,6 +81,7 @@ public class PlayerServiceImplTest {
     }
 
     @Test
+    @DisplayName("Test get player actions")
     public void testGetPlayerActions() {
         Action action = new Action(1, "username", "action", "detail");
         when(actionRepository.findByUsername("username")).thenReturn(Arrays.asList(action));
@@ -90,6 +96,7 @@ public class PlayerServiceImplTest {
     }
 
     @Test
+    @DisplayName("Test get transaction history")
     public void testGetTransactionHistory() {
         Transaction transaction = new Transaction(100.0, "type", 500);
         when(transactionRepository.findByPlayerUsername("username")).thenReturn(Arrays.asList(transaction));

@@ -6,10 +6,11 @@ import org.springframework.stereotype.Repository;
 import wallet_service.out.model.Action;
 
 import java.util.List;
+import java.util.zip.Checksum;
 
 @Repository
 public class ActionRepository {
-    private final JdbcTemplate jdbcTemplate;
+    final JdbcTemplate jdbcTemplate;
 
     public ActionRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -23,5 +24,15 @@ public class ActionRepository {
     public List<Action> findByUsername(String username) {
         String sql = "SELECT * FROM actions WHERE username = ?";
         return jdbcTemplate.query(sql, new Object[]{username}, new BeanPropertyRowMapper<>(Action.class));
+    }
+
+    public JdbcTemplate getJdbcTemplate() {
+        return jdbcTemplate;
+    }
+
+    public void deleteAll() {
+    }
+
+    public void save(Action action) {
     }
 }
