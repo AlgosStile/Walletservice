@@ -1,4 +1,4 @@
-package wallet_service.out.audit_logging_starter;
+package org.example;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

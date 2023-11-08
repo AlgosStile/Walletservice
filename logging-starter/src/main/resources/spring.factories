@@ -1,0 +1,3 @@
+# src/audit_aspect/spring.factories
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.example.audit.autoconfigure.AuditAutoConfiguration
