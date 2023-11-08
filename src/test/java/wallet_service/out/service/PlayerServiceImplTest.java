@@ -1,19 +1,22 @@
-package wallet_service.out.service;
+package test.java.wallet_service.out.service;
 
+import main.java.org.wallet_service.out.model.Action;
+import main.java.org.wallet_service.out.model.Player;
+import main.java.org.wallet_service.out.model.Transaction;
+import main.java.org.wallet_service.out.repository.ActionRepository;
+import main.java.org.wallet_service.out.repository.PlayerRepository;
+import main.java.org.wallet_service.out.repository.TransactionRepository;
+import main.java.org.wallet_service.out.service.PlayerServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import wallet_service.out.model.Action;
-import wallet_service.out.model.Player;
-import wallet_service.out.model.Transaction;
-import wallet_service.out.repository.ActionRepository;
-import wallet_service.out.repository.PlayerRepository;
-import wallet_service.out.repository.TransactionRepository;
+
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -25,6 +28,7 @@ public class PlayerServiceImplTest {
     @Mock
     private TransactionRepository transactionRepository;
     private PlayerServiceImpl playerService;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);

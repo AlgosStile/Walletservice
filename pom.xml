@@ -12,7 +12,7 @@
     <groupId>wallet_service</groupId>
     <artifactId>Walletservice</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>pom</packaging>
     <name>Walletservice</name>
     <description>Walletservice</description>
 
@@ -36,10 +36,13 @@
         <springdoc-openapi-common>1.7.0</springdoc-openapi-common>
         <springdoc-openapi-webmvc-core>1.7.0</springdoc-openapi-webmvc-core>
         <springdoc-openapi-starter-webmvc-ui>2.1.0</springdoc-openapi-starter-webmvc-ui>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
 
 
     </properties>
     <dependencies>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
@@ -47,10 +50,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -149,12 +148,38 @@
             <version>4.0.1</version>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>audit-starter</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>logging-starter</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-test-autoconfigure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+        </dependency>
         <dependency>
             <groupId>wallet_service</groupId>
             <artifactId>Walletservice</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
-
 
     </dependencies>
 
@@ -172,9 +197,27 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <nonFilteredFileExtensions>
+                        <nonFilteredFileExtension>xml</nonFilteredFileExtension>
+                    </nonFilteredFileExtensions>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <repositories>
+        <repository>
+            <id>local-audit-starter</id>
+            <url>file://${project.basedir}/../audit-starter</url>
+        </repository>
+        <repository>
+            <id>local-logging-starter</id>
+            <url>file://${project.basedir}/../logging-starter</url>
+        </repository>
         <repository>
             <id>spring-milestones</id>
             <name>Spring Milestones</name>
