@@ -3,8 +3,6 @@ package main.java.org.wallet_service;
 import org.example.EnableLogging;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-
 /**
  * Входная точка для приложения основанного на Spring Boot, называемого "WalletService".
  * Этот сервис является частью пакета main.java.org.wallet_service.
