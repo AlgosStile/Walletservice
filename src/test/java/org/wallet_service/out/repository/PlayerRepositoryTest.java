@@ -1,4 +1,4 @@
-package test.java.wallet_service.out.repository;
+package test.java.org.wallet_service.out.repository;
 
 import main.java.org.wallet_service.out.repository.PlayerRepository;
 import org.junit.jupiter.api.BeforeEach;

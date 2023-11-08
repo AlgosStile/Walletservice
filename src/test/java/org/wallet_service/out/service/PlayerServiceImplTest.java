@@ -1,4 +1,4 @@
-package test.java.wallet_service.out.service;
+package test.java.org.wallet_service.out.service;
 
 import main.java.org.wallet_service.out.model.Action;
 import main.java.org.wallet_service.out.model.Player;
