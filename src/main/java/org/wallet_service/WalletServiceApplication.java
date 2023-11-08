@@ -1,5 +1,6 @@
 package main.java.org.wallet_service;
 
+import org.example.EnableLogging;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -12,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @version 5.0
  */
 @SpringBootApplication
+@EnableLogging
 public class WalletServiceApplication {
     /**
      * Основной метод для запуска приложения.

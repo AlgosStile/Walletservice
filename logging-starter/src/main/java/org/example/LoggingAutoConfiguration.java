@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ConditionalOnClass(LoggingAspect.class)
-@ConditionalOnProperty(name = "logging.enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(name = "app.logging.enabled", havingValue = "true", matchIfMissing = true)
 public class LoggingAutoConfiguration {
 
     @Bean
@@ -16,5 +16,6 @@ public class LoggingAutoConfiguration {
     }
 
 }
+
 
 

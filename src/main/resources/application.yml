@@ -1,13 +1,16 @@
 spring:
   liquibase:
     enabled: true
-    change-log: classpath:db/changelog/db.changelog-master.xml
+    change-log: classpath:src/main/resources/db/changelog/db.changelog-master.xml
     default-schema: wallet
   datasource:
     url: jdbc:postgresql://localhost:5432/wallet_db?currentSchema=wallet
     username: postgres
     password: wallet
     driver-class-name: org.postgresql.Driver
+  app:
+    logging:
+      enabled: true
 
 
 
