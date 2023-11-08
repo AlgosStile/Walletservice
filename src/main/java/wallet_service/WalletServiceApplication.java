@@ -1,4 +1,4 @@
-package wallet_service;
+package main.java.wallet_service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

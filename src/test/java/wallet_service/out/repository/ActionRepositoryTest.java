@@ -1,5 +1,6 @@
-package wallet_service.out.repository;
+package test.java.wallet_service.out.repository;
 
+import main.java.wallet_service.out.repository.ActionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
-import wallet_service.out.model.Action;
+import main.java.wallet_service.out.model.Action;
 
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class ActionRepositoryTest {
 
         actionRepository.saveAction(action);
 
-        List<Action> actions = actionRepository.findByUsername("username");
+        List<Action> actions = (List<Action>) actionRepository.findByUsername("username");
 
         assertEquals(1, actions.size());
         assertEquals("action", actions.get(0).getAction());
@@ -52,7 +53,7 @@ public class ActionRepositoryTest {
     public void testFindByUsername_WithNoMatchingActions() {
         String username = "nonexistent";
 
-        List<Action> actions = actionRepository.findByUsername(username);
+        List<Action> actions = (List<Action>) actionRepository.findByUsername(username);
 
         assertEquals(0, actions.size());
     }
@@ -70,7 +71,7 @@ public class ActionRepositoryTest {
         actionRepository.saveAction(action2);
         actionRepository.saveAction(action3);
 
-        List<Action> actions = actionRepository.findByUsername("username");
+        List<Action> actions = (List<Action>) actionRepository.findByUsername("username");
 
         assertEquals(3, actions.size());
         assertEquals("action1", actions.get(0).getAction());

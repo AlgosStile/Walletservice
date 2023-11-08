@@ -1,5 +1,6 @@
-package wallet_service.out.repository;
+package test.java.wallet_service.out.repository;
 
+import main.java.wallet_service.out.repository.PlayerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
-import wallet_service.out.model.Player;
+import main.java.wallet_service.out.model.Player;
 
 import java.math.BigDecimal;
 
@@ -39,7 +40,7 @@ public class PlayerRepositoryTest {
         Player player = new Player(username, "password", BigDecimal.ZERO);
         jdbcTemplate.update("INSERT INTO players (username, password, balance) VALUES (?, ?, ?)", username, "password", BigDecimal.ZERO);
 
-        Player foundPlayer = playerRepository.findByUsername(username);
+        Player foundPlayer = (Player) playerRepository.findByUsername(username);
 
         assertNotNull(foundPlayer);
         assertEquals(username, foundPlayer.getUsername());
@@ -55,7 +56,7 @@ public class PlayerRepositoryTest {
 
         playerRepository.savePlayer(player);
 
-        Player savedPlayer = playerRepository.findByUsername(username);
+        Player savedPlayer = (Player) playerRepository.findByUsername(username);
 
         assertNotNull(savedPlayer);
         assertEquals(username, savedPlayer.getUsername());
@@ -72,7 +73,7 @@ public class PlayerRepositoryTest {
 
         playerRepository.updateBalanceByUsername(username, BigDecimal.TEN);
 
-        Player updatedPlayer = playerRepository.findByUsername(username);
+        Player updatedPlayer = (Player) playerRepository.findByUsername(username);
 
         assertNotNull(updatedPlayer);
         assertEquals(username, updatedPlayer.getUsername());

@@ -1,11 +1,10 @@
-package wallet_service.out.repository;
+package main.java.wallet_service.out.repository;
 
+import main.java.wallet_service.out.model.Transaction;
+import org.reactivestreams.Publisher;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import wallet_service.out.model.Transaction;
-
-import java.util.List;
 
 /**
  * Класс TransactionRepository представляет репозиторий для управления данными транзакций,
@@ -42,8 +41,8 @@ public class TransactionRepository {
      * @param username имя пользователя
      * @return список транзакций, связанных с указанным именем пользователя
      */
-    public List<Transaction> findByPlayerUsername(String username) {
+    public Publisher<?> findByPlayerUsername(String username) {
         String sql = "SELECT * FROM transactions WHERE username = ?";
-        return jdbcTemplate.query(sql, new Object[]{username}, new BeanPropertyRowMapper<>(Transaction.class));
+        return (Publisher<?>) jdbcTemplate.query(sql, new Object[]{username}, new BeanPropertyRowMapper<>(Transaction.class));
     }
 }

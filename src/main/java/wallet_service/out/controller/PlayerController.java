@@ -1,11 +1,11 @@
-package wallet_service.out.controller;
+package main.java.wallet_service.out.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import wallet_service.out.model.Action;
-import wallet_service.out.model.Player;
-import wallet_service.out.repository.PlayerRepository;
-import wallet_service.out.service.PlayerServiceImpl;
+import main.java.wallet_service.out.model.Action;
+import main.java.wallet_service.out.model.Player;
+import main.java.wallet_service.out.repository.PlayerRepository;
+import main.java.wallet_service.out.service.PlayerServiceImpl;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -41,7 +41,7 @@ public class PlayerController {
      */
     @GetMapping("/{username}")
     public Player getPlayer(@PathVariable String username) {
-        return playerRepository.findByUsername(username);
+        return (Player) playerRepository.findByUsername(username);
     }
 
     /**

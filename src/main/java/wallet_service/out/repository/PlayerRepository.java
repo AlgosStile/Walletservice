@@ -1,10 +1,11 @@
-package wallet_service.out.repository;
+package main.java.wallet_service.out.repository;
 
+import org.reactivestreams.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import wallet_service.out.model.Player;
+import main.java.wallet_service.out.model.Player;
 
 import java.math.BigDecimal;
 
@@ -34,9 +35,9 @@ public class PlayerRepository {
      * @param username имя пользователя
      * @return объект игрока, соответствующий указанному имени пользователя
      */
-    public Player findByUsername(String username) {
+    public Publisher<?> findByUsername(String username) {
         String sql = "SELECT * FROM players WHERE username = ?";
-        return jdbcTemplate.queryForObject(sql, new Object[]{username}, new BeanPropertyRowMapper<>(Player.class));
+        return (Publisher<?>) jdbcTemplate.queryForObject(sql, new Object[]{username}, new BeanPropertyRowMapper<>(Player.class));
     }
 
     /**

@@ -36,6 +36,8 @@
         <springdoc-openapi-common>1.7.0</springdoc-openapi-common>
         <springdoc-openapi-webmvc-core>1.7.0</springdoc-openapi-webmvc-core>
         <springdoc-openapi-starter-webmvc-ui>2.1.0</springdoc-openapi-starter-webmvc-ui>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
 
 
     </properties>
@@ -157,6 +159,22 @@
             <artifactId>logging-starter</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-test-autoconfigure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+        </dependency>
 
     </dependencies>
 
@@ -177,6 +195,14 @@
         </plugins>
     </build>
     <repositories>
+        <repository>
+            <id>local-audit-starter</id>
+            <url>file://${project.basedir}/../audit-starter</url>
+        </repository>
+        <repository>
+            <id>local-logging-starter</id>
+            <url>file://${project.basedir}/../logging-starter</url>
+        </repository>
         <repository>
             <id>spring-milestones</id>
             <name>Spring Milestones</name>

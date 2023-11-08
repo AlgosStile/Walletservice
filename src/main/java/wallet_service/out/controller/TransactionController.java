@@ -1,4 +1,4 @@
-package wallet_service.out.controller;
+package main.java.wallet_service.out.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import wallet_service.out.model.Transaction;
-import wallet_service.out.repository.PlayerRepository;
-import wallet_service.out.repository.TransactionRepository;
-import wallet_service.out.service.PlayerServiceImpl;
+import main.java.wallet_service.out.model.Transaction;
+import main.java.wallet_service.out.repository.PlayerRepository;
+import main.java.wallet_service.out.repository.TransactionRepository;
+import main.java.wallet_service.out.service.PlayerServiceImpl;
 
 import java.util.List;
 

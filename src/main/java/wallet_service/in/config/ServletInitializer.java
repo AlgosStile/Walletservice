@@ -1,8 +1,8 @@
-package wallet_service.in.config;
+package main.java.wallet_service.in.config;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import wallet_service.WalletServiceApplication;
+import main.java.wallet_service.WalletServiceApplication;
 
 /**
  * Класс ServletInitializer является наследником класса SpringBootServletInitializer

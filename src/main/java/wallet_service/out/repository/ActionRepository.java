@@ -1,12 +1,11 @@
-package wallet_service.out.repository;
+package main.java.wallet_service.out.repository;
 
 import lombok.Getter;
+import org.reactivestreams.Publisher;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import wallet_service.out.model.Action;
-
-import java.util.List;
+import main.java.wallet_service.out.model.Action;
 
 /**
  * Класс ActionRepository представляет репозиторий для управления действиями,
@@ -44,9 +43,9 @@ public class ActionRepository {
      * @param username имя пользователя
      * @return список действий, связанных с указанным именем пользователя
      */
-    public List<Action> findByUsername(String username) {
+    public Publisher<?> findByUsername(String username) {
         String sql = "SELECT * FROM actions WHERE username = ?";
-        return jdbcTemplate.query(sql, new Object[]{username}, new BeanPropertyRowMapper<>(Action.class));
+        return (Publisher<?>) jdbcTemplate.query(sql, new Object[]{username}, new BeanPropertyRowMapper<>(Action.class));
     }
 
     /**

@@ -1,4 +1,4 @@
-package wallet_service.out.model;
+package main.java.wallet_service.out.model;
 
 import lombok.Getter;
 import lombok.Setter;

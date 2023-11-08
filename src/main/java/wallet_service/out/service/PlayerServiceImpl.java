@@ -1,13 +1,13 @@
-package wallet_service.out.service;
+package main.java.wallet_service.out.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import wallet_service.out.model.Action;
-import wallet_service.out.model.Player;
-import wallet_service.out.model.Transaction;
-import wallet_service.out.repository.ActionRepository;
-import wallet_service.out.repository.PlayerRepository;
-import wallet_service.out.repository.TransactionRepository;
+import main.java.wallet_service.out.model.Action;
+import main.java.wallet_service.out.model.Player;
+import main.java.wallet_service.out.model.Transaction;
+import main.java.wallet_service.out.repository.ActionRepository;
+import main.java.wallet_service.out.repository.PlayerRepository;
+import main.java.wallet_service.out.repository.TransactionRepository;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -46,7 +46,7 @@ public class PlayerServiceImpl {
      * @return объект игрока
      */
     public Player getPlayer(String username) {
-        return playerRepository.findByUsername(username);
+        return (Player) playerRepository.findByUsername(username);
     }
 
     /**
@@ -65,7 +65,7 @@ public class PlayerServiceImpl {
      * @param amount   сумма транзакции
      */
     public void debitTransaction(String username, BigDecimal amount) {
-        Player player = playerRepository.findByUsername(username);
+        Player player = (Player) playerRepository.findByUsername(username);
         BigDecimal newBalance = BigDecimal.valueOf(player.getBalance()).subtract(amount);
         player.setBalance(newBalance.intValue());
         playerRepository.savePlayer(player);
@@ -78,7 +78,7 @@ public class PlayerServiceImpl {
      * @param amount   сумма транзакции
      */
     public void creditTransaction(String username, BigDecimal amount) {
-        Player player = playerRepository.findByUsername(username);
+        Player player = (Player) playerRepository.findByUsername(username);
         BigDecimal newBalance = BigDecimal.valueOf(player.getBalance()).add(amount);
         player.setBalance(newBalance.intValue());
         playerRepository.savePlayer(player);
@@ -91,7 +91,7 @@ public class PlayerServiceImpl {
      * @return список действий игрока
      */
     public List<Action> getPlayerActions(String username) {
-        return actionRepository.findByUsername(username);
+        return (List<Action>) actionRepository.findByUsername(username);
     }
 
     /**
@@ -101,7 +101,7 @@ public class PlayerServiceImpl {
      * @return список транзакций игрока
      */
     public List<Transaction> getTransactionHistory(String username) {
-        return transactionRepository.findByPlayerUsername(username);
+        return (List<Transaction>) transactionRepository.findByPlayerUsername(username);
     }
 
     /**
@@ -112,7 +112,7 @@ public class PlayerServiceImpl {
      * @param amount   сумма операции
      */
     public void debit(String username, int id, double amount) {
-        Player player = playerRepository.findByUsername(username);
+        Player player = (Player) playerRepository.findByUsername(username);
         BigDecimal newBalance = BigDecimal.valueOf(player.getBalance()).subtract(BigDecimal.valueOf(amount));
         player.setBalance(newBalance.intValue());
         playerRepository.savePlayer(player);
@@ -126,7 +126,7 @@ public class PlayerServiceImpl {
      * @param amount   сумма операции
      */
     public void credit(String username, int id, double amount) {
-        Player player = playerRepository.findByUsername(username);
+        Player player = (Player) playerRepository.findByUsername(username);
         BigDecimal newBalance = BigDecimal.valueOf(player.getBalance()).add(BigDecimal.valueOf(amount));
         player.setBalance(newBalance.intValue());
         playerRepository.savePlayer(player);
