@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuditAspect {
 
-    @Around("execution(* wallet_service.out.controller.*.*(..))")
+    @Around("execution(* org.wallet_service.out.controller.*.*(..))")
     public Object auditAndExecutionTimeAdvice(ProceedingJoinPoint jp) throws Throwable {
 
         System.out.println("Аудит выполнен. Изменение в: " + jp.getSignature());

@@ -10,10 +10,10 @@ import org.springframework.context.annotation.Configuration;
  * @author Олег Тодор
  */
 @Configuration
-public class LoggingConfig {
+public class LoggingAspect {
 
     @Bean
-    public LoggingConfig auditAndExecutionTimeAdvice() {
-        return new LoggingConfig();
+    public LoggingAspect auditAndExecutionTimeAdvice() {
+        return new LoggingAspect();
     }
 }
