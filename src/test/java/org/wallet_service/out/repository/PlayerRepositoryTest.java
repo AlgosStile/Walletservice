@@ -1,87 +1,69 @@
 package test.java.org.wallet_service.out.repository;
 
+
+import main.java.org.wallet_service.out.model.Player;
 import main.java.org.wallet_service.out.repository.PlayerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
+import org.mockito.ArgumentCaptor;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.context.ActiveProfiles;
-import main.java.org.wallet_service.out.model.Player;
 
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.*;
 
-@ActiveProfiles("test")
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Import(PlayerRepository.class)
-public class PlayerRepositoryTest {
+class PlayerRepositoryTest {
 
-    @Autowired
-    private PlayerRepository playerRepository;
-    @Autowired
     private JdbcTemplate jdbcTemplate;
+    private PlayerRepository playerRepository;
 
     @BeforeEach
-    public void setup() {
-        clearPlayers();
+    void setUp() {
+        jdbcTemplate = mock(JdbcTemplate.class);
+        playerRepository = new PlayerRepository(jdbcTemplate);
     }
 
     @Test
-    @DisplayName("FindByUsername")
-    public void testFindByUsername() {
-        String username = "username";
-        Player player = new Player(username, "password", BigDecimal.ZERO);
-        jdbcTemplate.update("INSERT INTO players (username, password, balance) VALUES (?, ?, ?)", username, "password", BigDecimal.ZERO);
+    @DisplayName("Find player by username")
+    void findByUsername() {
+        String username = "player1";
+        playerRepository.findByUsername(username);
 
-        Player foundPlayer = playerRepository.findByUsername(username);
-
-        assertNotNull(foundPlayer);
-        assertEquals(username, foundPlayer.getUsername());
-        assertEquals("password", foundPlayer.getPassword());
-        assertEquals(BigDecimal.ZERO, new BigDecimal(foundPlayer.getBalance()));
+        verify(jdbcTemplate, times(1)).queryForObject(anyString(), any(), any(BeanPropertyRowMapper.class));
     }
 
     @Test
-    @DisplayName("SavePlayer")
-    public void testSavePlayer() {
-        String username = "username";
-        Player player = new Player(username, "password", 0); // изменено на 0
-
+    @DisplayName("Save player")
+    void savePlayer() {
+        Player player = new Player();
+        player.setUsername("player1");
+        player.setPassword("password");
         playerRepository.savePlayer(player);
 
-        Player savedPlayer = playerRepository.findByUsername(username);
+        ArgumentCaptor<Object[]> argumentCaptor = ArgumentCaptor.forClass(Object[].class);
+        verify(jdbcTemplate, times(1)).update(anyString(), argumentCaptor.capture());
+        Object[] capturedArgs = argumentCaptor.getValue();
 
-        assertNotNull(savedPlayer);
-        assertEquals(username, savedPlayer.getUsername());
-        assertEquals("password", savedPlayer.getPassword());
-        assertEquals(0, savedPlayer.getBalance()); // изменено на 0
+        assertEquals(player.getUsername(), capturedArgs[0]);
+        assertEquals(player.getPassword(), capturedArgs[1]);
+        assertEquals(player.getBalance(), capturedArgs[2]);
     }
 
     @Test
-    @DisplayName("UpdateBalanceByUsername")
-    public void testUpdateBalanceByUsername() {
-        String username = "username";
-        Player player = new Player(username, "password", BigDecimal.ZERO);
-        jdbcTemplate.update("INSERT INTO players (username, password, balance) VALUES (?, ?, ?)", username, "password", BigDecimal.ZERO);
+    void updateBalanceByUsername() {
+        String username = "player1";
+        BigDecimal balance = BigDecimal.TEN;
 
-        playerRepository.updateBalanceByUsername(username, BigDecimal.TEN);
+        playerRepository.updateBalanceByUsername(username, balance);
 
-        Player updatedPlayer = playerRepository.findByUsername(username);
+        ArgumentCaptor<Object[]> argumentCaptor = ArgumentCaptor.forClass(Object[].class);
+        verify(jdbcTemplate, times(1)).update(anyString(), argumentCaptor.capture());
+        Object[] capturedArgs = argumentCaptor.getValue();
 
-        assertNotNull(updatedPlayer);
-        assertEquals(username, updatedPlayer.getUsername());
-        assertEquals("password", updatedPlayer.getPassword());
-        assertEquals(BigDecimal.TEN, new BigDecimal(updatedPlayer.getBalance()));
-    }
-
-    private void clearPlayers() {
-        jdbcTemplate.update("DELETE FROM players");
+        assertEquals(balance, capturedArgs[0]);
+        assertEquals(username, capturedArgs[1]);
     }
 }

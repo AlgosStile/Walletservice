@@ -64,4 +64,8 @@ public class Transaction {
         this.type = type;
         this.balance = balance;
     }
+
+    public Transaction() {
+
+    }
 }
