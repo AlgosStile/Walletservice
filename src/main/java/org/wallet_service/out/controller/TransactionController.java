@@ -1,5 +1,7 @@
 package main.java.org.wallet_service.out.controller;
 
+import main.java.org.wallet_service.out.model.Transaction;
+import main.java.org.wallet_service.out.service.PlayerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -7,10 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import main.java.org.wallet_service.out.model.Transaction;
-import main.java.org.wallet_service.out.repository.PlayerRepository;
-import main.java.org.wallet_service.out.repository.TransactionRepository;
-import main.java.org.wallet_service.out.service.PlayerServiceImpl;
 
 import java.util.List;
 
@@ -29,7 +27,7 @@ public class TransactionController {
     /**
      * Конструктор класса TransactionController.
      *
-     * @param playerServiceImpl     сервис игроков
+     * @param playerServiceImpl сервис игроков
      */
     @Autowired
     public TransactionController(PlayerServiceImpl playerServiceImpl) {

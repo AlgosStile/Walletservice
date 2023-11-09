@@ -2,9 +2,7 @@ package main.java.org.wallet_service;
 
 import org.example.EnableLogging;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -22,7 +20,7 @@ public class WalletServiceApplication {
      * Основной метод для запуска приложения.
      *
      * @param args аргументы командной строки, которые можно передать при запуске
-     * приложения.
+     *             приложения.
      */
     public static void main(String[] args) {
         SpringApplication.run(WalletServiceApplication.class, args);
