@@ -30,11 +30,11 @@ Wallet Service - это приложение на основе Spring Framework
 
 Для настройки и конфигурации приложения вы можете внести изменения в следующие файлы:
 
-#### `wallet_service.in.config.ServletInitializer`
+`wallet_service.in.config.ServletInitializer`
 
 Данный файл содержит класс `ServletInitializer`, который настраивает конфигурацию Spring Boot.
 
-#### `package org.example.AuditAspect`
+`package org.example.AuditAspect`
 
 Данный файл содержит аспект `AuditAspect`, класс AuditAspect имплементирует аспект для вычисления времени выполнения 
 методов и логирования этих данных. Метод auditAndExecutionTimeAdvice выполняет эту работу.
@@ -45,40 +45,40 @@ Wallet Service - это приложение на основе Spring Framework
 В этом файле производится логирование вызываемого метода и времени его выполнения. Это делается путем фиксации 
 времени перед и после выполнения вызываемого метода..
 
-#### `package org.example.LoggingAspect`
+`package org.example.LoggingAspect`
 
 Данный файл LoggingAspect представляет конфигурацию логирования и аудита.
 Он используется для создания аспекта AuditAspect и включения автоматической проксировки аспектов.
 
-#### `wallet_service.out.controller.PlayerController`
+`wallet_service.out.controller.PlayerController`
 
 Данный файл содержит контроллер `PlayerController`, который предоставляет API для работы с игроками.
 
-#### `wallet_service.out.controller.TransactionController`
+`wallet_service.out.controller.TransactionController`
 
 Данный файл содержит контроллер `TransactionController`, который предоставляет API для работы с транзакциями.
 
-#### `wallet_service.out.model.Action`
+`wallet_service.out.model.Action`
 
 Данный файл содержит модель `Action`, представляющую действие пользователя.
 
-#### `wallet_service.out.model.Player`
+`wallet_service.out.model.Player`
 
 Данный файл содержит модель `Player`, представляющую игрока.
 
-#### `wallet_service.out.model.Transaction`
+`wallet_service.out.model.Transaction`
 
 Данный файл содержит модель `Transaction`, представляющую финансовую транзакцию.
 
-#### `wallet_service.out.repository.ActionRepository`
+`wallet_service.out.repository.ActionRepository`
 
 Данный файл содержит репозиторий `ActionRepository`, предоставляющий доступ к данным о действиях пользователей.
 
-#### `wallet_service.out.repository.PlayerRepository`
+`wallet_service.out.repository.PlayerRepository`
 
 Данный файл содержит репозиторий `PlayerRepository`, предоставляющий доступ к данным о игроках.
 
-#### `wallet_service.out.repository.TransactionRepository`
+`wallet_service.out.repository.TransactionRepository`
 
 Данный файл содержит репозиторий `TransactionRepository`, предоставляющий доступ к данным о транзакциях.
 
