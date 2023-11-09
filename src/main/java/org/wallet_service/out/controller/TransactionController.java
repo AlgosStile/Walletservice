@@ -24,8 +24,6 @@ import java.util.List;
 @RestController
 public class TransactionController {
 
-    private final PlayerRepository playerRepository;
-    private final TransactionRepository transactionRepository;
     private final PlayerServiceImpl playerServiceImpl;
 
     /**
@@ -38,8 +36,6 @@ public class TransactionController {
     @Autowired
     public TransactionController(PlayerServiceImpl playerServiceImpl, PlayerRepository playerRepository, TransactionRepository transactionRepository) {
         this.playerServiceImpl = playerServiceImpl;
-        this.playerRepository = playerRepository;
-        this.transactionRepository = transactionRepository;
     }
 
     /**

@@ -70,4 +70,8 @@ public class PlayerServiceImpl {
         playerRepository.savePlayer(player);
 
     }
+
+    public Player findByUsername(String username) {
+        return playerRepository.findByUsername(username);
+    }
 }
