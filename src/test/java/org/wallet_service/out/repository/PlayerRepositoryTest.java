@@ -53,6 +53,7 @@ class PlayerRepositoryTest {
     }
 
     @Test
+    @DisplayName("Update balance by username")
     void updateBalanceByUsername() {
         String username = "player1";
         BigDecimal balance = BigDecimal.TEN;

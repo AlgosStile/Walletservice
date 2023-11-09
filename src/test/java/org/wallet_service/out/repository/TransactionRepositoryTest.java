@@ -3,6 +3,7 @@ package test.java.org.wallet_service.out.repository;
 import main.java.org.wallet_service.out.model.Transaction;
 import main.java.org.wallet_service.out.repository.TransactionRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -24,6 +25,7 @@ class TransactionRepositoryTest {
     }
 
     @Test
+    @DisplayName("Save transaction")
     void whenSavingTransaction_thenUpdateIsCalled() {
         Transaction transaction = new Transaction();
         transaction.setUsername("user");

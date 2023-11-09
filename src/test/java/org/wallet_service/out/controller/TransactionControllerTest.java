@@ -4,6 +4,7 @@ import main.java.org.wallet_service.WalletServiceApplication;
 import main.java.org.wallet_service.out.model.Transaction;
 import main.java.org.wallet_service.out.service.PlayerServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -48,6 +49,7 @@ class TransactionControllerTest {
     List<Transaction> transactions = Arrays.asList(transaction1, transaction2);
 
     @Test
+    @DisplayName("Debit transaction")
     void debitTransaction() throws Exception {
         doNothing().when(playerService).debit(anyString(), anyInt(), anyDouble());
         mvc.perform(post("/debit")
@@ -62,6 +64,7 @@ class TransactionControllerTest {
     }
 
     @Test
+    @DisplayName("Credit transaction")
     void creditTransaction() throws Exception {
         doNothing().when(playerService).credit(anyString(), anyInt(), anyDouble());
         mvc.perform(post("/credit")
@@ -76,6 +79,7 @@ class TransactionControllerTest {
     }
 
     @Test
+    @DisplayName("Get transaction history")
     void getTransactionHistory() throws Exception {
         mvc.perform(get("/transaction/history")
                         .param("username", "user1")

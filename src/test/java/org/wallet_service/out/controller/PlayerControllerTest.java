@@ -6,6 +6,7 @@ import main.java.org.wallet_service.out.controller.PlayerController;
 import main.java.org.wallet_service.out.model.Action;
 import main.java.org.wallet_service.out.model.Player;
 import main.java.org.wallet_service.out.service.PlayerServiceImpl;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,7 @@ public class PlayerControllerTest {
     private PlayerServiceImpl playerService;
 
     @Test
+    @DisplayName("Get player")
     public void getPlayerTest() throws Exception {
         Player player = new Player();
         player.setUsername("test");
@@ -51,6 +53,7 @@ public class PlayerControllerTest {
 
 
     @Test
+    @DisplayName("Save player")
     public void savePlayerTest() throws Exception {
         Player player = new Player();
         player.setUsername("test");
@@ -63,6 +66,7 @@ public class PlayerControllerTest {
     }
 
     @Test
+    @DisplayName("Debit transaction")
     public void debitTransactionTest() throws Exception {
         mvc.perform(post("/{username}/debit", "test")
                         .param("amount", "100")
@@ -71,6 +75,7 @@ public class PlayerControllerTest {
     }
 
     @Test
+    @DisplayName("Credit transaction")
     public void creditTransactionTest() throws Exception {
         mvc.perform(post("/{username}/credit", "test")
                         .param("amount", "100")
@@ -79,6 +84,7 @@ public class PlayerControllerTest {
     }
 
     @Test
+    @DisplayName("Get player actions")
     public void getPlayerActionsTest() throws Exception {
         Action action = new Action();
         action.setUsername("test");
