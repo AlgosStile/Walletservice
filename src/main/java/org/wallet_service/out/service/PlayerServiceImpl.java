@@ -39,6 +39,13 @@ public class PlayerServiceImpl {
         player.setBalance(newBalance.intValue());
         playerRepository.savePlayer(player);
 
+        Transaction transaction = new Transaction();
+        transaction.setPlayer(player);
+        transaction.setAmount(amount.doubleValue());
+        transaction.setType("debit");
+        transaction.setBalance(player.getBalance());
+        transactionRepository.saveTransaction(transaction);
+
     }
 
     public void creditTransaction(String username, BigDecimal amount) {
@@ -46,6 +53,11 @@ public class PlayerServiceImpl {
         BigDecimal newBalance = BigDecimal.valueOf(player.getBalance()).add(amount);
         player.setBalance(newBalance.intValue());
         playerRepository.savePlayer(player);
+
+        Transaction transaction = new Transaction();
+        transaction.setPlayer(player);
+        transaction.setAmount(amount.doubleValue());
+        transactionRepository.saveTransaction(transaction);
     }
 
     public List<Action> getPlayerActions(String username) {

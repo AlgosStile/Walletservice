@@ -30,11 +30,9 @@ public class TransactionController {
      * Конструктор класса TransactionController.
      *
      * @param playerServiceImpl     сервис игроков
-     * @param playerRepository      репозиторий игроков
-     * @param transactionRepository репозиторий транзакций
      */
     @Autowired
-    public TransactionController(PlayerServiceImpl playerServiceImpl, PlayerRepository playerRepository, TransactionRepository transactionRepository) {
+    public TransactionController(PlayerServiceImpl playerServiceImpl) {
         this.playerServiceImpl = playerServiceImpl;
     }
 

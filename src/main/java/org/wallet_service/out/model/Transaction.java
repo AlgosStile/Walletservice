@@ -68,4 +68,7 @@ public class Transaction {
     public Transaction() {
 
     }
+
+    public void setPlayer(Player player) {
+    }
 }

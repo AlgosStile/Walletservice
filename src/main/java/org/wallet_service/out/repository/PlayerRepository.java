@@ -59,4 +59,5 @@ public class PlayerRepository {
         String sql = "UPDATE players SET balance = ? WHERE username = ?";
         jdbcTemplate.update(sql, balance, username);
     }
+
 }
