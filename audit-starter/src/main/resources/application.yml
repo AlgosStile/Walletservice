@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/wallet_db?currentSchema=wallet
+    username: postgres
+    password: wallet
+    driver-class-name: org.postgresql.Driver
+
+
+
