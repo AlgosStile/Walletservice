@@ -11,6 +11,8 @@ spring:
   app:
     logging:
       enabled: true
-
-
-
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true

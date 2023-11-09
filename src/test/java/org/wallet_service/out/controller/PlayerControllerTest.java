@@ -3,32 +3,31 @@ package test.java.org.wallet_service.out.controller;
 
 import main.java.org.wallet_service.WalletServiceApplication;
 import main.java.org.wallet_service.out.controller.PlayerController;
-import main.java.org.wallet_service.out.service.PlayerServiceImpl;
-import main.java.org.wallet_service.out.model.Player;
 import main.java.org.wallet_service.out.model.Action;
-
+import main.java.org.wallet_service.out.model.Player;
+import main.java.org.wallet_service.out.service.PlayerServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.http.MediaType;
 
-import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = PlayerController.class)
-@ContextConfiguration(classes= WalletServiceApplication.class)
+@ContextConfiguration(classes = WalletServiceApplication.class)
 public class PlayerControllerTest {
 
     @Autowired
