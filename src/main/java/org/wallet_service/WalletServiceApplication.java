@@ -16,12 +16,6 @@ import org.springframework.context.annotation.Configuration;
 @EnableLogging
 @Configuration
 public class WalletServiceApplication {
-    /**
-     * Основной метод для запуска приложения.
-     *
-     * @param args аргументы командной строки, которые можно передать при запуске
-     *             приложения.
-     */
     public static void main(String[] args) {
         SpringApplication.run(WalletServiceApplication.class, args);
     }

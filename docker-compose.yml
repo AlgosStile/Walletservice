@@ -10,7 +10,7 @@ services:
       retries: 3
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: wallet
+      POSTGRES_PASSWORD: admin
       POSTGRES_DB: wallet_db
     ports:
       - "5432:5432"

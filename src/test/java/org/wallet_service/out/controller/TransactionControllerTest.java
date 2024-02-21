@@ -73,7 +73,7 @@ class TransactionControllerTest {
                         .param("amount", "150.0")
                         .characterEncoding("UTF-8"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Кредитная транзакция успешно выполнена!"));
+                .andExpect(content().string("Кредитная транзакция успешно выполнена."));
 
         verify(playerService, times(1)).credit("user1", 1, 150.0);
     }
