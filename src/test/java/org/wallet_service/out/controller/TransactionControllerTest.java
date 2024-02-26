@@ -58,6 +58,7 @@ class TransactionControllerTest {
                         .param("amount", "150.0")
                         .characterEncoding("UTF-8"))
                 .andExpect(status().isOk())
+
                 .andExpect(content().string("Дебетовая транзакция успешно выполнена!"));
 
         verify(playerService, times(1)).debit("user1", 1, 150.0);
